@@ -1,0 +1,7 @@
+c:\users\kamsi\source\repos\Computing Project\Computing Project\bin\Debug\Computing Project.exe.config
+c:\users\kamsi\source\repos\Computing Project\Computing Project\bin\Debug\Computing Project.exe
+c:\users\kamsi\source\repos\Computing Project\Computing Project\bin\Debug\Computing Project.pdb
+c:\users\kamsi\source\repos\Computing Project\Computing Project\obj\Debug\Computing Project.csprojResolveAssemblyReference.cache
+c:\users\kamsi\source\repos\Computing Project\Computing Project\obj\Debug\Computing Project.csproj.CoreCompileInputs.cache
+c:\users\kamsi\source\repos\Computing Project\Computing Project\obj\Debug\Computing Project.exe
+c:\users\kamsi\source\repos\Computing Project\Computing Project\obj\Debug\Computing Project.pdb
