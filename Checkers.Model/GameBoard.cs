@@ -61,49 +61,49 @@ namespace Checkers.Model
             }
         }
 
-        public bool IsEmptySquare(GameBoard board, int col, int row)
+        public bool IsEmptySquare( int col, int row)
         {
-            return board.Squares[col, row] == SquareValues.Empty;
+            return Squares[col, row] == SquareValues.Empty;
         }
 
-        public bool IsBlackSquare(GameBoard board, int col, int row)
+        public bool IsBlackSquare( int col, int row)
         {
-            return board.Squares[col, row] == SquareValues.Black;
+            return Squares[col, row] == SquareValues.Black;
         }
 
-        public bool IsWhiteSquare(GameBoard board, int col, int row)
+        public bool IsWhiteSquare( int col, int row)
         {
-            return board.Squares[col, row] == SquareValues.White;
+            return Squares[col, row] == SquareValues.White;
         }
 
-        public bool IsBlackKingSquare(GameBoard board, int col, int row)
+        public bool IsBlackKingSquare( int col, int row)
         {
-            return board.Squares[col, row] == SquareValues.BlackKing;
+            return Squares[col, row] == SquareValues.BlackKing;
         }
 
-        public bool IsWhiteKingSquare(GameBoard board, int col, int row)
+        public bool IsWhiteKingSquare( int col, int row)
         {
-            return board.Squares[col, row] == SquareValues.WhiteKing;
+            return Squares[col, row] == SquareValues.WhiteKing;
         }
 
-        public void MovePiece(GameBoard board, SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
+        public void MovePiece( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
-            board.Squares[oldCol, oldRow] = SquareValues.Empty;
-            board.Squares[newCol, newRow] = type;
+            Squares[oldCol, oldRow] = SquareValues.Empty;
+            Squares[newCol, newRow] = type;
             if (type == SquareValues.Black && newRow == 0)
             {
-                board.Squares[newCol, newRow] = SquareValues.BlackKing;
+                Squares[newCol, newRow] = SquareValues.BlackKing;
             }
 
             if (type == SquareValues.White && newRow == 7)
             {
-                board.Squares[newCol, newRow] = SquareValues.WhiteKing;
+                Squares[newCol, newRow] = SquareValues.WhiteKing;
             }
         }
 
-        public bool IsValidMove(GameBoard board, SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
+        public bool IsValidMove( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
-            if (board.IsEmptySquare(board, newCol, newRow) == false)
+            if (IsEmptySquare( newCol, newRow) == false)
             {
                 return false;
             }
@@ -171,11 +171,11 @@ namespace Checkers.Model
             return true;
         }
 
-        public bool NotYourPiece(GameBoard board, SquareValues type, int oldCol, int oldRow)
+        public bool NotYourPiece( SquareValues type, int oldCol, int oldRow)
         {
             if (type == SquareValues.Black)
             {
-                if (board.Squares[oldCol, oldRow] != SquareValues.White && board.Squares[oldCol, oldRow] != SquareValues.WhiteKing)
+                if (Squares[oldCol, oldRow] != SquareValues.White && Squares[oldCol, oldRow] != SquareValues.WhiteKing)
                 {
                     return false;
                 }
@@ -184,13 +184,58 @@ namespace Checkers.Model
 
             if (type == SquareValues.White )
             {
-                if (board.Squares[oldCol, oldRow] != SquareValues.Black && board.Squares[oldCol, oldRow] != SquareValues.BlackKing)
+                if (Squares[oldCol, oldRow] != SquareValues.Black && Squares[oldCol, oldRow] != SquareValues.BlackKing)
                 {
                     return false;
                 }
                 return true;
             }
             return true;
+        }
+
+        /// <summary>
+        /// if value is valid, it returns null
+        /// if it's invalid it returns an error message
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string IsInvalidEntry( int rowOrColumn)
+        {
+            if (rowOrColumn > 7 || rowOrColumn < 0)
+            {
+                return "Must be in range 0-7";
+            }
+            return null;
+        }
+
+        public bool GameIsWon()
+        {
+            int blackCount = 0;
+            int whiteCount = 0;
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    var square = ReadSquare(col, row);
+                    if (square == SquareValues.Black || square == SquareValues.BlackKing)
+                    {
+                        blackCount++;
+                    }
+
+                    if (square == SquareValues.White || square == SquareValues.WhiteKing)
+                    {
+                        whiteCount++;
+                    }
+                }
+            }
+            if (blackCount == 0 || whiteCount == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

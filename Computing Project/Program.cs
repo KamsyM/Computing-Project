@@ -82,10 +82,19 @@ namespace Checkers.UI
                 Console.WriteLine("You are the Black Piece");
                 Console.WriteLine();
                 Move(board, SquareValues.Black);
+                if (board.GameIsWon())
+                {
+                    Console.WriteLine("Black Wins!!!!");
+                    GameWon = true;
+                }
                 Console.WriteLine();
                 Console.WriteLine("You are the White Piece");
                 Move(board, SquareValues.White);
-                break;
+                if (board.GameIsWon())
+                {
+                    Console.WriteLine("White Wins!!!!");
+                    GameWon = true;
+                }
             }
         }
 
@@ -93,78 +102,94 @@ namespace Checkers.UI
         {
             Console.WriteLine("Select the Piece you would like to move");
             var Problem = true;
+            string msg = "";
             while (Problem)
             {
-
                 Console.Write("Put in its column: ");
                 var OldColumn = Convert.ToInt32(Console.ReadLine());
 
-                if (OldColumn > 7 || OldColumn < 0)
+                msg = board.IsInvalidEntry(OldColumn);
+                if (msg != null)
                 {
-                    Console.WriteLine("This Column doesn't exist");
-                    Console.WriteLine();
+                    Console.WriteLine(msg);
+                    PrintBoard(board);
                     continue;
                 }
 
                 Console.Write("Now the Piece row: ");
                 var OldRow = Convert.ToInt32(Console.ReadLine());
 
-                if (OldRow > 7 || OldRow < 0)
+                msg = board.IsInvalidEntry(OldRow);
+                if (msg != null)
                 {
-                    Console.WriteLine("This Row doesn't exist");
-                    Console.WriteLine();
+                    Console.WriteLine(msg);
+                    PrintBoard(board);
                     continue;
                 }
                 Console.WriteLine();
               
-                if (board.IsEmptySquare(board, OldColumn, OldRow))
+                if (board.IsEmptySquare( OldColumn, OldRow))
                 {
                     Console.WriteLine("This square is empty");
+                    PrintBoard(board);
                     Console.WriteLine();
                 }
 
-                else if (board.NotYourPiece(board, type, OldColumn, OldRow)/*board.IsWhiteSquare(board, OldColumn, OldRow) || board.IsWhiteKingSquare(board, OldColumn, OldRow)*/)
+                else if (board.NotYourPiece( type, OldColumn, OldRow)/*board.IsWhiteSquare(board, OldColumn, OldRow) || board.IsWhiteKingSquare(board, OldColumn, OldRow)*/)
                 {
                     Console.WriteLine("This is not your piece");
+                    PrintBoard(board);
                     Console.WriteLine();
                 }
 
-                else if(board.NotYourPiece(board, type, OldColumn, OldRow) == false/*board.IsBlackSquare(board, OldColumn, OldRow) || board.IsBlackKingSquare(board, OldColumn, OldRow)*/)
+                else if(board.NotYourPiece( type, OldColumn, OldRow) == false/*board.IsBlackSquare(board, OldColumn, OldRow) || board.IsBlackKingSquare(board, OldColumn, OldRow)*/)
                 {
                     var realtype = board.Squares[OldColumn, OldRow];
                     Console.Write("Now put in new column: ");
                     var NewColumn = Convert.ToInt32(Console.ReadLine());
 
-                    if (NewColumn > 7 || NewColumn < 0)
+                    msg = board.IsInvalidEntry(NewColumn);
+                    if (msg != null)
                     {
-                        Console.WriteLine("This Column doesn't exist");
-                        Console.WriteLine();
+                        Console.WriteLine(msg);
+                        PrintBoard(board);
                         continue;
                     }
 
                     Console.Write("Now put in new row: ");
                     var NewRow = Convert.ToInt32(Console.ReadLine());
 
-                    if (NewRow > 7 || NewRow < 0)
+                    msg = board.IsInvalidEntry(NewRow);
+                    if (msg != null)
                     {
-                        Console.WriteLine("This Row doesn't exist");
-                        Console.WriteLine();
+                        Console.WriteLine(msg);
+                        PrintBoard(board);
                         continue;
                     }
 
 
-                    if (board.IsValidMove(board, realtype, OldColumn, OldRow, NewColumn, NewRow))
+                    if (board.IsValidMove( realtype, OldColumn, OldRow, NewColumn, NewRow))
                     {                 
-                        board.MovePiece(board, realtype, OldColumn, OldRow, NewColumn, NewRow);
+                        board.MovePiece( realtype, OldColumn, OldRow, NewColumn, NewRow);
+                        if (type == SquareValues.Black && NewRow == 0)
+                        {
+                            board.Squares[NewColumn, NewRow] = SquareValues.BlackKing;
+                        }
+                        if (type == SquareValues.White && NewRow == 7)
+                        {
+                            board.Squares[NewColumn, NewRow] = SquareValues.WhiteKing;
+                        }
                         Problem = false;
                         PrintBoard(board);
                     }
 
-                    else
+                    else if(!board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
                     {
                         Console.WriteLine("Not a Valid Move");
+                        PrintBoard(board);
                         Console.WriteLine();
                     }
+
                 }
             }
         }
@@ -215,6 +240,10 @@ namespace Checkers.UI
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
         }
+
+       
+       
     }
 }
