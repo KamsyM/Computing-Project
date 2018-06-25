@@ -86,6 +86,7 @@ namespace Checkers.UI
                 {
                     Console.WriteLine("Black Wins!!!!");
                     GameWon = true;
+                    break;
                 }
                 Console.WriteLine();
                 Console.WriteLine("You are the White Piece");
