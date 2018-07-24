@@ -63,30 +63,50 @@ namespace Checkers.Model
 
         public bool IsEmptySquare( int col, int row)
         {
+            if (col > 7 || row > 7 || col < 0 || row < 0)
+            {
+                return false;
+            }
             return Squares[col, row] == SquareValues.Empty;
         }
 
         public bool IsBlackSquare( int col, int row)
         {
+            if (col > 7 || row > 7 || col < 0 || row < 0)
+            {
+                return false;
+            }
             return Squares[col, row] == SquareValues.Black;
         }
 
         public bool IsWhiteSquare( int col, int row)
         {
+            if (col > 7 || row > 7 || col < 0 || row < 0)
+            {
+                return false;
+            }
             return Squares[col, row] == SquareValues.White;
         }
 
         public bool IsBlackKingSquare( int col, int row)
         {
+            if (col > 7 || row > 7 || col < 0 || row < 0)
+            {
+                return false;
+            }
             return Squares[col, row] == SquareValues.BlackKing;
         }
 
         public bool IsWhiteKingSquare( int col, int row)
         {
+            if (col > 7 || row > 7 || col < 0 || row < 0)
+            {
+                return false;
+            }
             return Squares[col, row] == SquareValues.WhiteKing;
         }
 
-        public void MovePiece( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
+        public void MovePiece(SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
             Squares[oldCol, oldRow] = SquareValues.Empty;
             Squares[newCol, newRow] = type;
@@ -99,6 +119,27 @@ namespace Checkers.Model
             {
                 Squares[newCol, newRow] = SquareValues.WhiteKing;
             }
+
+            if (newCol == oldCol + 2 && newRow == oldRow - 2)
+            {
+                Squares[oldCol + 1, oldRow - 1] = SquareValues.Empty;
+            }
+
+            if (newCol == oldCol +2 && newRow == oldRow +2)
+            {
+                Squares[oldCol + 1, oldRow + 1] = SquareValues.Empty;
+            }
+
+            if (newCol == oldCol - 2 && newRow == oldRow + 2)
+            {
+                Squares[oldCol - 1, oldRow + 1] = SquareValues.Empty;
+            }
+
+            if (newCol == oldCol - 2 && newRow == oldRow - 2)
+            {
+                Squares[oldCol - 1, oldRow - 1] = SquareValues.Empty;
+            }
+
         }
 
         public bool IsValidMove( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
@@ -113,61 +154,214 @@ namespace Checkers.Model
                 return false;
             }
 
-            if (type == SquareValues.Black)
+            switch (type)
             {
-                if (newRow != oldRow -1)
-                {
-                    return false;
-                }
+                case SquareValues.Black:
+                    return IsValidBlackMove(oldCol, oldRow, newCol, newRow);
+                case SquareValues.White:
+                    return IsValidWhiteMove(oldCol, oldRow, newCol, newRow);
+                case SquareValues.BlackKing:
+                    return IsValidBlackKingMove(oldCol, oldRow, newCol, newRow);
+                case SquareValues.WhiteKing:
+                    return IsValidWhiteKingMove(oldCol, oldRow, newCol, newRow);
+                default:
+                    throw new Exception("Invalid SquareValue");
+            }
+            
+        }
 
-                if (newCol != oldCol +1 && newCol != oldCol - 1)
+        private bool IsValidWhiteKingMove(int oldCol, int oldRow, int newCol, int newRow)
+        {
+            if (oldRow + 2 <= 7 || oldRow - 2 >= 0)
+            {
+                if (oldCol + 2 <= 7 || oldCol - 2 >= 0)
                 {
-                    return false;
+                    if (IsBlackSquare(oldCol + 1, oldRow + 1) || IsBlackKingSquare(oldCol + 1, oldRow + 1))
+                    {
+                        if (IsEmptySquare(oldCol + 2, oldRow + 2) && newCol == oldCol + 2 && newRow == oldRow + 2)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsBlackSquare(oldCol - 1, oldRow + 1) || IsBlackKingSquare(oldCol - 1, oldRow + 1))
+                    {
+                        if (IsEmptySquare(oldCol - 2, oldRow + 2) && newCol == oldCol - 2 && newRow == oldRow + 2)
+                        {
+                            return true;
+                        }
+                    }
+                    if (IsBlackSquare(oldCol + 1, oldRow - 1) || IsBlackKingSquare(oldCol + 1, oldRow - 1))
+                    {
+                        if (IsEmptySquare(oldCol + 2, oldRow - 2) && newCol == oldCol + 2 && newRow == oldRow - 2)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsBlackSquare(oldCol - 1, oldRow - 1) || IsBlackKingSquare(oldCol - 1, oldRow - 1))
+                    {
+                        if (IsEmptySquare(oldCol - 2, oldRow - 2) && newCol == oldCol - 2 && newRow == oldRow - 2)
+                        {
+                            return true;
+                        }
+                    }
                 }
-                return true;
+            }
+            if (newRow != oldRow + 1 && newRow != oldRow - 1)
+            {
+                return false;
             }
 
-            if (type == SquareValues.BlackKing)
+            if (newCol != oldCol + 1 && newCol != oldCol - 1)
             {
-                if (newRow != oldRow + 1 && newRow != oldRow - 1)
-                {
-                    return false;
-                }
+                return false;
+            }
+            return true;
+        }
 
-                if (newCol != oldCol + 1 && newCol != oldCol - 1)
+        private bool IsValidWhiteMove(int oldCol, int oldRow, int newCol, int newRow)
+        {
+            
+            if (oldRow + 2 <= 7)
+            {
+                if (oldCol + 2 <= 7 || oldCol - 2 >= 0)
                 {
-                    return false;
+                    if (IsBlackSquare(oldCol + 1, oldRow + 1) || IsBlackKingSquare(oldCol + 1, oldRow + 1))
+                    {
+                        if (IsEmptySquare(oldCol + 2, oldRow + 2) && newCol == oldCol + 2 && newRow == oldRow + 2)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsBlackSquare(oldCol - 1, oldRow + 1) || IsBlackKingSquare(oldCol - 1, oldRow + 1))
+                    {
+                        if (IsEmptySquare(oldCol - 2, oldRow + 2) && newCol == oldCol - 2 && newRow == oldRow + 2)
+                        {
+                            return true;
+                        }
+                    }
                 }
-                return true;
             }
 
-            if (type == SquareValues.White)
+            if (newRow != oldRow + 1)
             {
-                if (newRow != oldRow + 1)
-                {
-                    return false;
-                }
-
-                if (newCol != oldCol + 1 && newCol != oldCol - 1)
-                {
-                    return false;
-                }
-                return true;
+                return false;
             }
 
-            if (type == SquareValues.WhiteKing)
+            if (newCol != oldCol + 1 && newCol != oldCol - 1)
             {
-                if (newRow != oldRow + 1 && newRow != oldRow - 1)
-                {
-                    return false;
-                }
-
-                if (newCol != oldCol + 1 && newCol != oldCol - 1)
-                {
-                    return false;
-                }
-                return true;
+                return false;
             }
+            return true;
+        }
+
+        private bool IsValidBlackKingMove(int oldCol, int oldRow, int newCol, int newRow)
+        {
+            if (oldRow + 2 <= 7 || oldRow - 2 >= 0)
+            {
+                if (oldCol + 2 <= 7 || oldCol - 2 >= 0)
+                {
+                    if (IsWhiteSquare(oldCol + 1, oldRow - 1) || IsWhiteKingSquare(oldCol + 1, oldRow - 1))
+                    {
+                        if (IsEmptySquare(oldCol + 2, oldRow - 2) && newCol == oldCol + 2 && newRow == oldRow - 2)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsWhiteSquare(oldCol - 1, oldRow - 1) || IsWhiteKingSquare(oldCol - 1, oldRow - 1))
+                    {
+                        if (IsEmptySquare(oldCol - 2, oldRow - 2) && newCol == oldCol - 2 && newRow == oldRow - 2)
+                        {
+                            return true;
+                        }
+                    }
+                    if (IsWhiteSquare(oldCol + 1, oldRow + 1) || IsWhiteKingSquare(oldCol + 1, oldRow + 1))
+                    {
+                        if (IsEmptySquare(oldCol + 2, oldRow + 2) && newCol == oldCol + 2 && newRow == oldRow + 2)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsWhiteSquare(oldCol - 1, oldRow + 1) || IsWhiteKingSquare(oldCol - 1, oldRow + 1))
+                    {
+                        if (IsEmptySquare(oldCol - 2, oldRow + 2) && newCol == oldCol - 2 && newRow == oldRow + 2)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (newRow != oldRow + 1 && newRow != oldRow - 1)
+            {
+                return false;
+            }
+
+            if (newCol != oldCol + 1 && newCol != oldCol - 1)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsValidBlackMove(int oldCol, int oldRow, int newCol, int newRow)
+        {
+            //if (oldCol + 2 < 7 && oldCol - 2 > 0 && oldRow + 2 < 7 && oldRow - 2 > 0)
+            //{
+            //    if (IsWhiteSquare(oldCol + 1, oldRow - 1) || IsWhiteKingSquare(oldCol + 1, oldRow - 1))
+            //    {
+            //        if (IsEmptySquare(oldCol + 2, oldRow - 2) && newCol == oldCol + 2 && newRow == oldRow - 2)
+            //        {
+            //            return true;
+            //        }
+            //    }
+
+            //    if (IsWhiteSquare(oldCol - 1, oldRow - 1) || IsWhiteKingSquare(oldCol - 1, oldRow - 1))
+            //    {
+            //        if (IsEmptySquare(oldCol - 2, oldRow - 2) && newCol == oldCol - 2 && newRow == oldRow - 2)
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+
+            if (oldRow - 2 >= 0)
+            {
+                if (oldCol + 2 <= 7 || oldCol - 2 >= 0)
+                {
+                    if (IsWhiteSquare(oldCol + 1, oldRow - 1) || IsWhiteKingSquare(oldCol + 1, oldRow - 1))
+                    {
+                        if (IsEmptySquare(oldCol + 2, oldRow - 2) && newCol == oldCol + 2 && newRow == oldRow - 2)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsWhiteSquare(oldCol - 1, oldRow - 1) || IsWhiteKingSquare(oldCol - 1, oldRow - 1))
+                    {
+                        if (IsEmptySquare(oldCol - 2, oldRow - 2) && newCol == oldCol - 2 && newRow == oldRow - 2)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (newRow != oldRow - 1)
+            {
+                return false;
+            }
+
+            if (newCol != oldCol + 1 && newCol != oldCol - 1)
+            {
+                return false;
+            }
+
+           
             return true;
         }
 

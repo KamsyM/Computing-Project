@@ -81,13 +81,14 @@ namespace Checkers.UI
                 Console.WriteLine();
                 Console.WriteLine("You are the Black Piece");
                 Console.WriteLine();
-                Move(board, SquareValues.Black);
+                Move(board, SquareValues.Black);               
                 if (board.GameIsWon())
                 {
                     Console.WriteLine("Black Wins!!!!");
                     GameWon = true;
                     break;
                 }
+                PrintBoard(board);
                 Console.WriteLine();
                 Console.WriteLine("You are the White Piece");
                 Move(board, SquareValues.White);
@@ -136,14 +137,14 @@ namespace Checkers.UI
                     Console.WriteLine();
                 }
 
-                else if (board.NotYourPiece( type, OldColumn, OldRow)/*board.IsWhiteSquare(board, OldColumn, OldRow) || board.IsWhiteKingSquare(board, OldColumn, OldRow)*/)
+                else if (board.NotYourPiece( type, OldColumn, OldRow))
                 {
                     Console.WriteLine("This is not your piece");
                     PrintBoard(board);
                     Console.WriteLine();
                 }
 
-                else if(board.NotYourPiece( type, OldColumn, OldRow) == false/*board.IsBlackSquare(board, OldColumn, OldRow) || board.IsBlackKingSquare(board, OldColumn, OldRow)*/)
+                else if(board.NotYourPiece( type, OldColumn, OldRow) == false)
                 {
                     var realtype = board.Squares[OldColumn, OldRow];
                     Console.Write("Now put in new column: ");
@@ -172,16 +173,7 @@ namespace Checkers.UI
                     if (board.IsValidMove( realtype, OldColumn, OldRow, NewColumn, NewRow))
                     {                 
                         board.MovePiece( realtype, OldColumn, OldRow, NewColumn, NewRow);
-                        if (type == SquareValues.Black && NewRow == 0)
-                        {
-                            board.Squares[NewColumn, NewRow] = SquareValues.BlackKing;
-                        }
-                        if (type == SquareValues.White && NewRow == 7)
-                        {
-                            board.Squares[NewColumn, NewRow] = SquareValues.WhiteKing;
-                        }
                         Problem = false;
-                        PrintBoard(board);
                     }
 
                     else if(!board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))

@@ -11,7 +11,6 @@ namespace Checkers.DataFixture
     {
         public static Piece[] BlackPlacements()
         {
-            //board.NewPiece(0, 7, SquareValues.Black);
             var pieces = new Piece[12];
             pieces[0] = new Piece(0,7,SquareValues.Black);
             pieces[1] = new Piece(2, 7, SquareValues.Black);
