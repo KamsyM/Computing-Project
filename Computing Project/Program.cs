@@ -58,18 +58,72 @@ namespace Checkers.UI
 
         private static void Start1PGame(GameBoard board)
         {
-            bool GameWon = false;
-            board.InitializePieces();
-            while (!GameWon)
+            bool running = true;
+            while (running)
             {
-                PrintBoard(board);
-                Console.WriteLine("You are the Black Piece");
-                Console.WriteLine();
-                Move(board, SquareValues.Black);
+                Console.WriteLine("Black or White");
+                string response = Console.ReadLine().ToUpper();
+                char PlayerType = response[0];
+                bool GameWon = false;
+                board.InitializePieces();
+                if (PlayerType == 'B')
+                {
+                    while (!GameWon)
+                    {
+                        PrintBoard(board);
+                        Console.WriteLine("You are the Black Piece");
+                        Console.WriteLine();
+                        Move(board, SquareValues.Black);
+                        if (board.GameIsWon())
+                        {
+                            Console.WriteLine("Black Wins!!!!");
+                            GameWon = true;
+                            running = false;
+                            break;
+                        }
+                        CompMove(board, SquareValues.White);
+                        if (board.GameIsWon())
+                        {
+                            Console.WriteLine("White Wins!!!!");
+                            GameWon = true;
+                            running = false;
+                        }
+                    }
+                }
 
-                break;
+                if (PlayerType == 'W')
+                {
+                    while (!GameWon)
+                    {
+                        PrintBoard(board);
+                        Console.WriteLine("You are the White Piece");
+                        Console.WriteLine();
+                        CompMove(board, SquareValues.Black);
+                        if (board.GameIsWon())
+                        {
+                            Console.WriteLine("Black Wins!!!!");
+                            GameWon = true;
+                            running = false;
+                            break;
+                        }
+                        Move(board, SquareValues.White);
+                        if (board.GameIsWon())
+                        {
+                            Console.WriteLine("White Wins!!!!");
+                            GameWon = true;
+                            running = false;
+                        }
+                    }
+                }
+
+                else
+                {
+                    Console.WriteLine("Invalid Entry");
+                }
             }
         }
+
+        
 
         private static void Start2PGame(GameBoard board)
         {
@@ -185,6 +239,11 @@ namespace Checkers.UI
 
                 }
             }
+        }
+
+        private static void CompMove(GameBoard board, SquareValues type)
+        {
+            throw new NotImplementedException();
         }
 
         private static void PrintBoard(GameBoard board)
