@@ -10,12 +10,69 @@ namespace Checkers.Model
     {
         public SquareValues Type;
         public GameBoard Board;
+        public int Difficuty;
 
-        public BotPlayers(GameBoard board, SquareValues type)
+        public BotPlayers(GameBoard board, SquareValues type, int difficulty)
         {
             Type = type;
             Board = board;
+            Difficuty = difficulty;
+            
+        }
 
+        public void Move()
+        {
+            switch (Difficuty)
+            {
+                case 1:
+                    BotPlayer1();
+                    break;
+                case 2:
+                    BotPlayer2();
+                    break;
+                case 3:
+                    BotPlayer3();
+                    break;
+            }
+        }
+
+        private void BotPlayer1()
+        {
+            for (int oldrow = 0; oldrow < Board.Size; oldrow++)
+            {
+                for (int oldcol = 0; oldcol < Board.Size; oldcol++)
+                {
+                    if (!Board.IsEmptySquare(oldcol,oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
+                    {
+                        for (int newrow = 0; newrow < Board.Size; newrow++)
+                        {
+                            for (int newcol = 0; newcol < Board.Size; newcol++)
+                            {
+                                if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(Type, oldcol, oldrow, newcol, newrow))
+                                {
+                                    Board.MovePiece(Type, oldcol, oldrow, newcol, newrow);
+                                    return;
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+
+        private void BotPlayer2()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void BotPlayer3()
+        {
+            throw new NotImplementedException();
         }
     }
 }

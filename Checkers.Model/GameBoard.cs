@@ -31,6 +31,55 @@ namespace Checkers.Model
             Pieces2 = pieces2;
         }
 
+        public void PrintBoard()
+        {
+            int boardSize = Size;
+            Console.WriteLine();
+            Console.WriteLine("The board looks like this: ");
+            Console.WriteLine();
+            Console.Write(" ");
+            for (int Column = 0; Column < boardSize; Column++)
+            {
+                Console.Write(" " + Column + "  ");
+            }
+            Console.WriteLine();
+            for (int row = 0; row < boardSize; row++)
+            {
+                Console.Write(row + " ");
+                for (int col = 0; col < boardSize; col++)
+                {
+                    SquareValues square = ReadSquare(col, row);
+                    switch (square)
+                    {
+                        case SquareValues.Empty:
+                            Console.Write(' ');
+                            break;
+                        case SquareValues.Black:
+                            Console.Write('*');
+                            break;
+                        case SquareValues.BlackKing:
+                            Console.Write('@');
+                            break;
+                        case SquareValues.White:
+                            Console.Write('%');
+                            break;
+                        case SquareValues.WhiteKing:
+                            Console.Write('/');
+                            break;
+
+                    }
+
+
+                    if (col != boardSize - 1)
+                    {
+                        Console.Write(" | ");
+                    }
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        }
+
         //Sets all squares to empty
         private void InitialiseEmptyBoard()
         {

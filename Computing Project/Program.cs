@@ -61,6 +61,7 @@ namespace Checkers.UI
             bool running = true;
             while (running)
             {
+                BotPlayers Bot = null;
                 Console.WriteLine("Black or White");
                 string response = Console.ReadLine().ToUpper();
                 char PlayerType = response[0];
@@ -68,9 +69,13 @@ namespace Checkers.UI
                 board.InitializePieces();
                 if (PlayerType == 'B')
                 {
+                    Console.WriteLine();
+                    Console.WriteLine("Select Player Difficulty (1 - 3)");
+                    int difficulty = Convert.ToInt32(Console.ReadLine());
+                    Bot = new BotPlayers(board, SquareValues.White, difficulty);
                     while (!GameWon)
                     {
-                        PrintBoard(board);
+                        board.PrintBoard();
                         Console.WriteLine("You are the Black Piece");
                         Console.WriteLine();
                         Move(board, SquareValues.Black);
@@ -81,7 +86,7 @@ namespace Checkers.UI
                             running = false;
                             break;
                         }
-                        CompMove(board, SquareValues.White);
+                        Bot.Move();
                         if (board.GameIsWon())
                         {
                             Console.WriteLine("White Wins!!!!");
@@ -93,12 +98,17 @@ namespace Checkers.UI
 
                 if (PlayerType == 'W')
                 {
+                    Console.WriteLine();
+                    Console.WriteLine("Select Player Difficulty (1 - 3)");
+                    int difficulty = Convert.ToInt32(Console.ReadLine());
+                    Bot = new BotPlayers(board, SquareValues.Black, difficulty);
                     while (!GameWon)
                     {
-                        PrintBoard(board);
+                        
                         Console.WriteLine("You are the White Piece");
                         Console.WriteLine();
-                        CompMove(board, SquareValues.Black);
+                        Bot.Move();
+                        board.PrintBoard();
                         if (board.GameIsWon())
                         {
                             Console.WriteLine("Black Wins!!!!");
@@ -119,6 +129,7 @@ namespace Checkers.UI
                 else
                 {
                     Console.WriteLine("Invalid Entry");
+                    Console.WriteLine();
                 }
             }
         }
@@ -131,7 +142,7 @@ namespace Checkers.UI
             board.InitializePieces();
             while (!GameWon)
             {
-                PrintBoard(board);
+                board.PrintBoard();
                 Console.WriteLine();
                 Console.WriteLine("You are the Black Piece");
                 Console.WriteLine();
@@ -142,7 +153,7 @@ namespace Checkers.UI
                     GameWon = true;
                     break;
                 }
-                PrintBoard(board);
+                board.PrintBoard();
                 Console.WriteLine();
                 Console.WriteLine("You are the White Piece");
                 Move(board, SquareValues.White);
@@ -168,7 +179,7 @@ namespace Checkers.UI
                 if (msg != null)
                 {
                     Console.WriteLine(msg);
-                    PrintBoard(board);
+                    board.PrintBoard();
                     continue;
                 }
 
@@ -179,7 +190,7 @@ namespace Checkers.UI
                 if (msg != null)
                 {
                     Console.WriteLine(msg);
-                    PrintBoard(board);
+                    board.PrintBoard();
                     continue;
                 }
                 Console.WriteLine();
@@ -187,14 +198,14 @@ namespace Checkers.UI
                 if (board.IsEmptySquare( OldColumn, OldRow))
                 {
                     Console.WriteLine("This square is empty");
-                    PrintBoard(board);
+                    board.PrintBoard();
                     Console.WriteLine();
                 }
 
                 else if (board.NotYourPiece( type, OldColumn, OldRow))
                 {
                     Console.WriteLine("This is not your piece");
-                    PrintBoard(board);
+                    board.PrintBoard();
                     Console.WriteLine();
                 }
 
@@ -208,7 +219,7 @@ namespace Checkers.UI
                     if (msg != null)
                     {
                         Console.WriteLine(msg);
-                        PrintBoard(board);
+                        board.PrintBoard();
                         continue;
                     }
 
@@ -219,7 +230,7 @@ namespace Checkers.UI
                     if (msg != null)
                     {
                         Console.WriteLine(msg);
-                        PrintBoard(board);
+                        board.PrintBoard();
                         continue;
                     }
 
@@ -233,69 +244,13 @@ namespace Checkers.UI
                     else if(!board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
                     {
                         Console.WriteLine("Not a Valid Move");
-                        PrintBoard(board);
+                        board.PrintBoard();
                         Console.WriteLine();
                     }
 
                 }
             }
         }
-
-        private static void CompMove(GameBoard board, SquareValues type)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void PrintBoard(GameBoard board)
-        {
-            int boardSize = board.Size;
-            Console.WriteLine();
-            Console.WriteLine("The board looks like this: ");
-            Console.WriteLine();
-            Console.Write(" ");
-            for (int Column = 0; Column < boardSize; Column++)
-            {
-                Console.Write(" " + Column + "  ");
-            }
-            Console.WriteLine();
-            for (int row = 0; row < boardSize; row++)
-            {
-                Console.Write(row + " ");
-                for (int col = 0; col < boardSize; col++)
-                {
-                    SquareValues square = board.ReadSquare(col, row);
-                    switch (square)
-                    {
-                        case SquareValues.Empty:
-                            Console.Write(' ');
-                            break;
-                        case SquareValues.Black:
-                            Console.Write('*');
-                            break;
-                        case SquareValues.BlackKing:
-                            Console.Write('@');
-                            break;
-                        case SquareValues.White:
-                            Console.Write('%');
-                            break;
-                        case SquareValues.WhiteKing:
-                            Console.Write('/');
-                            break;
-
-                    }
-                    
-
-                    if (col != boardSize - 1)
-                    {
-                        Console.Write(" | ");
-                    }
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine();
-        }
-
-       
-       
+   
     }
 }
