@@ -26,11 +26,12 @@ namespace Checkers.Model
             Size = size;
             Squares = new SquareValues[Size, Size];
             InitialiseEmptyBoard();
-            
+
             Pieces1 = pieces1;
             Pieces2 = pieces2;
         }
 
+        string[] ColALphabet = new string[8] {"A","B","C","D","E","F","G","H" };
         public void PrintBoard()
         {
             int boardSize = Size;
@@ -40,7 +41,7 @@ namespace Checkers.Model
             Console.Write(" ");
             for (int Column = 0; Column < boardSize; Column++)
             {
-                Console.Write(" " + Column + "  ");
+                Console.Write(" " + ColALphabet[Column] + "  ");
             }
             Console.WriteLine();
             for (int row = 0; row < boardSize; row++)
@@ -446,7 +447,7 @@ namespace Checkers.Model
         {
             if (rowOrColumn > 7 || rowOrColumn < 0)
             {
-                return "Must be in range 0-7";
+                return "Must be in range 0-7 for Row and in Range A-H for Column";
             }
             return null;
         }

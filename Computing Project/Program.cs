@@ -44,6 +44,8 @@ namespace Checkers.UI
             }
         }
 
+
+
         private static void DisplayMenu()
         {
             Console.WriteLine();
@@ -167,13 +169,26 @@ namespace Checkers.UI
 
         private static void Move(GameBoard board, SquareValues type)
         {
+            string[] ColAlphabet = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" };
             Console.WriteLine("Select the Piece you would like to move");
             var Problem = true;
             string msg = "";
             while (Problem)
             {
-                Console.Write("Put in its column: ");
-                var OldColumn = Convert.ToInt32(Console.ReadLine());
+
+                Console.Write("Put in its column and row: ");
+                var OldSquare = Console.ReadLine().ToUpper();
+                if (OldSquare.Length != 2)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Incorrect number of values, only two is required");
+                    Console.WriteLine();
+                    continue;
+                }
+               
+                int OldColumn = Array.IndexOf(ColAlphabet, Convert.ToString(OldSquare[0]));
+                int OldRow = Convert.ToInt32(Convert.ToString(OldSquare[1]));
+
 
                 msg = board.IsInvalidEntry(OldColumn);
                 if (msg != null)
@@ -183,8 +198,6 @@ namespace Checkers.UI
                     continue;
                 }
 
-                Console.Write("Now the Piece row: ");
-                var OldRow = Convert.ToInt32(Console.ReadLine());
 
                 msg = board.IsInvalidEntry(OldRow);
                 if (msg != null)
@@ -212,8 +225,16 @@ namespace Checkers.UI
                 else if(board.NotYourPiece( type, OldColumn, OldRow) == false)
                 {
                     var realtype = board.Squares[OldColumn, OldRow];
-                    Console.Write("Now put in new column: ");
-                    var NewColumn = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Put in the new Column and Row: ");
+                    var NewSquare = Console.ReadLine().ToUpper();
+                    if (NewSquare.Length != 2)
+                    {
+                        Console.WriteLine("Incorrect number of values, only two is required");
+                        continue;
+                    }
+
+                    int NewColumn = Array.IndexOf(ColAlphabet, Convert.ToString(NewSquare[0]));
+                    int NewRow = Convert.ToInt32(Convert.ToString(NewSquare[1]));
 
                     msg = board.IsInvalidEntry(NewColumn);
                     if (msg != null)
@@ -223,8 +244,6 @@ namespace Checkers.UI
                         continue;
                     }
 
-                    Console.Write("Now put in new row: ");
-                    var NewRow = Convert.ToInt32(Console.ReadLine());
 
                     msg = board.IsInvalidEntry(NewRow);
                     if (msg != null)
