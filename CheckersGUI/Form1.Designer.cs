@@ -108,6 +108,7 @@
             this.Start2PGame.TabIndex = 7;
             this.Start2PGame.Text = "Start 2P Game";
             this.Start2PGame.UseVisualStyleBackColor = true;
+            this.Start2PGame.Click += new System.EventHandler(this.Start2PGame_Click);
             // 
             // Quit
             // 
@@ -117,6 +118,7 @@
             this.Quit.TabIndex = 8;
             this.Quit.Text = "Quit";
             this.Quit.UseVisualStyleBackColor = true;
+            this.Quit.Click += new System.EventHandler(this.Quit_Click);
             // 
             // Form1
             // 

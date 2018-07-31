@@ -30,6 +30,16 @@ namespace CheckersGUI
             DrawBoard();
         }
 
+        private void Start2PGame_Click(object sender, EventArgs e)
+        {
+            DrawBoard();
+        }
+
+        private void Quit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
         private void DrawBoard()
         {
             for (int row = 0; row < 8; row++)
@@ -71,6 +81,6 @@ namespace CheckersGUI
             }
         }
 
-
+        
     }
 }
