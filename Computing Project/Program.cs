@@ -34,6 +34,12 @@ namespace Checkers.UI
                         Board = new GameBoard(8, blackpieces2, whitepieces2);
                         Start2PGame(Board);
                         break;
+                    case '3':
+                        var TestBlacks = Pieces.TestBlack();
+                        var TestWhites = Pieces.TestWhite();
+                        Board = new GameBoard(8, TestBlacks, TestWhites);
+                        Start1PGame(Board);
+                        break;
                     case '0':
                         running = false;
                         break;
@@ -83,17 +89,24 @@ namespace Checkers.UI
                         Move(board, SquareValues.Black);
                         if (board.GameIsWon())
                         {
+                            Console.WriteLine();
+                            board.PrintBoard();
+                            Console.WriteLine();
                             Console.WriteLine("Black Wins!!!!");
                             GameWon = true;
                             running = false;
-                            break;
+                            return;
                         }
                         Bot.Move();
                         if (board.GameIsWon())
                         {
+                            Console.WriteLine();
+                            board.PrintBoard();
+                            Console.WriteLine();
                             Console.WriteLine("White Wins!!!!");
                             GameWon = true;
                             running = false;
+                            return;
                         }
                     }
                 }
@@ -113,17 +126,24 @@ namespace Checkers.UI
                         board.PrintBoard();
                         if (board.GameIsWon())
                         {
+                            Console.WriteLine();
+                            board.PrintBoard();
+                            Console.WriteLine();
                             Console.WriteLine("Black Wins!!!!");
                             GameWon = true;
                             running = false;
-                            break;
+                            return;
                         }
                         Move(board, SquareValues.White);
                         if (board.GameIsWon())
                         {
+                            Console.WriteLine();
+                            board.PrintBoard();
+                            Console.WriteLine();
                             Console.WriteLine("White Wins!!!!");
                             GameWon = true;
                             running = false;
+                            return;
                         }
                     }
                 }
@@ -151,9 +171,10 @@ namespace Checkers.UI
                 Move(board, SquareValues.Black);               
                 if (board.GameIsWon())
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Black Wins!!!!");
                     GameWon = true;
-                    break;
+                    return;
                 }
                 board.PrintBoard();
                 Console.WriteLine();
@@ -161,8 +182,10 @@ namespace Checkers.UI
                 Move(board, SquareValues.White);
                 if (board.GameIsWon())
                 {
+                    Console.WriteLine();
                     Console.WriteLine("White Wins!!!!");
                     GameWon = true;
+                    return;
                 }
             }
         }
