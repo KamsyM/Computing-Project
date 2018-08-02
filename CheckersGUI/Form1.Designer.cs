@@ -47,6 +47,7 @@
             this.Grid.Size = new System.Drawing.Size(326, 337);
             this.Grid.TabIndex = 0;
             this.Grid.TabStop = false;
+            this.Grid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Grid_MouseClick);
             // 
             // Column
             // 
@@ -139,6 +140,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
 
         }
 

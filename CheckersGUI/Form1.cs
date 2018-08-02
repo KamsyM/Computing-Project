@@ -38,10 +38,17 @@ namespace CheckersGUI
             float turtleY = Height / 2 - e.Y - 19;
             Messages.Text = turtleX.ToString();
             Messages.Text = turtleY.ToString();
-            Messages.Text = "woohoo";
         }
 
-
+        private void Grid_MouseClick(object sender, MouseEventArgs e)
+        {
+            int X = e.X ;
+            int Y = e.Y;
+            int Col = Board.MouseConverter(X);
+            int row = Board.MouseConverter(Y);
+            var location = Board.ReadSquare(Col,row);
+            //return location;
+        }
 
         private void Start1PGame_Click(object sender, EventArgs e)
         {
@@ -75,9 +82,16 @@ namespace CheckersGUI
         private void Initialize2PGame(GameBoard board)
         {
             Board.InitializePieces();
+            Move2(board, SquareValues.Black);
         }
 
-        private void DrawBoard()
+        private void Move2(GameBoard board, SquareValues type)
+        {
+            Messages.Text = "Select the Piece you would like to move";
+           // var Checker = Grid_MouseClick();
+        }
+
+            private void DrawBoard()
         {
             for (int row = 0; row < 8; row++)
             {

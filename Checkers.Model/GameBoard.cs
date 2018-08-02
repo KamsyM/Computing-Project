@@ -481,5 +481,46 @@ namespace Checkers.Model
                 return false;
             }
         }
+
+        public int MouseConverter(int num)
+        {
+            if (num < 40)
+            {
+                return 0;
+            }
+            if (num < 80 && num > 40)
+            {
+                return 1;
+            }
+            if (num < 120 && num > 80)
+            {
+                return 2;
+            }
+            if (num < 160 && num > 120)
+            {
+                return 3;
+            }
+            if (num < 200 && num > 160)
+            {
+                return 4;
+            }
+            if (num < 240 && num > 200)
+            {
+                return 5;
+            }
+            if (num < 280 && num > 240)
+            {
+                return 6;
+            }
+            if (num < 320 && num > 280)
+            {
+                return 7;
+            }
+
+            else
+            {
+                return -1;
+            }
+        }
     }
 }
