@@ -30,13 +30,25 @@ namespace CheckersGUI
         {
             InitializeComponent();
             g = Grid.CreateGraphics();
+
         }
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            float turtleX = e.X - Width / 2 + 8;
+            float turtleY = Height / 2 - e.Y - 19;
+            Messages.Text = turtleX.ToString();
+            Messages.Text = turtleY.ToString();
+            Messages.Text = "woohoo";
+        }
+
+
 
         private void Start1PGame_Click(object sender, EventArgs e)
         {
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             Board = new GameBoard(8, blackpieces, whitepieces);
+            Messages.Text = "Begin";
             Initialize1PGame(Board);
             DrawBoard();
         }
@@ -167,5 +179,7 @@ namespace CheckersGUI
                 g.FillRectangle(fill, col * squareSize + 11, row * squareSize + 11, squareSize - 21, squareSize - 21);
             }
         }
+
+
     }
 }
