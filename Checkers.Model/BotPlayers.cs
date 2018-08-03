@@ -44,11 +44,12 @@ namespace Checkers.Model
                 {
                     if (!Board.IsEmptySquare(oldcol,oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
                     {
+                        var realtype = Board.Squares[oldcol, oldrow];
                         for (int newrow = 0; newrow < Board.Size; newrow++)
                         {
                             for (int newcol = 0; newcol < Board.Size; newcol++)
                             {
-                                if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(Type, oldcol, oldrow, newcol, newrow))
+                                if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
                                     Board.MovePiece(Type, oldcol, oldrow, newcol, newrow);
                                     return;

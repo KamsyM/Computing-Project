@@ -192,6 +192,7 @@ namespace Checkers.Model
 
         }
 
+
         public bool IsValidMove( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
             if (IsEmptySquare( newCol, newRow) == false)
