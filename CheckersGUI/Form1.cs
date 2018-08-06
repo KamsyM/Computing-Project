@@ -25,6 +25,8 @@ namespace CheckersGUI
         Graphics g;
         private GameBoard Board;
         private BotPlayers Bot;
+        private Modality Mode;
+        private SquareValues PType;
         private int gamemode = 1;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
         private int turn = 1;
@@ -34,11 +36,14 @@ namespace CheckersGUI
         {
             InitializeComponent();
             g = Grid.CreateGraphics();
+            Mode = Modality.BlackTurn;
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
+            //var blackpieces = Pieces.TestBlack();
+            //var whitepieces = Pieces.TestWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Bot = new BotPlayers(Board, SquareValues.White, 1);
-            Board.InitializePieces();
+            //Board.InitializePieces();
 
         }
 
@@ -61,6 +66,49 @@ namespace CheckersGUI
                 Messages.Text = "Invalid Move";
             }
 
+            if (Positions.Count == 1)
+            {
+                var OldPosition = Positions.First();
+                var OldColumn = OldPosition.Key;
+                var OldRow = OldPosition.Value;
+                if (Board.IsEmptySquare(OldColumn,OldRow))
+                {
+                    Messages.Text = "There is no piece in this square";
+                    Positions.Clear();
+                }
+
+                if (!Board.IsEmptySquare(OldColumn, OldRow))
+                {
+                    switch (Mode)
+                    {
+                        case Modality.BlackTurn:
+                            if (Board.NotYourPiece(SquareValues.Black, OldColumn, OldRow))
+                            {
+                                Messages.Text = "This is not your piece";
+                                Positions.Clear();
+                            }
+                            else
+                            {
+                                Messages.Text = "Now select where you would like to move to";
+                            }
+                            break;
+                        case Modality.WhiteTurn:
+                            if (Board.NotYourPiece(SquareValues.White, OldColumn, OldRow))
+                            {
+                                Messages.Text = "This is not your piece";
+                                Positions.Clear();
+                            }
+                            else
+                            {
+                                Messages.Text = "Now select where you would like to move to";
+                            }
+                            break;
+                    }
+
+                }
+                
+            }
+
             if (Positions.Count == 2)
             {
                 if (gamemode == 1)
@@ -75,13 +123,14 @@ namespace CheckersGUI
                         Bot.Move();
                         if (Board.GameIsWon())
                         {
-                            Messages.Text = "Black Wins!!!!";
+                            Messages.Text = "White Wins!!!!";
                             DrawBoard();
                             turn = -2;
                             return;
                         }
                         DrawBoard();
                         turn = 1;
+                        Mode = Modality.BlackTurn;
                         return;
                     }
 
@@ -133,14 +182,23 @@ namespace CheckersGUI
 
         private void Start1PGame_Click(object sender, EventArgs e)
         {
+            Board.InitialiseEmptyBoard();
+            Board.InitializePieces();
             DrawBoard();
+            Messages.Text = "You are the Black Piece";
+            turn = 1;
+            Mode = Modality.BlackTurn;
         }
 
         private void Start2PGame_Click(object sender, EventArgs e)
         {
+            Board.InitialiseEmptyBoard();
+            Board.InitializePieces();
             gamemode = 2;
             DrawBoard();
             Messages.Text = "You are the Black Piece";
+            turn = 1;
+            Mode = Modality.BlackTurn;
         }
 
         private void Quit_Click(object sender, EventArgs e)
@@ -162,11 +220,6 @@ namespace CheckersGUI
             var NewColumn = NewPosition.Key;
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
-            if (Board.IsEmptySquare(OldColumn, OldRow))
-            {
-                Messages.Text = "This square is empty";
-                return;
-            }
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
@@ -190,9 +243,9 @@ namespace CheckersGUI
                 turn = -1;
                 return;
             }
-            //Initialize2PGame(Positions);
             DrawBoard();
             turn = 2;
+            Mode = Modality.WhiteTurn;
             return;
         }
 
@@ -233,12 +286,13 @@ namespace CheckersGUI
             if (Board.GameIsWon())
             {
                 Messages.Text = "White Wins!!!!";
+                DrawBoard();
                 turn = -2;
                 return;
             }
-            //Initialize2PGame2(Positions);
             DrawBoard();
             turn = 1;
+            Mode = Modality.BlackTurn;
             return;
         }
 

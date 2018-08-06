@@ -82,7 +82,7 @@ namespace Checkers.Model
         }
 
         //Sets all squares to empty
-        private void InitialiseEmptyBoard()
+        public void InitialiseEmptyBoard()
         {
             for (int Row = 0; Row < Size; Row++)
             {

@@ -15,4 +15,9 @@ namespace Checkers.Model
     {
         Empty/*Taken*/, Black, White, BlackKing, WhiteKing
     }
+
+    public enum Modality
+    {
+        BlackTurn, WhiteTurn
+    }
 }
