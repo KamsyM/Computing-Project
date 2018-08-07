@@ -33,12 +33,16 @@
             this.Start1PGame = new System.Windows.Forms.Button();
             this.Start2PGame = new System.Windows.Forms.Button();
             this.Quit = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.MenuGame = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuNewGame = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Grid
             // 
-            this.Grid.Location = new System.Drawing.Point(12, 12);
+            this.Grid.Location = new System.Drawing.Point(12, 23);
             this.Grid.Name = "Grid";
             this.Grid.Size = new System.Drawing.Size(326, 337);
             this.Grid.TabIndex = 0;
@@ -47,7 +51,7 @@
             // 
             // Messages
             // 
-            this.Messages.Location = new System.Drawing.Point(12, 355);
+            this.Messages.Location = new System.Drawing.Point(12, 366);
             this.Messages.Name = "Messages";
             this.Messages.Size = new System.Drawing.Size(326, 83);
             this.Messages.TabIndex = 2;
@@ -83,6 +87,31 @@
             this.Quit.UseVisualStyleBackColor = true;
             this.Quit.Click += new System.EventHandler(this.Quit_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuGame});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(684, 24);
+            this.menuStrip1.TabIndex = 9;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // MenuGame
+            // 
+            this.MenuGame.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuNewGame});
+            this.MenuGame.Name = "MenuGame";
+            this.MenuGame.Size = new System.Drawing.Size(50, 20);
+            this.MenuGame.Text = "&Game";
+            // 
+            // MenuNewGame
+            // 
+            this.MenuNewGame.Name = "MenuNewGame";
+            this.MenuNewGame.Size = new System.Drawing.Size(180, 22);
+            this.MenuNewGame.Text = "New Game";
+            this.MenuNewGame.Click += new System.EventHandler(this.MenuNewGame_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -93,10 +122,15 @@
             this.Controls.Add(this.Start1PGame);
             this.Controls.Add(this.Messages);
             this.Controls.Add(this.Grid);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Checkers";
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -107,6 +141,9 @@
         private System.Windows.Forms.Button Start1PGame;
         private System.Windows.Forms.Button Start2PGame;
         private System.Windows.Forms.Button Quit;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem MenuGame;
+        private System.Windows.Forms.ToolStripMenuItem MenuNewGame;
     }
 }
 

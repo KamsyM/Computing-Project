@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -25,11 +26,12 @@ namespace CheckersGUI
         Graphics g;
         private GameBoard Board;
         private BotPlayers Bot;
+        private BotPlayers Bot2;
         private Modality Mode;
-        private SquareValues PType;
         private int gamemode = 1;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
         private int turn = 1;
+        private bool PlayerBlack = true;
 
 
         public Form1()
@@ -43,8 +45,8 @@ namespace CheckersGUI
             //var whitepieces = Pieces.TestWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Bot = new BotPlayers(Board, SquareValues.White, 1);
+            Bot2 = new BotPlayers(Board, SquareValues.Black, 1);
             //Board.InitializePieces();
-
         }
 
 
@@ -113,14 +115,23 @@ namespace CheckersGUI
             {
                 if (gamemode == 1)
                 {
-                    if (turn == 1)
+                    if (PlayerBlack)
                     {
-                        BlackTurn();
-                        Messages.Text = "You are the Black Piece";
+                  
+                        if (turn == 1)
+                        {
+                            BlackTurn();
+                            Messages.Text = "You are the Black Piece";
+                        }
+                        if (turn == 2)
+                        {
+                            WhiteBotMove();
+                            return;
+                        }
                     }
-                    if (turn == 2)
+                    if (!PlayerBlack)
                     {
-                        Bot.Move();
+                        WhiteTurn();
                         if (Board.GameIsWon())
                         {
                             Messages.Text = "White Wins!!!!";
@@ -128,10 +139,10 @@ namespace CheckersGUI
                             turn = -2;
                             return;
                         }
-                        DrawBoard();
-                        turn = 1;
-                        Mode = Modality.BlackTurn;
+                        Messages.Text = "You are the White Piece";
+                        BlackBotMove();
                         return;
+
                     }
 
                     if(turn == -1)
@@ -176,18 +187,63 @@ namespace CheckersGUI
            
         }
 
+        private void BlackBotMove()
+        {
+            Bot2.Move();
+            if (Board.GameIsWon())
+            {
+                Messages.Text = "Black Wins!!!!";
+                DrawBoard();
+                turn = -2;
+                return;
+            }
+            DrawBoard();
+            Mode = Modality.WhiteTurn;
+        }
 
+        private void WhiteBotMove()
+        {
+            Bot.Move();
+            if (Board.GameIsWon())
+            {
+                Messages.Text = "White Wins!!!!";
+                DrawBoard();
+                turn = -2;
+                return;
+            }
+            DrawBoard();
+            turn = 1;
+            Mode = Modality.BlackTurn;
+        }
 
 
 
         private void Start1PGame_Click(object sender, EventArgs e)
         {
-            Board.InitialiseEmptyBoard();
-            Board.InitializePieces();
-            DrawBoard();
-            Messages.Text = "You are the Black Piece";
-            turn = 1;
-            Mode = Modality.BlackTurn;
+            PopUp PlayerType = new PopUp();
+            PlayerType.ShowDialog();
+            if (PlayerType.PType == SquareValues.Black)
+            {
+                Messages.Text = "You are the Black Piece";
+                turn = 1;
+                Mode = Modality.BlackTurn;
+                Board.InitialiseEmptyBoard();
+                Board.InitializePieces();
+                DrawBoard();
+            }
+
+            if (PlayerType.PType == SquareValues.White)
+            {
+                PlayerBlack = false;
+                Messages.Text = "You are the White Piece";
+                turn = 1;
+                Mode = Modality.BlackTurn;
+                Board.InitialiseEmptyBoard();
+                Board.InitializePieces();
+                DrawBoard();
+                BlackBotMove();
+            }
+
         }
 
         private void Start2PGame_Click(object sender, EventArgs e)
@@ -400,6 +456,16 @@ namespace CheckersGUI
             }
         }
 
+        private void MenuNewGame_Click(object sender, EventArgs e)
+        {
+            StartNewGame();
+        }
 
+        private void StartNewGame()
+        {
+
+            Menu newGame = new Menu();
+           // newGame.InitializeComponent();
+        }
     }
 }

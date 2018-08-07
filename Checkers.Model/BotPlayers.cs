@@ -51,7 +51,7 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(Type, oldcol, oldrow, newcol, newrow);
+                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
                                     return;
                                 }
                                 

@@ -15,3 +15,5 @@ C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.csproj.CopyComplete
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.exe
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.Menu.resources
+C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.PopUp.resources
