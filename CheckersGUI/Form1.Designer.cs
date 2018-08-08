@@ -28,14 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.Grid = new System.Windows.Forms.PictureBox();
             this.Messages = new System.Windows.Forms.RichTextBox();
-            this.Start1PGame = new System.Windows.Forms.Button();
-            this.Start2PGame = new System.Windows.Forms.Button();
             this.Quit = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.MenuGame = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuNewGame = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblNameP1 = new System.Windows.Forms.Label();
+            this.lblNameP2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.P1remain = new System.Windows.Forms.RichTextBox();
+            this.P2remain = new System.Windows.Forms.RichTextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -57,29 +64,9 @@
             this.Messages.TabIndex = 2;
             this.Messages.Text = "";
             // 
-            // Start1PGame
-            // 
-            this.Start1PGame.Location = new System.Drawing.Point(475, 26);
-            this.Start1PGame.Name = "Start1PGame";
-            this.Start1PGame.Size = new System.Drawing.Size(90, 41);
-            this.Start1PGame.TabIndex = 6;
-            this.Start1PGame.Text = "Start 1P Game";
-            this.Start1PGame.UseVisualStyleBackColor = true;
-            this.Start1PGame.Click += new System.EventHandler(this.Start1PGame_Click);
-            // 
-            // Start2PGame
-            // 
-            this.Start2PGame.Location = new System.Drawing.Point(475, 130);
-            this.Start2PGame.Name = "Start2PGame";
-            this.Start2PGame.Size = new System.Drawing.Size(90, 41);
-            this.Start2PGame.TabIndex = 7;
-            this.Start2PGame.Text = "Start 2P Game";
-            this.Start2PGame.UseVisualStyleBackColor = true;
-            this.Start2PGame.Click += new System.EventHandler(this.Start2PGame_Click);
-            // 
             // Quit
             // 
-            this.Quit.Location = new System.Drawing.Point(475, 240);
+            this.Quit.Location = new System.Drawing.Point(502, 408);
             this.Quit.Name = "Quit";
             this.Quit.Size = new System.Drawing.Size(90, 41);
             this.Quit.TabIndex = 8;
@@ -108,21 +95,102 @@
             // MenuNewGame
             // 
             this.MenuNewGame.Name = "MenuNewGame";
-            this.MenuNewGame.Size = new System.Drawing.Size(180, 22);
+            this.MenuNewGame.Size = new System.Drawing.Size(132, 22);
             this.MenuNewGame.Text = "New Game";
             this.MenuNewGame.Click += new System.EventHandler(this.MenuNewGame_Click);
+            // 
+            // lblNameP1
+            // 
+            this.lblNameP1.Font = new System.Drawing.Font("Tahoma", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNameP1.Location = new System.Drawing.Point(375, 107);
+            this.lblNameP1.Name = "lblNameP1";
+            this.lblNameP1.Size = new System.Drawing.Size(129, 17);
+            this.lblNameP1.TabIndex = 10;
+            this.lblNameP1.Text = "Player";
+            // 
+            // lblNameP2
+            // 
+            this.lblNameP2.Font = new System.Drawing.Font("Tahoma", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNameP2.Location = new System.Drawing.Point(375, 271);
+            this.lblNameP2.Name = "lblNameP2";
+            this.lblNameP2.Size = new System.Drawing.Size(124, 16);
+            this.lblNameP2.TabIndex = 11;
+            this.lblNameP2.Text = "Opponent";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(375, 300);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Remaining:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(375, 137);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Remaining:";
+            // 
+            // P1remain
+            // 
+            this.P1remain.Location = new System.Drawing.Point(451, 137);
+            this.P1remain.Name = "P1remain";
+            this.P1remain.ReadOnly = true;
+            this.P1remain.Size = new System.Drawing.Size(48, 23);
+            this.P1remain.TabIndex = 14;
+            this.P1remain.Text = "";
+            // 
+            // P2remain
+            // 
+            this.P2remain.Location = new System.Drawing.Point(451, 300);
+            this.P2remain.Name = "P2remain";
+            this.P2remain.ReadOnly = true;
+            this.P2remain.Size = new System.Drawing.Size(48, 22);
+            this.P2remain.TabIndex = 15;
+            this.P2remain.Text = "";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(375, 81);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "PLAYER 1";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(375, 247);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "PLAYER 2";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.P2remain);
+            this.Controls.Add(this.P1remain);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblNameP2);
+            this.Controls.Add(this.lblNameP1);
             this.Controls.Add(this.Quit);
-            this.Controls.Add(this.Start2PGame);
-            this.Controls.Add(this.Start1PGame);
             this.Controls.Add(this.Messages);
             this.Controls.Add(this.Grid);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Checkers";
@@ -138,12 +206,18 @@
 
         private System.Windows.Forms.PictureBox Grid;
         private System.Windows.Forms.RichTextBox Messages;
-        private System.Windows.Forms.Button Start1PGame;
-        private System.Windows.Forms.Button Start2PGame;
         private System.Windows.Forms.Button Quit;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem MenuGame;
         private System.Windows.Forms.ToolStripMenuItem MenuNewGame;
+        private System.Windows.Forms.Label lblNameP1;
+        private System.Windows.Forms.Label lblNameP2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RichTextBox P1remain;
+        private System.Windows.Forms.RichTextBox P2remain;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }
 

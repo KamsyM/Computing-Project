@@ -28,10 +28,12 @@ namespace CheckersGUI
         private BotPlayers Bot;
         private BotPlayers Bot2;
         private Modality Mode;
-        private int gamemode = 1;
+        private int gamemode = 0;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
         private int turn = 1;
         private bool PlayerBlack = true;
+        private Menu menu = new Menu();
+        private SquareValues PType = SquareValues.Empty;
 
 
         public Form1()
@@ -44,9 +46,7 @@ namespace CheckersGUI
             //var blackpieces = Pieces.TestBlack();
             //var whitepieces = Pieces.TestWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
-            Bot = new BotPlayers(Board, SquareValues.White, 1);
-            Bot2 = new BotPlayers(Board, SquareValues.Black, 1);
-            //Board.InitializePieces();
+
         }
 
 
@@ -113,7 +113,7 @@ namespace CheckersGUI
 
             if (Positions.Count == 2)
             {
-                if (gamemode == 1)
+                if (gamemode == 0)
                 {
                     if (PlayerBlack)
                     {
@@ -157,7 +157,7 @@ namespace CheckersGUI
                         return;
                     }
                 }
-                if (gamemode == 2)
+                if (gamemode == 1)
                 {
                     if (turn == 1)
                     {
@@ -218,11 +218,37 @@ namespace CheckersGUI
 
 
 
-        private void Start1PGame_Click(object sender, EventArgs e)
+        //private void Start1PGame_Click(object sender, EventArgs e)
+        //{
+        //    PopUp PlayerType = new PopUp();
+        //    PlayerType.ShowDialog();
+        //    if (PlayerType.PType == SquareValues.Black)
+        //    {
+        //        Messages.Text = "You are the Black Piece";
+        //        turn = 1;
+        //        Mode = Modality.BlackTurn;
+        //        Board.InitialiseEmptyBoard();
+        //        Board.InitializePieces();
+        //        DrawBoard();
+        //    }
+
+        //    if (PlayerType.PType == SquareValues.White)
+        //    {
+        //        PlayerBlack = false;
+        //        Messages.Text = "You are the White Piece";
+        //        turn = 1;
+        //        Mode = Modality.BlackTurn;
+        //        Board.InitialiseEmptyBoard();
+        //        Board.InitializePieces();
+        //        DrawBoard();
+        //        BlackBotMove();
+        //    }
+
+        //}
+
+        private void StartGame1P()
         {
-            PopUp PlayerType = new PopUp();
-            PlayerType.ShowDialog();
-            if (PlayerType.PType == SquareValues.Black)
+            if (PType == SquareValues.Black)
             {
                 Messages.Text = "You are the Black Piece";
                 turn = 1;
@@ -232,7 +258,7 @@ namespace CheckersGUI
                 DrawBoard();
             }
 
-            if (PlayerType.PType == SquareValues.White)
+            if (PType == SquareValues.White)
             {
                 PlayerBlack = false;
                 Messages.Text = "You are the White Piece";
@@ -244,17 +270,34 @@ namespace CheckersGUI
                 BlackBotMove();
             }
 
+            if (PType == SquareValues.Empty)
+            {
+                Messages.Text = "It's empty";
+            }
+
         }
 
-        private void Start2PGame_Click(object sender, EventArgs e)
+        //private void Start2PGame_Click(object sender, EventArgs e)
+        //{
+        //    Board.InitialiseEmptyBoard();
+        //    Board.InitializePieces();
+        //    gamemode = 1;
+        //    DrawBoard();
+        //    Messages.Text = "You are the Black Piece";
+        //    turn = 1;
+        //    Mode = Modality.BlackTurn;
+        //}
+
+        private void StartGame2P()
         {
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
-            gamemode = 2;
+            gamemode = 1;
             DrawBoard();
             Messages.Text = "You are the Black Piece";
             turn = 1;
             Mode = Modality.BlackTurn;
+            DrawSquare(3, 3, blackPen, greyBrush);
         }
 
         private void Quit_Click(object sender, EventArgs e)
@@ -403,7 +446,8 @@ namespace CheckersGUI
                     }
                 }
             }
-
+            P1remain.Text = Convert.ToString(BlackCount());
+            P2remain.Text = Convert.ToString(WhiteCount());
         }
 
         private void DrawSquare(int col, int row, Pen pen, Brush fill)
@@ -463,9 +507,62 @@ namespace CheckersGUI
 
         private void StartNewGame()
         {
+            menu.ShowDialog();
+            PType = menu.PType;
+            gamemode = menu.gamemode;
+            switch (gamemode)
+            {
+                case 0:
+                    lblNameP1.Text = menu.name1P;
+                    StartGame1P();
+                    break;
+                case 1:
+                    lblNameP1.Text = menu.name2P1;
+                    lblNameP2.Text = menu.name2P2;
+                    StartGame2P();
+                    break;
+                default:
+                    lblNameP1.Text = menu.name1P;
+                    StartGame1P();
+                    break;
+            }
+            Bot = new BotPlayers(Board, SquareValues.White, menu.difficulty);
+            Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
+            
+            // newGame.InitializeComponent();
+        }
 
-            Menu newGame = new Menu();
-           // newGame.InitializeComponent();
+        private int BlackCount()
+        {
+            int count = 0;
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    var square = Board.ReadSquare(col, row);
+                    if (square == SquareValues.Black || square == SquareValues.BlackKing)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+        private int WhiteCount()
+        {
+            int count = 0;
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    var square = Board.ReadSquare(col, row);
+                    if (square == SquareValues.White || square == SquareValues.WhiteKing )
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
         }
     }
 }

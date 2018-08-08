@@ -485,23 +485,23 @@ namespace Checkers.Model
 
         public int MouseConverter(int num)
         {
-            if (num < 40)
+            if (num <= 40)
             {
                 return 0;
             }
-            if (num < 80 && num > 40)
+            if (num <= 80 && num > 40)
             {
                 return 1;
             }
-            if (num < 120 && num > 80)
+            if (num <= 120 && num > 80)
             {
                 return 2;
             }
-            if (num < 160 && num > 120)
+            if (num <= 160 && num > 120)
             {
                 return 3;
             }
-            if (num < 200 && num > 160)
+            if (num <= 200 && num > 160)
             {
                 return 4;
             }
@@ -509,11 +509,11 @@ namespace Checkers.Model
             {
                 return 5;
             }
-            if (num < 280 && num > 240)
+            if (num <= 280 && num > 240)
             {
                 return 6;
             }
-            if (num < 320 && num > 280)
+            if (num <= 320 && num > 280)
             {
                 return 7;
             }
