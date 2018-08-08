@@ -43,8 +43,12 @@
             this.P2remain = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.BlackPiecePic = new System.Windows.Forms.PictureBox();
+            this.WhitePiecePic = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WhitePiecePic)).BeginInit();
             this.SuspendLayout();
             // 
             // Grid
@@ -157,7 +161,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(375, 81);
+            this.label3.Location = new System.Drawing.Point(375, 77);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
             this.label3.TabIndex = 16;
@@ -173,11 +177,31 @@
             this.label4.TabIndex = 17;
             this.label4.Text = "PLAYER 2";
             // 
+            // BlackPiecePic
+            // 
+            this.BlackPiecePic.Image = ((System.Drawing.Image)(resources.GetObject("BlackPiecePic.Image")));
+            this.BlackPiecePic.Location = new System.Drawing.Point(518, 87);
+            this.BlackPiecePic.Name = "BlackPiecePic";
+            this.BlackPiecePic.Size = new System.Drawing.Size(37, 37);
+            this.BlackPiecePic.TabIndex = 18;
+            this.BlackPiecePic.TabStop = false;
+            // 
+            // WhitePiecePic
+            // 
+            this.WhitePiecePic.Image = ((System.Drawing.Image)(resources.GetObject("WhitePiecePic.Image")));
+            this.WhitePiecePic.Location = new System.Drawing.Point(518, 250);
+            this.WhitePiecePic.Name = "WhitePiecePic";
+            this.WhitePiecePic.Size = new System.Drawing.Size(37, 37);
+            this.WhitePiecePic.TabIndex = 19;
+            this.WhitePiecePic.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.WhitePiecePic);
+            this.Controls.Add(this.BlackPiecePic);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.P2remain);
@@ -197,6 +221,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WhitePiecePic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,6 +244,8 @@
         private System.Windows.Forms.RichTextBox P2remain;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.PictureBox BlackPiecePic;
+        private System.Windows.Forms.PictureBox WhitePiecePic;
     }
 }
 

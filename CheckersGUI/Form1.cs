@@ -34,6 +34,8 @@ namespace CheckersGUI
         private bool PlayerBlack = true;
         private Menu menu = new Menu();
         private SquareValues PType = SquareValues.Empty;
+        private Point Player1Pic = new Point(518, 87);
+        private Point Player2Pic = new Point(518, 250);
 
 
         public Form1()
@@ -261,6 +263,8 @@ namespace CheckersGUI
             if (PType == SquareValues.White)
             {
                 PlayerBlack = false;
+                BlackPiecePic.Location = Player2Pic;
+                WhitePiecePic.Location = Player1Pic;
                 Messages.Text = "You are the White Piece";
                 turn = 1;
                 Mode = Modality.BlackTurn;
@@ -446,8 +450,16 @@ namespace CheckersGUI
                     }
                 }
             }
-            P1remain.Text = Convert.ToString(BlackCount());
-            P2remain.Text = Convert.ToString(WhiteCount());
+            if (PlayerBlack)
+            {
+                P1remain.Text = Convert.ToString(BlackCount());
+                P2remain.Text = Convert.ToString(WhiteCount());
+            }
+            if (!PlayerBlack)
+            {
+                P1remain.Text = Convert.ToString(WhiteCount());
+                P2remain.Text = Convert.ToString(BlackCount());
+            }
         }
 
         private void DrawSquare(int col, int row, Pen pen, Brush fill)
@@ -467,6 +479,7 @@ namespace CheckersGUI
                 g.FillEllipse(fill, col * squareSize + 1, row * squareSize + 1, squareSize - 1, squareSize - 1);
             }
         }
+
 
         private void DrawStar(Pen pen, Brush fill)
         {
@@ -510,6 +523,8 @@ namespace CheckersGUI
             menu.ShowDialog();
             PType = menu.PType;
             gamemode = menu.gamemode;
+            Bot = new BotPlayers(Board, SquareValues.White, menu.difficulty);
+            Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
             switch (gamemode)
             {
                 case 0:
@@ -526,10 +541,7 @@ namespace CheckersGUI
                     StartGame1P();
                     break;
             }
-            Bot = new BotPlayers(Board, SquareValues.White, menu.difficulty);
-            Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
-            
-            // newGame.InitializeComponent();
+
         }
 
         private int BlackCount()
