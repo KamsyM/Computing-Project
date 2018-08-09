@@ -44,10 +44,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.DoubleJumpBlack();
-            //var whitepieces = Pieces.TestWhite();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.TestBlack();
+            var whitepieces = Pieces.TestWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
 
         }
@@ -99,7 +99,6 @@ namespace CheckersGUI
                             default:
                                 break;
                         }
-                        //BlackTurn();
                         
                     }
                 }
@@ -179,13 +178,10 @@ namespace CheckersGUI
                         if (turn == 2)
                         {
                             WhiteTurn();
-                            //if (Board.GameIsWon())
-                            //{
-                            //    Messages.Text = "White Wins!!!!";
-                            //    DrawBoard();
-                            //    turn = -2;
-                            //    return;
-                            //}
+                            if (Board.GameIsWon())
+                            {
+                                turn = -1;
+                            }
                             Messages.Text = "You are the White Piece";
                         }
                         if (turn == 1)
@@ -200,13 +196,13 @@ namespace CheckersGUI
 
                     if(turn == -1)
                     {
-                        Messages.Text = "Black Wins!!!";
+                        Messages.Text = lblNameP1.Text + " Wins!!!";
                         return;
                     }
 
                     if (turn == -2)
                     {
-                        Messages.Text = "White Wins!!";
+                        Messages.Text = lblNameP2.Text +  " Wins!!";
                         return;
                     }
                 }
@@ -225,13 +221,13 @@ namespace CheckersGUI
 
                     if(turn == -1)
                     {
-                        Messages.Text = "Black Wins!!";
+                        Messages.Text = lblNameP1.Text + " Wins!!";
                         return;
                     }
 
                     if (turn == -2)
                     {
-                        Messages.Text = "White Wins!!";
+                        Messages.Text = lblNameP2.Text + " Wins!!";
                         return;
                     }
 
@@ -245,7 +241,7 @@ namespace CheckersGUI
             Bot2.Move();
             if (Board.GameIsWon())
             {
-                Messages.Text = "Black Wins!!!!";
+                Messages.Text = lblNameP2.Text + " Wins!!!!";
                 DrawBoard();
                 turn = -2;
                 return;
@@ -259,7 +255,7 @@ namespace CheckersGUI
             Bot.Move();
             if (Board.GameIsWon())
             {
-                Messages.Text = "White Wins!!!!";
+                Messages.Text = lblNameP2.Text + " Wins!!!!";
                 DrawBoard();
                 turn = -2;
                 return;
@@ -271,33 +267,6 @@ namespace CheckersGUI
 
 
 
-        //private void Start1PGame_Click(object sender, EventArgs e)
-        //{
-        //    PopUp PlayerType = new PopUp();
-        //    PlayerType.ShowDialog();
-        //    if (PlayerType.PType == SquareValues.Black)
-        //    {
-        //        Messages.Text = "You are the Black Piece";
-        //        turn = 1;
-        //        Mode = Modality.BlackTurn;
-        //        Board.InitialiseEmptyBoard();
-        //        Board.InitializePieces();
-        //        DrawBoard();
-        //    }
-
-        //    if (PlayerType.PType == SquareValues.White)
-        //    {
-        //        PlayerBlack = false;
-        //        Messages.Text = "You are the White Piece";
-        //        turn = 1;
-        //        Mode = Modality.BlackTurn;
-        //        Board.InitialiseEmptyBoard();
-        //        Board.InitializePieces();
-        //        DrawBoard();
-        //        BlackBotMove();
-        //    }
-
-        //}
 
         private void StartGame1P()
         {
@@ -333,16 +302,6 @@ namespace CheckersGUI
 
         }
 
-        //private void Start2PGame_Click(object sender, EventArgs e)
-        //{
-        //    Board.InitialiseEmptyBoard();
-        //    Board.InitializePieces();
-        //    gamemode = 1;
-        //    DrawBoard();
-        //    Messages.Text = "You are the Black Piece";
-        //    turn = 1;
-        //    Mode = Modality.BlackTurn;
-        //}
 
         private void StartGame2P()
         {
@@ -367,7 +326,6 @@ namespace CheckersGUI
             Messages.Text = "You are the White Piece";
             var type = SquareValues.Black;
             var OldPosition = Positions.First();
-            //Positions.Remove(OldPosition.Key);
             var NewPosition = Positions.Last();
             if (!MultiJump)
             {
@@ -405,7 +363,6 @@ namespace CheckersGUI
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             Positions.Add(NewColumn, NewRow);
-                            //Positions.Add(NewColumn+2, NewRow -2);
                             MultiJump = true;
                             return;
                         }
@@ -417,7 +374,6 @@ namespace CheckersGUI
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             Positions.Add(NewColumn, NewRow);
-                            //Positions.Add(NewColumn+2, NewRow -2);
                             MultiJump = true;
                             return;
                         }
@@ -428,15 +384,11 @@ namespace CheckersGUI
             if (Board.GameIsWon())
             {
                 MultiJump = false;
-                Messages.Text = "Black Wins!!!!";
+                Messages.Text = lblNameP1.Text + " Wins!!!!";
                 DrawBoard();
                 turn = -1;
                 return;
             }
-            //if (MultiJump)
-            //{
-            //    Positions.Clear();
-            //}
             MultiJump = false;
             DrawBoard();
             turn = 2;
@@ -449,7 +401,6 @@ namespace CheckersGUI
             Messages.Text = "You are the Black Piece";
             var type = SquareValues.White;
             var OldPosition = Positions.First();
-            //Positions.Remove(OldPosition.Key);
             var NewPosition = Positions.Last();
             if (!MultiJump)
             {
@@ -460,11 +411,6 @@ namespace CheckersGUI
             var NewColumn = NewPosition.Key;
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
-            //if (Board.IsEmptySquare(OldColumn, OldRow))
-            //{
-            //    Messages.Text = "This square is empty";
-            //    return;
-            //}
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
@@ -492,7 +438,6 @@ namespace CheckersGUI
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             Positions.Add(NewColumn, NewRow);
-                            //Positions.Add(NewColumn+2, NewRow -2);
                             MultiJump = true;
                             return;
                         }
@@ -503,7 +448,6 @@ namespace CheckersGUI
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             Positions.Add(NewColumn, NewRow);
-                            //Positions.Add(NewColumn+2, NewRow -2);
                             MultiJump = true;
                             return;
                         }
@@ -514,7 +458,7 @@ namespace CheckersGUI
             if (Board.GameIsWon())
             {
                 MultiJump = false;
-                Messages.Text = "White Wins!!!!";
+                Messages.Text = lblNameP2.Text + " Wins!!!!";
                 DrawBoard();
                 turn = -2;
                 return;
