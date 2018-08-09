@@ -133,17 +133,25 @@ namespace CheckersGUI
                     }
                     if (!PlayerBlack)
                     {
-                        WhiteTurn();
-                        if (Board.GameIsWon())
+                        if (turn == 2)
                         {
-                            Messages.Text = "White Wins!!!!";
-                            DrawBoard();
-                            turn = -2;
+                            WhiteTurn();
+                            //if (Board.GameIsWon())
+                            //{
+                            //    Messages.Text = "White Wins!!!!";
+                            //    DrawBoard();
+                            //    turn = -2;
+                            //    return;
+                            //}
+                            Messages.Text = "You are the White Piece";
+                        }
+                        if (turn == 1)
+                        {
+                            BlackBotMove();
+                            turn = 2;
                             return;
                         }
-                        Messages.Text = "You are the White Piece";
-                        BlackBotMove();
-                        return;
+
 
                     }
 
@@ -272,6 +280,7 @@ namespace CheckersGUI
                 Board.InitializePieces();
                 DrawBoard();
                 BlackBotMove();
+                turn = 2;
             }
 
             if (PType == SquareValues.Empty)
