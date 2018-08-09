@@ -416,6 +416,15 @@ namespace Checkers.Model
             return true;
         }
 
+        public bool HasJumped(int oldCol, int oldRow, int newCol, int newRow)
+        {
+            if (newCol == oldCol +2 || newCol == oldCol - 2)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public bool NotYourPiece( SquareValues type, int oldCol, int oldRow)
         {
             if (type == SquareValues.Black)

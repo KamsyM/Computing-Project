@@ -36,6 +36,7 @@ namespace CheckersGUI
         private SquareValues PType = SquareValues.Empty;
         private Point Player1Pic = new Point(518, 87);
         private Point Player2Pic = new Point(518, 250);
+        private bool MultiJump = false;
 
 
         public Form1()
@@ -45,7 +46,7 @@ namespace CheckersGUI
             Mode = Modality.BlackTurn;
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.TestBlack();
+            //var blackpieces = Pieces.DoubleJumpBlack();
             //var whitepieces = Pieces.TestWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
 
@@ -66,8 +67,49 @@ namespace CheckersGUI
             catch (Exception)
             {
 
-                Positions.Clear();
+                if (!MultiJump)
+                {
+                    Positions.Clear();
+                }
                 Messages.Text = "Invalid Move";
+                return;
+            }
+
+            if (MultiJump)
+            {
+               
+                var OldPosition = Positions.First();
+                var OldColumn = OldPosition.Key;
+                var OldRow = OldPosition.Value;
+                var NewPosition = Positions.Last();
+                var NewColumn = NewPosition.Key;
+                var NewRow = NewPosition.Value;
+                if (NewColumn == OldColumn + 2 || NewColumn == OldColumn - 2)
+                {
+                    if (NewRow == OldRow +2 || NewRow == OldRow - 2)
+                    {
+                        switch (Mode)
+                        {
+                            case Modality.BlackTurn:
+                                BlackTurn();
+                                break;
+                            case Modality.WhiteTurn:
+                                WhiteTurn();
+                                break;
+                            default:
+                                break;
+                        }
+                        //BlackTurn();
+                        
+                    }
+                }
+                if (MultiJump)
+                {
+                    Positions.Remove(NewPosition.Key);
+                    return;
+                }
+
+
             }
 
             if (Positions.Count == 1)
@@ -128,6 +170,7 @@ namespace CheckersGUI
                         if (turn == 2)
                         {
                             WhiteBotMove();
+                            Positions.Clear();
                             return;
                         }
                     }
@@ -324,9 +367,12 @@ namespace CheckersGUI
             Messages.Text = "You are the White Piece";
             var type = SquareValues.Black;
             var OldPosition = Positions.First();
-            Positions.Remove(OldPosition.Key);
-            var NewPosition = Positions.First();
-            Positions.Clear();
+            //Positions.Remove(OldPosition.Key);
+            var NewPosition = Positions.Last();
+            if (!MultiJump)
+            {
+                Positions.Clear();
+            }
             var OldColumn = OldPosition.Key;
             var OldRow = OldPosition.Value;
             var NewColumn = NewPosition.Key;
@@ -342,19 +388,56 @@ namespace CheckersGUI
             if (!Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Messages.Text = "Not a Valid Move";
+                if (MultiJump)
+                {
+                    Positions.Remove(NewPosition.Key);
+                }
                 return;
             }
             if (Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
+                if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
+                {
+                    if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow - 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow - 2))
+                    {
+                        DrawBoard();
+                        if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            Positions.Add(NewColumn, NewRow);
+                            //Positions.Add(NewColumn+2, NewRow -2);
+                            MultiJump = true;
+                            return;
+                        }
+                    }
+
+                    if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow + 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow + 2))
+                    {
+                        DrawBoard();
+                        if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            Positions.Add(NewColumn, NewRow);
+                            //Positions.Add(NewColumn+2, NewRow -2);
+                            MultiJump = true;
+                            return;
+                        }
+                    }
+                }
+                
             }
             if (Board.GameIsWon())
             {
+                MultiJump = false;
                 Messages.Text = "Black Wins!!!!";
                 DrawBoard();
                 turn = -1;
                 return;
             }
+            //if (MultiJump)
+            //{
+            //    Positions.Clear();
+            //}
+            MultiJump = false;
             DrawBoard();
             turn = 2;
             Mode = Modality.WhiteTurn;
@@ -366,19 +449,22 @@ namespace CheckersGUI
             Messages.Text = "You are the Black Piece";
             var type = SquareValues.White;
             var OldPosition = Positions.First();
-            Positions.Remove(OldPosition.Key);
-            var NewPosition = Positions.First();
-            Positions.Clear();
+            //Positions.Remove(OldPosition.Key);
+            var NewPosition = Positions.Last();
+            if (!MultiJump)
+            {
+                Positions.Clear();
+            }
             var OldColumn = OldPosition.Key;
             var OldRow = OldPosition.Value;
             var NewColumn = NewPosition.Key;
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
-            if (Board.IsEmptySquare(OldColumn, OldRow))
-            {
-                Messages.Text = "This square is empty";
-                return;
-            }
+            //if (Board.IsEmptySquare(OldColumn, OldRow))
+            //{
+            //    Messages.Text = "This square is empty";
+            //    return;
+            //}
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
@@ -389,19 +475,51 @@ namespace CheckersGUI
             if (!Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Messages.Text = "Not a Valid Move";
+                if (!MultiJump)
+                {
+                    Positions.Remove(NewPosition.Key);
+                }
                 return;
             }
             if (Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
+                if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
+                {
+                    if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow + 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow + 2))
+                    {
+                        DrawBoard();
+                        if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            Positions.Add(NewColumn, NewRow);
+                            //Positions.Add(NewColumn+2, NewRow -2);
+                            MultiJump = true;
+                            return;
+                        }
+                    }
+                    if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow - 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow - 2))
+                    {
+                        DrawBoard();
+                        if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            Positions.Add(NewColumn, NewRow);
+                            //Positions.Add(NewColumn+2, NewRow -2);
+                            MultiJump = true;
+                            return;
+                        }
+                    }
+                }
+                
             }
             if (Board.GameIsWon())
             {
+                MultiJump = false;
                 Messages.Text = "White Wins!!!!";
                 DrawBoard();
                 turn = -2;
                 return;
             }
+            MultiJump = false;
             DrawBoard();
             turn = 1;
             Mode = Modality.BlackTurn;
