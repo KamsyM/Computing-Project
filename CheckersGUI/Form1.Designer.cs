@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.Grid = new System.Windows.Forms.PictureBox();
             this.Messages = new System.Windows.Forms.RichTextBox();
-            this.Quit = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.MenuGame = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuNewGame = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +44,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.BlackPiecePic = new System.Windows.Forms.PictureBox();
             this.WhitePiecePic = new System.Windows.Forms.PictureBox();
+            this.endGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).BeginInit();
@@ -68,16 +70,6 @@
             this.Messages.TabIndex = 2;
             this.Messages.Text = "";
             // 
-            // Quit
-            // 
-            this.Quit.Location = new System.Drawing.Point(502, 408);
-            this.Quit.Name = "Quit";
-            this.Quit.Size = new System.Drawing.Size(90, 41);
-            this.Quit.TabIndex = 8;
-            this.Quit.Text = "Quit";
-            this.Quit.UseVisualStyleBackColor = true;
-            this.Quit.Click += new System.EventHandler(this.Quit_Click);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -91,7 +83,10 @@
             // MenuGame
             // 
             this.MenuGame.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuNewGame});
+            this.MenuNewGame,
+            this.endGameToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.exitToolStripMenuItem});
             this.MenuGame.Name = "MenuGame";
             this.MenuGame.Size = new System.Drawing.Size(50, 20);
             this.MenuGame.Text = "&Game";
@@ -99,8 +94,8 @@
             // MenuNewGame
             // 
             this.MenuNewGame.Name = "MenuNewGame";
-            this.MenuNewGame.Size = new System.Drawing.Size(132, 22);
-            this.MenuNewGame.Text = "New Game";
+            this.MenuNewGame.Size = new System.Drawing.Size(180, 22);
+            this.MenuNewGame.Text = "&New Game";
             this.MenuNewGame.Click += new System.EventHandler(this.MenuNewGame_Click);
             // 
             // lblNameP1
@@ -195,6 +190,25 @@
             this.WhitePiecePic.TabIndex = 19;
             this.WhitePiecePic.TabStop = false;
             // 
+            // endGameToolStripMenuItem
+            // 
+            this.endGameToolStripMenuItem.Name = "endGameToolStripMenuItem";
+            this.endGameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.endGameToolStripMenuItem.Text = "&End Game";
+            this.endGameToolStripMenuItem.Click += new System.EventHandler(this.endGameToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "&Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -210,7 +224,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblNameP2);
             this.Controls.Add(this.lblNameP1);
-            this.Controls.Add(this.Quit);
             this.Controls.Add(this.Messages);
             this.Controls.Add(this.Grid);
             this.Controls.Add(this.menuStrip1);
@@ -233,7 +246,6 @@
 
         private System.Windows.Forms.PictureBox Grid;
         private System.Windows.Forms.RichTextBox Messages;
-        private System.Windows.Forms.Button Quit;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem MenuGame;
         private System.Windows.Forms.ToolStripMenuItem MenuNewGame;
@@ -247,6 +259,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox BlackPiecePic;
         private System.Windows.Forms.PictureBox WhitePiecePic;
+        private System.Windows.Forms.ToolStripMenuItem endGameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

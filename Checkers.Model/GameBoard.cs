@@ -361,24 +361,6 @@ namespace Checkers.Model
 
         private bool IsValidBlackMove(int oldCol, int oldRow, int newCol, int newRow)
         {
-            //if (oldCol + 2 < 7 && oldCol - 2 > 0 && oldRow + 2 < 7 && oldRow - 2 > 0)
-            //{
-            //    if (IsWhiteSquare(oldCol + 1, oldRow - 1) || IsWhiteKingSquare(oldCol + 1, oldRow - 1))
-            //    {
-            //        if (IsEmptySquare(oldCol + 2, oldRow - 2) && newCol == oldCol + 2 && newRow == oldRow - 2)
-            //        {
-            //            return true;
-            //        }
-            //    }
-
-            //    if (IsWhiteSquare(oldCol - 1, oldRow - 1) || IsWhiteKingSquare(oldCol - 1, oldRow - 1))
-            //    {
-            //        if (IsEmptySquare(oldCol - 2, oldRow - 2) && newCol == oldCol - 2 && newRow == oldRow - 2)
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //}
 
             if (oldRow - 2 >= 0)
             {
@@ -416,6 +398,14 @@ namespace Checkers.Model
             return true;
         }
 
+        /// <summary>
+        /// Used to check if a piece has already taken out another piece
+        /// </summary>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
+        /// <returns></returns>
         public bool HasJumped(int oldCol, int oldRow, int newCol, int newRow)
         {
             if (newCol == oldCol +2 || newCol == oldCol - 2)
@@ -423,6 +413,83 @@ namespace Checkers.Model
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks to see if a piece has the option to jump
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="currentCol"></param>
+        /// <param name="currentRow"></param>
+        /// <returns></returns>
+        public int CanJump(SquareValues type, int currentCol, int currentRow)
+        {
+            var B = SquareValues.Black;
+            var Bk = SquareValues.BlackKing;
+            var W = SquareValues.White;
+            var Wk = SquareValues.WhiteKing;
+            var E = SquareValues.Empty;
+            if (type == B || type == Bk)
+            {
+                if (IsInvalidEntry(currentRow - 2) == null)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow - 1] == W || Squares[currentCol + 1, currentRow - 1] == Wk)
+                        {
+                            if (Squares[currentCol + 2, currentRow - 2] == E)
+                            {
+                                return 1;
+                            }
+                        }
+                    }
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow - 1] == W || Squares[currentCol - 1, currentRow - 1] == Wk)
+                        {
+                            if (Squares[currentCol - 2, currentRow - 2] == E)
+                            {
+                                return 2;
+                            }
+                        }
+                    }
+                }
+                return 0;
+            }
+
+            if (type == W || type == Wk)
+            {
+                if (IsInvalidEntry(currentRow + 2) == null)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null )
+                    {
+
+                        if (Squares[currentCol + 1, currentRow + 1] == B || Squares[currentCol + 1, currentRow + 1] == Bk)
+                        {
+                            if (Squares[currentCol + 2, currentRow + 2] == E)
+                            {
+                                return 3;
+                            }
+                        }
+                    }
+
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+                   
+                        if (Squares[currentCol - 1, currentRow + 1] == B || Squares[currentCol - 1, currentRow + 1] == Bk)
+                        {
+                            if (Squares[currentCol - 2, currentRow + 2] == E)
+                            {
+                                return 4;
+                            }
+                        }
+                    }
+                }
+                return 0;
+            }
+            return 0;
         }
 
         public bool NotYourPiece( SquareValues type, int oldCol, int oldRow)

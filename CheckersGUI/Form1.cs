@@ -44,12 +44,11 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.TestBlack();
-            //var whitepieces = Pieces.TestWhite();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.TestBlack();
+            var whitepieces = Pieces.DoubleJumpWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
-
         }
 
 
@@ -92,9 +91,17 @@ namespace CheckersGUI
                         {
                             case Modality.BlackTurn:
                                 BlackTurn();
+                                while (MultiJump)
+                                {
+                                    return;
+                                }
                                 break;
                             case Modality.WhiteTurn:
                                 WhiteTurn();
+                                while (MultiJump)
+                                {
+                                    return;
+                                }
                                 break;
                             default:
                                 break;
@@ -168,6 +175,7 @@ namespace CheckersGUI
                         }
                         if (turn == 2)
                         {
+
                             WhiteBotMove();
                             Positions.Clear();
                             return;
@@ -235,6 +243,8 @@ namespace CheckersGUI
             }
            
         }
+
+
 
         private void BlackBotMove()
         {
@@ -315,11 +325,6 @@ namespace CheckersGUI
             DrawSquare(3, 3, blackPen, greyBrush);
         }
 
-        private void Quit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
 
         private void BlackTurn()
         {
@@ -355,6 +360,7 @@ namespace CheckersGUI
             if (Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
+
                 if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
                 {
                     if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow - 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow - 2))
@@ -362,6 +368,10 @@ namespace CheckersGUI
                         DrawBoard();
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
+                            if (Positions.Count > 0)
+                            {
+                                Positions.Clear();
+                            }
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -373,6 +383,10 @@ namespace CheckersGUI
                         DrawBoard();
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
+                            if (Positions.Count > 0)
+                            {
+                                Positions.Clear();
+                            }
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -437,6 +451,10 @@ namespace CheckersGUI
                         DrawBoard();
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
+                            if (Positions.Count > 0)
+                            {
+                                Positions.Clear();
+                            }
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -447,6 +465,10 @@ namespace CheckersGUI
                         DrawBoard();
                         if (MessageBox.Show("Jump again?", "Double Jump ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
+                            if (Positions.Count > 0)
+                            {
+                                Positions.Clear();
+                            }
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -646,6 +668,17 @@ namespace CheckersGUI
                 }
             }
             return count;
+        }
+
+        private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Board.InitialiseEmptyBoard();
+            DrawBoard();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
