@@ -44,10 +44,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            //var blackpieces = Pieces.BlackPlacements();
-            //var whitepieces = Pieces.WhitePlacements();
-            var blackpieces = Pieces.TestBlack();
-            var whitepieces = Pieces.DoubleJumpWhite();
+            var blackpieces = Pieces.BlackPlacements();
+            var whitepieces = Pieces.WhitePlacements();
+            //var blackpieces = Pieces.TestBlack();
+            //var whitepieces = Pieces.DoubleJumpWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
         }
 
