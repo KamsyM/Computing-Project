@@ -15,19 +15,21 @@ namespace CheckersGUI
 {
     public partial class Menu : Form
     {
+       // private Form1 IniForm;
         public SquareValues PType;
         public int difficulty;
         public int gamemode;
         public string name1P;
         public string name2P1;
         public string name2P2;
+        //public List<BotPlayer> Bots = new List<BotPlayer>();
+        //private SquareValues BotType;
 
 
         public Menu()
         {
             InitializeComponent();
-
-
+            
         }
 
 
@@ -44,7 +46,7 @@ namespace CheckersGUI
             {
                 gamemode = 1;
             }
-            switch (Convert.ToString(PlayerPieceType.SelectedItem))
+            switch ((string)PlayerPieceType.SelectedItem)
             {
                 case "Black":
                     PType = SquareValues.Black;
@@ -57,12 +59,26 @@ namespace CheckersGUI
                     break;
             }
 
-            switch (Convert.ToString(Difficulty.SelectedItem))
+            //switch (PType)
+            //{
+            //    case SquareValues.Black:
+            //        BotType = SquareValues.White;
+            //        break;
+            //    case SquareValues.White:
+            //        BotType = SquareValues.Black;
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            switch ((string)Difficulty.SelectedItem)
             {
                 case "Beginner":
+                    //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
                     difficulty = 1;
                     break;
                 case "Intermediate":
+                   // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
                     difficulty = 2;
                     break;
                 case "Advanced":

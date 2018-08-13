@@ -21,12 +21,13 @@ namespace CheckersGUI
         private Brush redBrush = new SolidBrush(Color.Red);
         private Brush blackBrush = new SolidBrush(Color.Black);
         private Brush yellowBrush = new SolidBrush(Color.Yellow);
+        private Brush blueBrush = new SolidBrush(Color.LightBlue);
         const int squareSize = 40;
         const int boardSize = 8;
         Graphics g;
-        private GameBoard Board;
+        public GameBoard Board;
         private BotPlayers Bot;
-        private BotPlayers Bot2;
+        //private BotPlayers Bot2;
         private Modality Mode;
         private int gamemode = 0;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
@@ -37,6 +38,8 @@ namespace CheckersGUI
         private Point Player1Pic = new Point(518, 87);
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
+        private SquareValues BotType = SquareValues.Empty;
+        private List<BotPlayer> Bots = new List<BotPlayer>();
 
 
         public Form1()
@@ -44,11 +47,13 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.TestBlack();
-            //var whitepieces = Pieces.DoubleJumpWhite();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.TestBlack();
+            var whitepieces = Pieces.DoubleJumpWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
+            Messages.Text = "WELCOME TO CHECKERS" +
+                " \nClick the Game tab on the top left to begin";
         }
 
 
@@ -71,6 +76,7 @@ namespace CheckersGUI
                     Positions.Clear();
                 }
                 Messages.Text = "Invalid Move";
+                DrawBoard();
                 return;
             }
 
@@ -115,7 +121,10 @@ namespace CheckersGUI
                     return;
                 }
 
-
+                //Positions.Add(0,1);
+                //Positions.Add(3,1);
+                //Positions.Clear();
+                //return;
             }
 
             if (Positions.Count == 1)
@@ -123,6 +132,7 @@ namespace CheckersGUI
                 var OldPosition = Positions.First();
                 var OldColumn = OldPosition.Key;
                 var OldRow = OldPosition.Value;
+                var realtype = Board.ReadSquare(OldColumn, OldRow);
                 if (Board.IsEmptySquare(OldColumn,OldRow))
                 {
                     Messages.Text = "There is no piece in this square";
@@ -131,6 +141,7 @@ namespace CheckersGUI
 
                 if (!Board.IsEmptySquare(OldColumn, OldRow))
                 {
+
                     switch (Mode)
                     {
                         case Modality.BlackTurn:
@@ -141,6 +152,33 @@ namespace CheckersGUI
                             }
                             else
                             {
+                                switch (realtype)
+                                {
+                                    case SquareValues.Black:
+                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                                        DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
+                                        break;
+                                    case SquareValues.BlackKing:
+                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                                        DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
+                                        DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                for (int newrow = 0; newrow < Board.Size; newrow++)
+                                {
+                                    for (int newcol = 0; newcol < Board.Size; newcol++)
+                                    {
+                                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                                        {
+                                            DrawSquare(newcol, newrow, blackPen, blueBrush);
+
+                                        }
+
+                                    }
+
+                                }
                                 Messages.Text = "Now select where you would like to move to";
                             }
                             break;
@@ -152,6 +190,34 @@ namespace CheckersGUI
                             }
                             else
                             {
+                                switch (realtype)
+                                {
+                                    case SquareValues.White:
+                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                                        DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
+                                        break;
+                                    case SquareValues.WhiteKing:
+                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                                        DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
+                                        DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                for (int newrow = 0; newrow < Board.Size; newrow++)
+                                {
+                                    for (int newcol = 0; newcol < Board.Size; newcol++)
+                                    {
+                                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                                        {
+                                            DrawSquare(newcol, newrow, blackPen, blueBrush);
+
+                                        }
+
+                                    }
+
+                                }
                                 Messages.Text = "Now select where you would like to move to";
                             }
                             break;
@@ -171,7 +237,7 @@ namespace CheckersGUI
                         if (turn == 1)
                         {
                             BlackTurn();
-                            Messages.Text = "You are the Black Piece";
+                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                         }
                         if (turn == 2)
                         {
@@ -190,12 +256,13 @@ namespace CheckersGUI
                             {
                                 turn = -1;
                             }
-                            Messages.Text = "You are the White Piece";
+                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                         }
                         if (turn == 1)
                         {
                             BlackBotMove();
                             turn = 2;
+                            Positions.Clear();
                             return;
                         }
 
@@ -248,7 +315,9 @@ namespace CheckersGUI
 
         private void BlackBotMove()
         {
-            Bot2.Move();
+            //Bot2.Move();
+            Bot.Move();
+           // Bots.First().Move();
             if (Board.GameIsWon())
             {
                 Messages.Text = lblNameP2.Text + " Wins!!!!";
@@ -282,7 +351,7 @@ namespace CheckersGUI
         {
             if (PType == SquareValues.Black)
             {
-                Messages.Text = "You are the Black Piece";
+                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                 turn = 1;
                 Mode = Modality.BlackTurn;
                 Board.InitialiseEmptyBoard();
@@ -295,7 +364,7 @@ namespace CheckersGUI
                 PlayerBlack = false;
                 BlackPiecePic.Location = Player2Pic;
                 WhitePiecePic.Location = Player1Pic;
-                Messages.Text = "You are the White Piece";
+                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                 turn = 1;
                 Mode = Modality.BlackTurn;
                 Board.InitialiseEmptyBoard();
@@ -319,7 +388,7 @@ namespace CheckersGUI
             Board.InitializePieces();
             gamemode = 1;
             DrawBoard();
-            Messages.Text = "You are the Black Piece";
+            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
             turn = 1;
             Mode = Modality.BlackTurn;
             DrawSquare(3, 3, blackPen, greyBrush);
@@ -328,7 +397,7 @@ namespace CheckersGUI
 
         private void BlackTurn()
         {
-            Messages.Text = "You are the White Piece";
+            Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
             var type = SquareValues.Black;
             var OldPosition = Positions.First();
             var NewPosition = Positions.Last();
@@ -345,12 +414,14 @@ namespace CheckersGUI
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
                 Messages.Text = "This is not your piece";
+                DrawBoard();
                 return;
             }
 
             if (!Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Messages.Text = "Not a Valid Move";
+                DrawBoard();
                 if (MultiJump)
                 {
                     Positions.Remove(NewPosition.Key);
@@ -372,6 +443,7 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
+                            Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -387,6 +459,7 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
+                            Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -403,6 +476,11 @@ namespace CheckersGUI
                 turn = -1;
                 return;
             }
+            if (MultiJump)
+            {
+                Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
+                //Positions.Clear();
+            }
             MultiJump = false;
             DrawBoard();
             turn = 2;
@@ -412,7 +490,7 @@ namespace CheckersGUI
 
         private void WhiteTurn()
         {
-            Messages.Text = "You are the Black Piece";
+            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
             var type = SquareValues.White;
             var OldPosition = Positions.First();
             var NewPosition = Positions.Last();
@@ -429,12 +507,14 @@ namespace CheckersGUI
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
                 Messages.Text = "This is not your piece";
+                DrawBoard();
                 return;
             }
 
             if (!Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Messages.Text = "Not a Valid Move";
+                DrawBoard();
                 if (!MultiJump)
                 {
                     Positions.Remove(NewPosition.Key);
@@ -455,6 +535,7 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
+                            Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -469,6 +550,7 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
+                            Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
                             MultiJump = true;
                             return;
@@ -483,7 +565,16 @@ namespace CheckersGUI
                 Messages.Text = lblNameP2.Text + " Wins!!!!";
                 DrawBoard();
                 turn = -2;
+                if (gamemode == 0)
+                {
+                    Messages.Text = lblNameP1.Text + " Wins!!!!";
+                }
                 return;
+            }
+            if (MultiJump)
+            {
+                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+               // Positions.Clear();
             }
             MultiJump = false;
             DrawBoard();
@@ -616,8 +707,21 @@ namespace CheckersGUI
             menu.ShowDialog();
             PType = menu.PType;
             gamemode = menu.gamemode;
-            Bot = new BotPlayers(Board, SquareValues.White, menu.difficulty);
-            Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
+            //Bots = menu.Bots;
+            switch (PType)
+            {
+                case SquareValues.Black:
+                    BotType = SquareValues.White;
+                    break;
+                case SquareValues.White:
+                    BotType = SquareValues.Black;
+                    break;
+                default:
+                    break;
+            }
+            //Bots.Add(new BotPlayer1(Board, BotType));
+            Bot = new BotPlayers(Board, BotType, menu.difficulty);
+            //Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
             switch (gamemode)
             {
                 case 0:

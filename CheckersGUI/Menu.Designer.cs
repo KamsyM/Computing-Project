@@ -144,7 +144,7 @@
             this.Tab2P.Padding = new System.Windows.Forms.Padding(3);
             this.Tab2P.Size = new System.Drawing.Size(592, 298);
             this.Tab2P.TabIndex = 1;
-            this.Tab2P.Text = "Multiplayer";
+            this.Tab2P.Text = "Two-Player";
             this.Tab2P.UseVisualStyleBackColor = true;
             // 
             // Name2P2
