@@ -89,5 +89,7 @@ namespace CheckersGUI
                     break;
             }
         }
+
+
     }
 }

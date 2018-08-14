@@ -48,7 +48,7 @@ namespace Checkers.DataFixture
         public static Piece[] TestBlack()
         {
             var pieces = new Piece[1];
-            pieces[0] = new Piece(0,7, SquareValues.Black);
+            pieces[0] = new Piece(1,2, SquareValues.Black);
             return pieces;
         }
 
@@ -62,8 +62,9 @@ namespace Checkers.DataFixture
 
         public static Piece[] TestWhite()
         {
-            var pieces = new Piece[1];
-            pieces[0] = new Piece(0, 1, SquareValues.White);
+            var pieces = new Piece[2];
+            pieces[0] = new Piece(1, 0, SquareValues.White);
+            pieces[1] = new Piece(5, 2, SquareValues.White);
             return pieces;
         }
 

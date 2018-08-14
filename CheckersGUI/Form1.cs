@@ -50,7 +50,7 @@ namespace CheckersGUI
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             //var blackpieces = Pieces.TestBlack();
-            //var whitepieces = Pieces.DoubleJumpWhite();
+            //var whitepieces = Pieces.TestWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -317,12 +317,20 @@ namespace CheckersGUI
         {
             //Bot2.Move();
             Bot.Move();
-           // Bots.First().Move();
+            // Bots.First().Move();
+            //if (!Board.CanMove(SquareValues.White))
+            //{
+            //    GameWonProcedure(2);
+            //    return;
+            //}
+            //if (!Board.CanMove(SquareValues.Black))
+            //{
+            //    GameWonProcedure(1);
+            //    return;
+            //}
             if (Board.GameIsWon())
             {
-                Messages.Text = lblNameP2.Text + " Wins!!!!";
-                DrawBoard();
-                turn = -2;
+                GameWonProcedure(2);
                 return;
             }
             DrawBoard();
@@ -332,11 +340,19 @@ namespace CheckersGUI
         private void WhiteBotMove()
         {
             Bot.Move();
+            //if (!Board.CanMove(SquareValues.White))
+            //{
+            //    GameWonProcedure(1);
+            //    return;
+            //}
+            //if (!Board.CanMove(SquareValues.Black))
+            //{
+            //    GameWonProcedure(2);
+            //    return;
+            //}
             if (Board.GameIsWon())
             {
-                Messages.Text = lblNameP2.Text + " Wins!!!!";
-                DrawBoard();
-                turn = -2;
+                GameWonProcedure(2);
                 return;
             }
             DrawBoard();
@@ -468,12 +484,19 @@ namespace CheckersGUI
                 }
                 
             }
+            //if (!Board.CanMove(SquareValues.White))
+            //{
+            //    GameWonProcedure(1);
+            //    return;
+            //}
+            //if (!Board.CanMove(SquareValues.Black))
+            //{
+            //    GameWonProcedure(2);
+            //    return;
+            //}
             if (Board.GameIsWon())
             {
-                MultiJump = false;
-                Messages.Text = lblNameP1.Text + " Wins!!!!";
-                DrawBoard();
-                turn = -1;
+                GameWonProcedure(1);
                 return;
             }
             if (MultiJump)
@@ -487,6 +510,8 @@ namespace CheckersGUI
             Mode = Modality.WhiteTurn;
             return;
         }
+
+
 
         private void WhiteTurn()
         {
@@ -559,12 +584,27 @@ namespace CheckersGUI
                 }
                 
             }
+            //if (!Board.CanMove(SquareValues.White))
+            //{
+            //    GameWonProcedure(1);
+            //    if (gamemode == 0)
+            //    {
+            //        Messages.Text = lblNameP2.Text + " Wins!!!!";
+            //    }
+            //    return;
+            //}
+            //if (!Board.CanMove(SquareValues.Black))
+            //{
+            //    GameWonProcedure(2);
+            //    if (gamemode == 0)
+            //    {
+            //        Messages.Text = lblNameP1.Text + " Wins!!!!";
+            //    }
+            //    return;
+            //}
             if (Board.GameIsWon())
             {
-                MultiJump = false;
-                Messages.Text = lblNameP2.Text + " Wins!!!!";
-                DrawBoard();
-                turn = -2;
+                GameWonProcedure(2);
                 if (gamemode == 0)
                 {
                     Messages.Text = lblNameP1.Text + " Wins!!!!";
@@ -583,6 +623,28 @@ namespace CheckersGUI
             return;
         }
 
+        private void GameWonProcedure(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    MultiJump = false;
+                    Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    DrawBoard();
+                    turn = -1;
+                    return;
+                case 2:
+                    MultiJump = false;
+                    Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    DrawBoard();
+                    turn = -2;
+                    break;
+                default:
+                    Messages.Text = "I have no idea who won, U put in a wrong number idiot, FIX ME!!!!!";
+                    break;
+            }
+
+        }
 
         private void DrawBoard()
         {

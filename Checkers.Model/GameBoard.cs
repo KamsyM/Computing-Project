@@ -21,6 +21,12 @@ namespace Checkers.Model
         private Piece[] Pieces2;
         //private ILogger Logger;
 
+            /// <summary>
+            /// GameBoard Constructor
+            /// </summary>
+            /// <param name="size"></param>
+            /// <param name="pieces1"></param>
+            /// <param name="pieces2"></param>
         public GameBoard(int size, Piece[] pieces1, Piece[] pieces2)
         {
             Size = size;
@@ -32,6 +38,10 @@ namespace Checkers.Model
         }
 
         string[] ColALphabet = new string[8] {"A","B","C","D","E","F","G","H" };
+
+        /// <summary>
+        /// Creates the Board in CLI
+        /// </summary>
         public void PrintBoard()
         {
             int boardSize = Size;
@@ -81,7 +91,9 @@ namespace Checkers.Model
             Console.WriteLine();
         }
 
-        //Sets all squares to empty
+        /// <summary>
+        /// Sets all squares to empty
+        /// </summary>
         public void InitialiseEmptyBoard()
         {
             for (int Row = 0; Row < Size; Row++)
@@ -93,11 +105,20 @@ namespace Checkers.Model
             }
         }
 
+        /// <summary>
+        /// Returns the Square Value or the Piece type contained in the Square in Question
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public SquareValues ReadSquare(int col, int row)
         {
             return Squares[col, row];
         }
 
+        /// <summary>
+        /// Puts the Pieces on the Board
+        /// </summary>
         public void InitializePieces()
         {
             foreach (var piece in Pieces1)
@@ -111,6 +132,12 @@ namespace Checkers.Model
             }
         }
 
+        /// <summary>
+        /// Checks if Square is contains no pieces
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public bool IsEmptySquare( int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
@@ -120,6 +147,12 @@ namespace Checkers.Model
             return Squares[col, row] == SquareValues.Empty;
         }
 
+        /// <summary>
+        /// Checks if Square contains a Black Piece
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public bool IsBlackSquare( int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
@@ -129,6 +162,12 @@ namespace Checkers.Model
             return Squares[col, row] == SquareValues.Black;
         }
 
+        /// <summary>
+        /// Checks if Square contains a White Piece
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public bool IsWhiteSquare( int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
@@ -138,6 +177,12 @@ namespace Checkers.Model
             return Squares[col, row] == SquareValues.White;
         }
 
+        /// <summary>
+        /// Checks if Square contains a Black-King Piece
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public bool IsBlackKingSquare( int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
@@ -147,6 +192,12 @@ namespace Checkers.Model
             return Squares[col, row] == SquareValues.BlackKing;
         }
 
+        /// <summary>
+        /// Checks if Square contains a White-King Piece
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public bool IsWhiteKingSquare( int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
@@ -156,6 +207,14 @@ namespace Checkers.Model
             return Squares[col, row] == SquareValues.WhiteKing;
         }
 
+        /// <summary>
+        /// Moves a Piece on the Board
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
         public void MovePiece(SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
             Squares[oldCol, oldRow] = SquareValues.Empty;
@@ -192,7 +251,15 @@ namespace Checkers.Model
 
         }
 
-
+        /// <summary>
+        /// Asserts whether a move on the checkers Board by any piece is Valid
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
+        /// <returns></returns>
         public bool IsValidMove( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
             if (IsEmptySquare( newCol, newRow) == false)
@@ -221,6 +288,14 @@ namespace Checkers.Model
             
         }
 
+        /// <summary>
+        /// Asserts whether a move made by a White-King Piece is valid
+        /// </summary>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
+        /// <returns></returns>
         private bool IsValidWhiteKingMove(int oldCol, int oldRow, int newCol, int newRow)
         {
             if (oldRow + 2 <= 7 || oldRow - 2 >= 0)
@@ -271,6 +346,14 @@ namespace Checkers.Model
             return true;
         }
 
+        /// <summary>
+        /// Asserts whether a move made by a White Piece is valid
+        /// </summary>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
+        /// <returns></returns>
         private bool IsValidWhiteMove(int oldCol, int oldRow, int newCol, int newRow)
         {
             
@@ -308,6 +391,14 @@ namespace Checkers.Model
             return true;
         }
 
+        /// <summary>
+        /// Asserts whether a move made by a Black-King Piece is valid
+        /// </summary>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
+        /// <returns></returns>
         private bool IsValidBlackKingMove(int oldCol, int oldRow, int newCol, int newRow)
         {
             if (oldRow + 2 <= 7 || oldRow - 2 >= 0)
@@ -359,6 +450,14 @@ namespace Checkers.Model
             return true;
         }
 
+        /// <summary>
+        /// Asserts whether a move made by a Black Piece is valid
+        /// </summary>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <param name="newCol"></param>
+        /// <param name="newRow"></param>
+        /// <returns></returns>
         private bool IsValidBlackMove(int oldCol, int oldRow, int newCol, int newRow)
         {
 
@@ -492,6 +591,47 @@ namespace Checkers.Model
             return 0;
         }
 
+        /// <summary>
+        /// Checks to see if a Piece can make any moves
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool CanMove(SquareValues type)
+        {
+            for (int oldrow = 0; oldrow < 8; oldrow++)
+            {
+                for (int oldcol = 0; oldcol < 8; oldcol++)
+                {
+                    if (!IsEmptySquare(oldcol, oldrow) && !NotYourPiece(type, oldcol, oldrow))
+                    {
+                        var realtype = Squares[oldcol, oldrow];
+                        for (int newrow = 0; newrow < 8; newrow++)
+                        {
+                            for (int newcol = 0; newcol < 8; newcol++)
+                            {
+                                if (IsEmptySquare(newcol, newrow) && IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
+                                {                                   
+                                    return true;
+                                }
+
+                            }
+
+                        }
+
+                    }
+                }
+
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the Piecetype is correct relative to the SquareValue put in
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <returns></returns>
         public bool NotYourPiece( SquareValues type, int oldCol, int oldRow)
         {
             if (type == SquareValues.Black)
@@ -529,6 +669,10 @@ namespace Checkers.Model
             return null;
         }
 
+        /// <summary>
+        /// Checks to see of game is won
+        /// </summary>
+        /// <returns></returns>
         public bool GameIsWon()
         {
             int blackCount = 0;
@@ -553,12 +697,21 @@ namespace Checkers.Model
             {
                 return true;
             }
+            //if (!CanMove(SquareValues.White) || !CanMove(SquareValues.Black))
+            //{
+            //    return true;
+            //}
             else
             {
                 return false;
             }
         }
 
+        /// <summary>
+        /// Converts numbers up to 320 to numbers 0 - 7
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public int MouseConverter(int num)
         {
             if (num <= 40)
@@ -581,7 +734,7 @@ namespace Checkers.Model
             {
                 return 4;
             }
-            if (num < 240 && num > 200)
+            if (num <= 240 && num > 200)
             {
                 return 5;
             }
