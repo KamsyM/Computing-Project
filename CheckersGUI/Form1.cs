@@ -315,17 +315,17 @@ namespace CheckersGUI
 
         private void BlackBotMove()
         {
+            if (!Board.CanMove(SquareValues.Black))
+            {
+                GameWonProcedure(1);
+                return;
+            }
             //Bot2.Move();
             Bot.Move();
             // Bots.First().Move();
             //if (!Board.CanMove(SquareValues.White))
             //{
             //    GameWonProcedure(2);
-            //    return;
-            //}
-            //if (!Board.CanMove(SquareValues.Black))
-            //{
-            //    GameWonProcedure(1);
             //    return;
             //}
             if (Board.GameIsWon())
@@ -339,12 +339,13 @@ namespace CheckersGUI
 
         private void WhiteBotMove()
         {
+            if (!Board.CanMove(SquareValues.White))
+            {
+                GameWonProcedure(1);
+                return;
+            }
             Bot.Move();
-            //if (!Board.CanMove(SquareValues.White))
-            //{
-            //    GameWonProcedure(1);
-            //    return;
-            //}
+
             //if (!Board.CanMove(SquareValues.Black))
             //{
             //    GameWonProcedure(2);
@@ -427,6 +428,11 @@ namespace CheckersGUI
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
 
+            if (!Board.CanMove(SquareValues.Black))
+            {
+                GameWonProcedure(2);
+                return;
+            }
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
                 Messages.Text = "This is not your piece";
@@ -489,11 +495,7 @@ namespace CheckersGUI
             //    GameWonProcedure(1);
             //    return;
             //}
-            //if (!Board.CanMove(SquareValues.Black))
-            //{
-            //    GameWonProcedure(2);
-            //    return;
-            //}
+
             if (Board.GameIsWon())
             {
                 GameWonProcedure(1);
@@ -528,6 +530,16 @@ namespace CheckersGUI
             var NewColumn = NewPosition.Key;
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
+
+            if (!Board.CanMove(SquareValues.White))
+            {
+                GameWonProcedure(1);
+                if (gamemode == 0)
+                {
+                    Messages.Text = lblNameP2.Text + " Wins!!!!";
+                }
+                return;
+            }
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
@@ -584,15 +596,7 @@ namespace CheckersGUI
                 }
                 
             }
-            //if (!Board.CanMove(SquareValues.White))
-            //{
-            //    GameWonProcedure(1);
-            //    if (gamemode == 0)
-            //    {
-            //        Messages.Text = lblNameP2.Text + " Wins!!!!";
-            //    }
-            //    return;
-            //}
+
             //if (!Board.CanMove(SquareValues.Black))
             //{
             //    GameWonProcedure(2);
