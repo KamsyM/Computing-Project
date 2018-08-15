@@ -15,7 +15,7 @@ namespace CheckersGUI
 {
     public partial class Menu : Form
     {
-       // private Form1 IniForm;
+       //private Form1 IniForm;
         public SquareValues PType;
         public int difficulty;
         public int gamemode;

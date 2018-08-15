@@ -15,35 +15,16 @@ namespace CheckersGUI
 {
     public partial class PopUp : Form
     {
-        public SquareValues PType;
-        public PopUp()
+        private Form1 iniForm;
+       // private Bitmap Black Wins;
+        public PopUp(string txt)
         {
             InitializeComponent();
-            PType = SquareValues.Empty;
+            WinningText.Text = txt;
+            //WinningPic.Image = new Bitmap();
         }
 
-        private void PlayerBlack_Click(object sender, EventArgs e)
-        {
-            PType = SquareValues.Black;
-            this.Close();
-        }
 
-        private void PlayerWhite_Click(object sender, EventArgs e)
-        {
-            PType = SquareValues.White;
-            this.Close();
-        }
 
-        //public SquareValues PType
-        //{
-        //    get
-        //    {
-        //        return PType;
-        //    }
-        //    set
-        //    {
-        //        PType = value;
-        //    }
-        //}
     }
 }
