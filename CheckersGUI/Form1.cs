@@ -35,12 +35,15 @@ namespace CheckersGUI
         private int turn = 1;
         private bool PlayerBlack = true;
         private Menu menu = new Menu();
+        private PopUp popUp;
         private SquareValues PType = SquareValues.Empty;
         private Point Player1Pic = new Point(518, 87);
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
         private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
+        private Bitmap BlackWins = new Bitmap(@"C:\Users\Kamsi\Pictures\Black Checker Piece.png");
+        private Bitmap WhiteWins = new Bitmap(@"C:\Users\Kamsi\Pictures\White Checker Piece.png");
 
 
         public Form1()
@@ -50,8 +53,8 @@ namespace CheckersGUI
             Mode = Modality.BlackTurn;
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.JumpedBlack();
-            //var whitepieces = Pieces.JumpingWhite();
+            //var blackpieces = Pieces.JumpingBlack();
+            //var whitepieces = Pieces.JumpedWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -271,7 +274,7 @@ namespace CheckersGUI
                             BlackBotMove();
                             if (!Board.CanMove(SquareValues.White))
                             {
-                                GameWonProcedure(2);
+                                GameWonProcedure(4);
                                 return;
                             }
                             turn = 2;
@@ -340,7 +343,7 @@ namespace CheckersGUI
         {
             if (!Board.CanMove(SquareValues.Black))
             {
-                GameWonProcedure(1);
+                GameWonProcedure(3);
                 return;
             }
             //Bot2.Move();
@@ -348,7 +351,7 @@ namespace CheckersGUI
             // Bots.First().Move();
             if (Board.GameIsWon())
             {
-                GameWonProcedure(2);
+                GameWonProcedure(4);
                 return;
             }
             DrawBoard();
@@ -592,9 +595,13 @@ namespace CheckersGUI
 
             if (Board.GameIsWon())
             {
-                GameWonProcedure(2);
+                if (gamemode == 1)
+                {
+                    GameWonProcedure(2);
+                }
                 if (gamemode == 0)
                 {
+                    GameWonProcedure(3);
                     Messages.Text = lblNameP1.Text + " Wins!!!!";
                 }
                 return;
@@ -616,12 +623,36 @@ namespace CheckersGUI
             switch (i)
             {
                 case 1:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP1.Text + " Wins!!!!", BlackWins);
+                    popUp.ShowDialog();
                     MultiJump = false;
                     Messages.Text = lblNameP1.Text + " Wins!!!!";
                     DrawBoard();
                     turn = -1;
                     return;
                 case 2:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP2.Text + " Wins!!!!", WhiteWins);
+                    popUp.ShowDialog();
+                    MultiJump = false;
+                    Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    DrawBoard();
+                    turn = -2;
+                    break;
+                case 3:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP1.Text + " Wins!!!!", WhiteWins);
+                    popUp.ShowDialog();
+                    MultiJump = false;
+                    Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    DrawBoard();
+                    turn = -1;
+                    break;
+                case 4:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP2.Text + " Wins!!!!", BlackWins);
+                    popUp.ShowDialog();
                     MultiJump = false;
                     Messages.Text = lblNameP2.Text + " Wins!!!!";
                     DrawBoard();
