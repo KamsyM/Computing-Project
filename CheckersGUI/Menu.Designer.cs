@@ -44,6 +44,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.Highlight = new System.Windows.Forms.CheckBox();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
@@ -135,6 +136,7 @@
             // 
             // Tab2P
             // 
+            this.Tab2P.Controls.Add(this.Highlight);
             this.Tab2P.Controls.Add(this.Name2P2);
             this.Tab2P.Controls.Add(this.Name2P1);
             this.Tab2P.Controls.Add(this.label5);
@@ -202,6 +204,18 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "&Cancel";
             // 
+            // Highlight
+            // 
+            this.Highlight.AutoSize = true;
+            this.Highlight.Checked = true;
+            this.Highlight.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.Highlight.Location = new System.Drawing.Point(440, 35);
+            this.Highlight.Name = "Highlight";
+            this.Highlight.Size = new System.Drawing.Size(125, 17);
+            this.Highlight.TabIndex = 4;
+            this.Highlight.Text = "Highlight Movements";
+            this.Highlight.UseVisualStyleBackColor = true;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,5 +254,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox Highlight;
     }
 }

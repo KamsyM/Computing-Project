@@ -8,7 +8,6 @@ C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug\Checkers.Dat
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug\Checkers.Model.pdb
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug\Checkers.Model.dll.config
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.csprojAssemblyReference.cache
-C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.Form1.resources
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.Properties.Resources.resources
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.csproj.GenerateResource.cache
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.csproj.CoreCompileInputs.cache
@@ -17,3 +16,4 @@ C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.pdb
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.Menu.resources
 C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.PopUp.resources
+C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.Form1.resources

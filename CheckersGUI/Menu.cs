@@ -19,6 +19,7 @@ namespace CheckersGUI
         public SquareValues PType;
         public int difficulty;
         public int gamemode;
+        public bool highlight;
         public string name1P;
         public string name2P1;
         public string name2P2;
@@ -38,6 +39,7 @@ namespace CheckersGUI
             name1P = Name1p.Text;
             name2P1 = Name2P1.Text;
             name2P2 = Name2P2.Text;
+            highlight = Highlight.Checked;
             if (Gamemode.SelectedTab == Tab1P)
             {
                 gamemode = 0;
@@ -59,17 +61,6 @@ namespace CheckersGUI
                     break;
             }
 
-            //switch (PType)
-            //{
-            //    case SquareValues.Black:
-            //        BotType = SquareValues.White;
-            //        break;
-            //    case SquareValues.White:
-            //        BotType = SquareValues.Black;
-            //        break;
-            //    default:
-            //        break;
-            //}
 
             switch ((string)Difficulty.SelectedItem)
             {
@@ -85,7 +76,7 @@ namespace CheckersGUI
                     difficulty = 3;
                     break;
                 default:
-                    difficulty = 1;
+                    difficulty = 2;
                     break;
             }
         }

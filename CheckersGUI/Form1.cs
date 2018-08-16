@@ -40,6 +40,7 @@ namespace CheckersGUI
         private Point Player1Pic = new Point(518, 87);
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
+        private bool Highlight = false;
         private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
         private Bitmap BlackWins = new Bitmap(@"C:\Users\Kamsi\Pictures\Black Checker Piece.png");
@@ -157,32 +158,17 @@ namespace CheckersGUI
                             }
                             else
                             {
-                                switch (realtype)
+                                if (menu.highlight && gamemode == 1)
                                 {
-                                    case SquareValues.Black:
-                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
-                                        DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
-                                        break;
-                                    case SquareValues.BlackKing:
-                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
-                                        DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
-                                        DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
-                                        break;
-                                    default:
-                                        break;
+                                    BlackHighlight(OldColumn, OldRow, realtype);
                                 }
-                                for (int newrow = 0; newrow < Board.Size; newrow++)
+                                if (menu.difficulty == 1 && gamemode == 0)
                                 {
-                                    for (int newcol = 0; newcol < Board.Size; newcol++)
-                                    {
-                                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
-                                        {
-                                            DrawSquare(newcol, newrow, blackPen, blueBrush);
-
-                                        }
-
-                                    }
-
+                                    BlackHighlight(OldColumn, OldRow, realtype);
+                                }
+                                if (Highlight)
+                                {
+                                    BlackHighlight(OldColumn, OldRow, realtype);
                                 }
                                 Messages.Text = "Now select where you would like to move to";
                             }
@@ -195,33 +181,17 @@ namespace CheckersGUI
                             }
                             else
                             {
-                                switch (realtype)
+                                if (menu.highlight && gamemode == 1)
                                 {
-                                    case SquareValues.White:
-                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
-                                        DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
-                                        break;
-                                    case SquareValues.WhiteKing:
-                                        DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
-                                        DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
-                                        DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
-                                        break;
-                                    default:
-                                        break;
+                                    WhiteHighlight(OldColumn, OldRow, realtype);
                                 }
-
-                                for (int newrow = 0; newrow < Board.Size; newrow++)
+                                if (menu.difficulty == 1 && gamemode == 0)
                                 {
-                                    for (int newcol = 0; newcol < Board.Size; newcol++)
-                                    {
-                                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
-                                        {
-                                            DrawSquare(newcol, newrow, blackPen, blueBrush);
-
-                                        }
-
-                                    }
-
+                                    WhiteHighlight(OldColumn, OldRow, realtype);
+                                }
+                                if (Highlight)
+                                {
+                                    WhiteHighlight(OldColumn, OldRow, realtype);
                                 }
                                 Messages.Text = "Now select where you would like to move to";
                             }
@@ -337,7 +307,68 @@ namespace CheckersGUI
            
         }
 
+        private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype)
+        {
+            switch (realtype)
+            {
+                case SquareValues.White:
+                    DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                    DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
+                    break;
+                case SquareValues.WhiteKing:
+                    DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                    DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
+                    DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
+                    break;
+                default:
+                    break;
+            }
 
+            for (int newrow = 0; newrow < Board.Size; newrow++)
+            {
+                for (int newcol = 0; newcol < Board.Size; newcol++)
+                {
+                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                    {
+                        DrawSquare(newcol, newrow, blackPen, blueBrush);
+
+                    }
+
+                }
+
+            }
+        }
+
+        private void BlackHighlight(int OldColumn, int OldRow, SquareValues realtype)
+        {
+            switch (realtype)
+            {
+                case SquareValues.Black:
+                    DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                    DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
+                    break;
+                case SquareValues.BlackKing:
+                    DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
+                    DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
+                    DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
+                    break;
+                default:
+                    break;
+            }
+            for (int newrow = 0; newrow < Board.Size; newrow++)
+            {
+                for (int newcol = 0; newcol < Board.Size; newcol++)
+                {
+                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                    {
+                        DrawSquare(newcol, newrow, blackPen, blueBrush);
+
+                    }
+
+                }
+
+            }
+        }
 
         private void BlackBotMove()
         {
@@ -865,5 +896,34 @@ namespace CheckersGUI
         {
             Application.Exit();
         }
+
+        private void OnHighlight_Click(object sender, EventArgs e)
+        {
+            Highlight = true;
+            OnHighlight.Checked = true;
+            OffHighlight.Checked = false;
+        }
+
+        private void OffHighlight_Click(object sender, EventArgs e)
+        {
+            Highlight = false;
+            OnHighlight.Checked = false;
+            OffHighlight.Checked = true;
+        }
+
+        private void OnTextBox_Click(object sender, EventArgs e)
+        {
+            Messages.Visible = true;
+            OffTextBox.Checked = false;
+            OnTextBox.Checked = true;
+        }
+
+        private void OffTextBox_Click(object sender, EventArgs e)
+        {
+            Messages.Visible = false;
+            OffTextBox.Checked = true;
+            OnTextBox.Checked = false;
+        }
+
     }
 }
