@@ -670,7 +670,7 @@ namespace Checkers.Model
         }
 
         /// <summary>
-        /// Checks to see of game is won
+        /// Checks to see of game is won by seeing if there is none of one piecetype
         /// </summary>
         /// <returns></returns>
         public bool GameIsWon()

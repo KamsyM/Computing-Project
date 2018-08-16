@@ -17,6 +17,7 @@ namespace CheckersGUI
     public partial class Form1 : Form
     {
         private Pen blackPen = new Pen(Color.Black);
+        private Pen yellowPen = new Pen(Color.Yellow);
         private Brush whiteBrush = new SolidBrush(Color.White);
         private Brush greyBrush = new SolidBrush(Color.Gray);
         private Brush redBrush = new SolidBrush(Color.Red);
@@ -52,10 +53,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.JumpingBlack();
-            //var whitepieces = Pieces.JumpedWhite();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.JumpedBlack();
+            var whitepieces = Pieces.JumpingWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -218,7 +219,7 @@ namespace CheckersGUI
                         {
                             Thread.Sleep(1000);
                             WhiteBotMove();
-                            if (!Board.CanMove(SquareValues.Black))
+                            if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(2);
                                 return;
@@ -242,7 +243,7 @@ namespace CheckersGUI
                         {
                             Thread.Sleep(1000);
                             BlackBotMove();
-                            if (!Board.CanMove(SquareValues.White))
+                            if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(4);
                                 return;
@@ -272,7 +273,7 @@ namespace CheckersGUI
                     if (turn == 1)
                     {
                         BlackTurn();
-                        if (!Board.CanMove(SquareValues.White))
+                        if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                         {
                             GameWonProcedure(1);
                             return;
@@ -282,7 +283,7 @@ namespace CheckersGUI
                     if (turn == 2)
                     {
                         WhiteTurn();
-                        if (!Board.CanMove(SquareValues.Black))
+                        if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                         {
                             GameWonProcedure(2);
                             return;
@@ -318,7 +319,8 @@ namespace CheckersGUI
                 case SquareValues.WhiteKing:
                     DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
                     DrawCircle(OldColumn, OldRow, blackPen, whiteBrush);
-                    DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
+                    DrawStar(OldColumn, OldRow, blackPen, redBrush);
+                    //DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
                     break;
                 default:
                     break;
@@ -350,7 +352,8 @@ namespace CheckersGUI
                 case SquareValues.BlackKing:
                     DrawSquare(OldColumn, OldRow, blackPen, blueBrush);
                     DrawCircle(OldColumn, OldRow, blackPen, blackBrush);
-                    DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
+                    DrawStar(OldColumn, OldRow, blackPen, redBrush);
+                    //DrawInnerSquare(OldColumn, OldRow, blackPen, yellowBrush);
                     break;
                 default:
                     break;
@@ -414,6 +417,9 @@ namespace CheckersGUI
         {
             if (PType == SquareValues.Black)
             {
+                PlayerBlack = true;
+                BlackPiecePic.Location = Player1Pic;
+                WhitePiecePic.Location = Player2Pic;
                 Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                 turn = 1;
                 Mode = Modality.BlackTurn;
@@ -733,14 +739,16 @@ namespace CheckersGUI
                             break;
                         case SquareValues.BlackKing:
                             DrawCircle(col, row, blackPen, blackBrush);
-                            DrawInnerSquare(col, row, blackPen, yellowBrush);
+                            DrawStar(col,row,blackPen,redBrush);
+                            //DrawInnerSquare(col, row, blackPen, yellowBrush);
                             break;
                         case SquareValues.White:
                             DrawCircle(col, row, blackPen, whiteBrush);
                             break;
                         case SquareValues.WhiteKing:
                             DrawCircle(col, row, blackPen, whiteBrush);
-                            DrawInnerSquare(col, row, blackPen, yellowBrush);
+                            DrawStar(col, row, blackPen, redBrush);
+                            //DrawInnerSquare(col, row, blackPen, yellowBrush);
                             break;
 
                     }
@@ -777,26 +785,34 @@ namespace CheckersGUI
         }
 
 
-        private void DrawStar(Pen pen, Brush fill)
+        private void DrawStar(int col, int row, Pen pen, Brush fill)
         {
-            g.DrawPolygon(pen,Starpoints());
+            g.DrawPolygon(pen,Starpoints(col * squareSize + 10, row * squareSize + 20));
             if (fill != null)
             {
-                g.FillPolygon(fill, Starpoints());
+                g.FillPolygon(fill, Starpoints(col * squareSize + 10, row * squareSize + 20));
             }
         }
 
-        private Point[] Starpoints()
+        private Point[] Starpoints(int col, int row)
         {
             var p = new Point[8];
-            p[0] = new Point(0, 25);
-            p[1] = new Point(20, 20);
-            p[2] = new Point(25, 0);
-            p[3] = new Point(30, 20);
-            p[4] = new Point(50, 25);
-            p[5] = new Point(30, 30);
-            p[6] = new Point(25, 50);
-            p[7] = new Point(20, 30);
+            p[0] = new Point(col, row);
+            p[1] = new Point(col+8, row-2);
+            p[2] = new Point(col+10, row-10);
+            p[3] = new Point(col+12, row-2);
+            p[4] = new Point(col+20, row);
+            p[5] = new Point(col+12, row+2);
+            p[6] = new Point(col+10, row+10);
+            p[7] = new Point(col+8, row+2);
+            //p[0] = new Point(0, 25);
+            //p[1] = new Point(20, 20);
+            //p[2] = new Point(25, 0);
+            //p[3] = new Point(30, 20);
+            //p[4] = new Point(50, 25);
+            //p[5] = new Point(30, 30);
+            //p[6] = new Point(25, 50);
+            //p[7] = new Point(20, 30);
             return p;
         }
 
