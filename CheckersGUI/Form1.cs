@@ -53,10 +53,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            //var blackpieces = Pieces.BlackPlacements();
-            //var whitepieces = Pieces.WhitePlacements();
-            var blackpieces = Pieces.JumpedBlack();
-            var whitepieces = Pieces.JumpingWhite();
+            var blackpieces = Pieces.BlackPlacements();
+            var whitepieces = Pieces.WhitePlacements();
+            //var blackpieces = Pieces.JumpedBlack();
+            //var whitepieces = Pieces.JumpingWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -941,5 +941,13 @@ namespace CheckersGUI
             OnTextBox.Checked = false;
         }
 
+        private void CLIversion_Click(object sender, EventArgs e)
+        {
+            var processStartInfo = new ProcessStartInfo();
+            processStartInfo.WorkingDirectory = @"C:\Users\Kamsi\source\repos\Computing - Project\Computing Project\bin\Debug";
+            processStartInfo.FileName = @"C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Debug\Computing Project.exe";
+            Process.Start(processStartInfo);
+            Application.Exit();
+        }
     }
 }

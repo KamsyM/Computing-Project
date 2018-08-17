@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Checkers.Model;
 using Checkers.DataFixture;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Checkers.UI
 {
@@ -34,11 +36,18 @@ namespace Checkers.UI
                         Board = new GameBoard(8, blackpieces2, whitepieces2);
                         Start2PGame(Board);
                         break;
-                    case '3':
-                        var TestBlacks = Pieces.TestBlack();
-                        var TestWhites = Pieces.TestWhite();
+                    case '4':
+                        var TestBlacks = Pieces.JumpedBlack();
+                        var TestWhites = Pieces.JumpingWhite();
                         Board = new GameBoard(8, TestBlacks, TestWhites);
                         Start1PGame(Board);
+                        break;
+                    case '3':
+                        var processStartInfo = new ProcessStartInfo();
+                        processStartInfo.WorkingDirectory = @"C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug";
+                        processStartInfo.FileName = @"C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug\CheckersGUI.exe";
+                        Process.Start(processStartInfo);
+                        running = false;
                         break;
                     case '0':
                         running = false;
@@ -59,6 +68,7 @@ namespace Checkers.UI
             Console.WriteLine();
             Console.WriteLine("1. Single Player");
             Console.WriteLine("2. Two Players");
+            Console.WriteLine("3. GUI Version");
             Console.WriteLine("0. Quit");
             Console.WriteLine();
             Console.WriteLine("Enter your choice number");
@@ -277,9 +287,109 @@ namespace Checkers.UI
                     }
 
 
-                    if (board.IsValidMove( realtype, OldColumn, OldRow, NewColumn, NewRow))
-                    {                 
-                        board.MovePiece( realtype, OldColumn, OldRow, NewColumn, NewRow);
+                    if (board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
+                    {
+                        board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
+
+                        if (board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
+                        {
+                            if (board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow - 2) || board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow - 2))
+                            {
+                                board.PrintBoard();
+                                Console.WriteLine("Would you like to jump again: Yes/No");
+                                string ans = Console.ReadLine().ToUpper();
+                                char realans = ans[0];
+                                if (realans == 'Y')
+                                {
+                                    Console.WriteLine("Jump Again");
+                                    bool MultiJump = true;
+                                    while (MultiJump)
+                                    {
+                                        OldColumn = NewColumn;
+                                        OldRow = NewRow;
+                                        NewColumn = Jumping(board, OldColumn, OldRow);
+                                        if (board.ReadSquare(OldColumn,OldRow) == SquareValues.Empty)
+                                        {
+                                            board.PrintBoard();
+                                            if (board.CanJump(type,NewColumn,OldRow - 2) != 0)
+                                            {
+                                                Console.WriteLine("Would you like to jump again: Yes/No");
+                                                string ans2 = Console.ReadLine().ToUpper();
+                                                char realans2 = ans2[0];
+                                                if (realans2 == 'Y')
+                                                {
+                                                    NewRow = OldRow - 2;
+                                                    continue;
+                                                }
+                                                if(realans2 != 'Y')
+                                                {
+                                                    MultiJump = false;
+                                                    Problem = false;
+                                                    return;
+                                                }
+                                            }
+                                            MultiJump = false;
+                                            Problem = false;
+                                            return;
+                                        }
+                                        if (board.ReadSquare(OldColumn, OldRow) != SquareValues.Empty && MultiJump)
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                    return;
+                                }
+                                
+                            }
+
+                            if (board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow + 2) || board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow + 2))
+                            {
+                                board.PrintBoard();
+                                Console.WriteLine("Would you like to jump again: Yes/No");
+                                string ans = Console.ReadLine().ToUpper();
+                                char realans = ans[0];
+                                if (realans == 'Y')
+                                {
+                                    Console.WriteLine("Jump Again");
+                                    bool MultiJump = true;
+                                    while (MultiJump)
+                                    {
+                                        OldColumn = NewColumn;
+                                        OldRow = NewRow;
+                                        NewColumn = Jumping(board, OldColumn, OldRow);
+                                        if (board.ReadSquare(OldColumn, OldRow) == SquareValues.Empty)
+                                        {
+                                            board.PrintBoard();
+                                            if (board.CanJump(type, NewColumn, OldRow + 2) != 0)
+                                            {
+                                                Console.WriteLine("Would you like to jump again: Yes/No");
+                                                string ans2 = Console.ReadLine().ToUpper();
+                                                char realans2 = ans2[0];
+                                                if (realans2 == 'Y')
+                                                {
+                                                    NewRow = OldRow + 2;
+                                                    continue;
+                                                }
+                                                if(realans2 != 'Y')
+                                                {
+                                                    MultiJump = false;
+                                                    Problem = false;
+                                                    return;
+                                                }
+                                            }
+                                            MultiJump = false;
+                                            Problem = false;
+                                            return;
+                                        }
+                                        if (board.ReadSquare(OldColumn, OldRow) != SquareValues.Empty && MultiJump)
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                    return;
+                                }
+                            }
+                        }
                         Problem = false;
                     }
 
@@ -293,6 +403,55 @@ namespace Checkers.UI
                 }
             }
         }
-   
+
+        private static int Jumping(GameBoard board, int OldColumn, int OldRow)
+        {
+            string[] ColAlphabet = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" };
+            string msg = "";
+            var realtype = board.Squares[OldColumn, OldRow];
+            Console.Write("Put in the new Column and Row: ");
+            var NewSquare = Console.ReadLine().ToUpper();
+            if (NewSquare.Length != 2)
+            {
+                Console.WriteLine("Incorrect number of values, only two is required");
+                return -1;
+                //continue;
+            }
+
+            int NewColumn = Array.IndexOf(ColAlphabet, Convert.ToString(NewSquare[0]));
+            int NewRow = Convert.ToInt32(Convert.ToString(NewSquare[1]));
+
+            msg = board.IsInvalidEntry(NewColumn);
+            if (msg != null)
+            {
+                Console.WriteLine(msg);
+                board.PrintBoard();
+                return-1;
+                //continue;
+            }
+
+
+            msg = board.IsInvalidEntry(NewRow);
+            if (msg != null)
+            {
+                Console.WriteLine(msg);
+                board.PrintBoard();
+                return-1;
+                //continue;
+            }
+
+
+            if (board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
+            {
+                board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
+                return NewColumn;
+            }
+
+            if (!board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
+            {
+                return -1;
+            }
+            return -1;
+        }
     }
 }

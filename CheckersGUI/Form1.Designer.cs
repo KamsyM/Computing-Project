@@ -35,6 +35,8 @@
             this.MenuGame = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuNewGame = new System.Windows.Forms.ToolStripMenuItem();
             this.endGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.CLIversion = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +95,8 @@
             this.MenuGame.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuNewGame,
             this.endGameToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.CLIversion,
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.MenuGame.Name = "MenuGame";
@@ -112,6 +116,18 @@
             this.endGameToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.endGameToolStripMenuItem.Text = "&End Game";
             this.endGameToolStripMenuItem.Click += new System.EventHandler(this.endGameToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
+            // 
+            // CLIversion
+            // 
+            this.CLIversion.Name = "CLIversion";
+            this.CLIversion.Size = new System.Drawing.Size(132, 22);
+            this.CLIversion.Text = "&CLI Version";
+            this.CLIversion.Click += new System.EventHandler(this.CLIversion_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -140,13 +156,13 @@
             this.OnHighlight,
             this.OffHighlight});
             this.highlightPiecesToolStripMenuItem.Name = "highlightPiecesToolStripMenuItem";
-            this.highlightPiecesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.highlightPiecesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.highlightPiecesToolStripMenuItem.Text = "&Highlight Pieces";
             // 
             // OnHighlight
             // 
             this.OnHighlight.Name = "OnHighlight";
-            this.OnHighlight.Size = new System.Drawing.Size(180, 22);
+            this.OnHighlight.Size = new System.Drawing.Size(91, 22);
             this.OnHighlight.Text = "&On";
             this.OnHighlight.Click += new System.EventHandler(this.OnHighlight_Click);
             // 
@@ -155,7 +171,7 @@
             this.OffHighlight.Checked = true;
             this.OffHighlight.CheckState = System.Windows.Forms.CheckState.Checked;
             this.OffHighlight.Name = "OffHighlight";
-            this.OffHighlight.Size = new System.Drawing.Size(180, 22);
+            this.OffHighlight.Size = new System.Drawing.Size(91, 22);
             this.OffHighlight.Text = "&Off";
             this.OffHighlight.Click += new System.EventHandler(this.OffHighlight_Click);
             // 
@@ -165,7 +181,7 @@
             this.OnTextBox,
             this.OffTextBox});
             this.textBoxToolStripMenuItem.Name = "textBoxToolStripMenuItem";
-            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.textBoxToolStripMenuItem.Text = "&Text Box";
             // 
             // OnTextBox
@@ -261,9 +277,9 @@
             // BlackPiecePic
             // 
             this.BlackPiecePic.Image = ((System.Drawing.Image)(resources.GetObject("BlackPiecePic.Image")));
-            this.BlackPiecePic.Location = new System.Drawing.Point(518, 87);
+            this.BlackPiecePic.Location = new System.Drawing.Point(518, 77);
             this.BlackPiecePic.Name = "BlackPiecePic";
-            this.BlackPiecePic.Size = new System.Drawing.Size(37, 37);
+            this.BlackPiecePic.Size = new System.Drawing.Size(83, 83);
             this.BlackPiecePic.TabIndex = 18;
             this.BlackPiecePic.TabStop = false;
             // 
@@ -272,7 +288,7 @@
             this.WhitePiecePic.Image = ((System.Drawing.Image)(resources.GetObject("WhitePiecePic.Image")));
             this.WhitePiecePic.Location = new System.Drawing.Point(518, 250);
             this.WhitePiecePic.Name = "WhitePiecePic";
-            this.WhitePiecePic.Size = new System.Drawing.Size(37, 37);
+            this.WhitePiecePic.Size = new System.Drawing.Size(83, 83);
             this.WhitePiecePic.TabIndex = 19;
             this.WhitePiecePic.TabStop = false;
             // 
@@ -336,6 +352,8 @@
         private System.Windows.Forms.ToolStripMenuItem textBoxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OnTextBox;
         private System.Windows.Forms.ToolStripMenuItem OffTextBox;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem CLIversion;
     }
 }
 
