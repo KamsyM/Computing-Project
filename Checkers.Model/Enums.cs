@@ -20,4 +20,9 @@ namespace Checkers.Model
     {
         BlackTurn, WhiteTurn
     }
+
+    public enum CheckNo
+    {
+        RightUp, LeftUp, RightDown, LeftDown
+    }
 }

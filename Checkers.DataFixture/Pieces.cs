@@ -105,5 +105,20 @@ namespace Checkers.DataFixture
             pieces[2] = new Piece(5, 6, SquareValues.Black);
             return pieces;
         }
+
+        public static Piece[] TestingComp()
+        {
+            var pieces = new Piece[3];
+            pieces[0] = new Piece(5, 0, SquareValues.White);
+            pieces[1] = new Piece(5, 2, SquareValues.White);
+            pieces[2] = new Piece(4, 3, SquareValues.Black);
+            return pieces;
+        }
+
+        public static Piece[] Empty()
+        {
+            var pieces = new Piece[0];
+            return pieces;
+        }
     }
 }

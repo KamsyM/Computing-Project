@@ -55,8 +55,8 @@ namespace CheckersGUI
             Mode = Modality.BlackTurn;
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.JumpedBlack();
-            //var whitepieces = Pieces.JumpingWhite();
+            //var blackpieces = Pieces.TestingComp();
+            //var whitepieces = Pieces.Empty();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
