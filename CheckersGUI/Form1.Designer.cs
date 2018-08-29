@@ -276,7 +276,7 @@
             // 
             // BlackPiecePic
             // 
-            this.BlackPiecePic.Image = ((System.Drawing.Image)(resources.GetObject("BlackPiecePic.Image")));
+            this.BlackPiecePic.Image = global::CheckersGUI.Properties.Resources.Black_Checker_Piece;
             this.BlackPiecePic.Location = new System.Drawing.Point(518, 77);
             this.BlackPiecePic.Name = "BlackPiecePic";
             this.BlackPiecePic.Size = new System.Drawing.Size(83, 83);
@@ -285,7 +285,7 @@
             // 
             // WhitePiecePic
             // 
-            this.WhitePiecePic.Image = ((System.Drawing.Image)(resources.GetObject("WhitePiecePic.Image")));
+            this.WhitePiecePic.Image = global::CheckersGUI.Properties.Resources.White_Checker_Piece;
             this.WhitePiecePic.Location = new System.Drawing.Point(518, 250);
             this.WhitePiecePic.Name = "WhitePiecePic";
             this.WhitePiecePic.Size = new System.Drawing.Size(83, 83);

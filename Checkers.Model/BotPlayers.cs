@@ -197,16 +197,16 @@ namespace Checkers.Model
                             case 0:
                                 break;
                             case 1:
-                                Checking(oldcol, oldrow, CheckNo.RightUp);
+                                Checking(oldcol, oldrow,realtype, CheckNo.RightUp);
                                 break;
                             case 2:
-                                Checking(oldcol, oldrow, CheckNo.LeftUp);
+                                Checking(oldcol, oldrow,realtype, CheckNo.LeftUp);
                                 break;
                             case 3:
-                                Checking(oldcol, oldrow, CheckNo.RightDown);
+                                Checking(oldcol, oldrow,realtype, CheckNo.RightDown);
                                 break;
                             case 4:
-                                Checking(oldcol, oldrow, CheckNo.LeftDown);
+                                Checking(oldcol, oldrow,realtype, CheckNo.LeftDown);
                                 break;
                             default:
                                 break;
@@ -286,7 +286,7 @@ namespace Checkers.Model
         /// <param name="oldcol"></param>
         /// <param name="oldrow"></param>
         /// <param name="mode"></param>
-        private void Checking(int oldcol, int oldrow, CheckNo mode)
+        private void Checking(int oldcol, int oldrow, SquareValues type, CheckNo mode)
         {
             switch (mode)
             {
@@ -295,9 +295,9 @@ namespace Checkers.Model
                     {
                         a = Board.Squares[oldcol + 2, oldrow - 2];
                         b = Board.Squares[oldcol + 1, oldrow - 1];
-                        Board.Squares[oldcol + 2, oldrow - 2] = SquareValues.Black;
+                        Board.Squares[oldcol + 2, oldrow - 2] = type;
                         Board.Squares[oldcol + 1, oldrow - 1] = SquareValues.Empty;
-                        if (Board.CanJump(Board.Squares[oldcol + 3, oldrow - 3], oldcol + 3, oldrow - 3) == 0 && Board.CanJump(Board.Squares[oldcol + 1, oldrow - 3], oldcol + 1, oldrow - 3) == 0)
+                        if (!Board.CanBeJumped(oldcol+2, oldrow -2) || Board.CanJump(type, oldcol + 2, oldrow - 2) != 0)
                         {
                             Board.Squares[oldcol + 2, oldrow - 2] = a;
                             Board.Squares[oldcol + 1, oldrow - 1] = b;
@@ -308,6 +308,8 @@ namespace Checkers.Model
                             Board.Squares[oldcol + 2, oldrow - 2] = a;
                             Board.Squares[oldcol + 1, oldrow - 1] = b;
                         }
+
+
                     }
                     catch (Exception)
                     {
@@ -330,9 +332,9 @@ namespace Checkers.Model
                     {
                         a = Board.Squares[oldcol - 2, oldrow - 2];
                         b = Board.Squares[oldcol - 1, oldrow - 1];
-                        Board.Squares[oldcol - 2, oldrow - 2] = SquareValues.Black;
+                        Board.Squares[oldcol - 2, oldrow - 2] = type;
                         Board.Squares[oldcol - 1, oldrow - 1] = SquareValues.Empty;
-                        if (Board.CanJump(Board.Squares[oldcol - 3, oldrow - 3], oldcol - 3, oldrow - 3) == 0 && Board.CanJump(Board.Squares[oldcol - 1, oldrow - 3], oldcol - 1, oldrow - 3) == 0)
+                        if (!Board.CanBeJumped(oldcol - 2, oldrow - 2) || Board.CanJump(type, oldcol - 2, oldrow - 2) != 0)
                         {
                             Board.Squares[oldcol - 2, oldrow - 2] = a;
                             Board.Squares[oldcol - 1, oldrow - 1] = b;
@@ -365,9 +367,9 @@ namespace Checkers.Model
                     {
                          a = Board.Squares[oldcol + 2, oldrow + 2];
                          b = Board.Squares[oldcol + 1, oldrow + 1];
-                        Board.Squares[oldcol + 2, oldrow + 2] = SquareValues.White;
+                        Board.Squares[oldcol + 2, oldrow + 2] = type;
                         Board.Squares[oldcol + 1, oldrow + 1] = SquareValues.Empty;
-                        if (Board.CanJump(Board.Squares[oldcol + 3, oldrow + 3], oldcol + 3, oldrow + 3) == 0 && Board.CanJump(Board.Squares[oldcol + 1, oldrow + 3], oldcol + 1, oldrow + 3) == 0)
+                        if (!Board.CanBeJumped(oldcol + 2, oldrow + 2) || Board.CanJump(type, oldcol + 2, oldrow + 2) != 0)
                         {
                             Board.Squares[oldcol + 2, oldrow + 2] = a;
                             Board.Squares[oldcol + 1, oldrow + 1] = b;
@@ -400,9 +402,9 @@ namespace Checkers.Model
                     {
                          a = Board.Squares[oldcol - 2, oldrow + 2];
                          b = Board.Squares[oldcol - 1, oldrow + 1];
-                        Board.Squares[oldcol - 2, oldrow + 2] = SquareValues.White;
+                        Board.Squares[oldcol - 2, oldrow + 2] = type;
                         Board.Squares[oldcol - 1, oldrow + 1] = SquareValues.Empty;
-                        if (Board.CanJump(Board.Squares[oldcol - 3, oldrow + 3], oldcol - 3, oldrow + 3) == 0 && Board.CanJump(Board.Squares[oldcol - 1, oldrow + 3], oldcol - 1, oldrow + 3) == 0)
+                        if (!Board.CanBeJumped(oldcol - 2, oldrow + 2) || Board.CanJump(type, oldcol - 2, oldrow + 2) != 0)
                         {
                             Board.Squares[oldcol - 2, oldrow + 2] = a;
                             Board.Squares[oldcol - 1, oldrow + 1] = b;

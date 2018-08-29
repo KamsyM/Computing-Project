@@ -13,7 +13,7 @@ namespace Checkers.Model
 
     public enum SquareValues
     {
-        Empty/*Taken*/, Black, White, BlackKing, WhiteKing
+        Empty, Black, White, BlackKing, WhiteKing
     }
 
     public enum Modality

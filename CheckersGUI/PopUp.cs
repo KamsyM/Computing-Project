@@ -15,19 +15,14 @@ namespace CheckersGUI
 {
     public partial class PopUp : Form
     {
-        private Form1 iniForm;
-        //private Bitmap BlackWins = new Bitmap(@"C:\Users\Kamsi\Pictures\Black Checker Piece.jpg");
-        //private Bitmap WhiteWins = new Bitmap(@"C:\Users\Kamsi\Pictures\White Checker Piece.bmp");
-        //private Image stuff = new Image();
         public PopUp(string txt, Bitmap image)
         {
             InitializeComponent();
-            //WinningText.BackColor = Color.Transparent;
             WinningText.Text = txt;
             WinningPic.Image = image;
+            System.Media.SoundPlayer WinnerSound = new System.Media.SoundPlayer(Properties.Resources.achievement_mp3_sound__online_audio_converter_com_);           
+            WinnerSound.Load();
+            WinnerSound.PlaySync();
         }
-
-
-
     }
 }

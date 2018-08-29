@@ -515,7 +515,7 @@ namespace Checkers.Model
         }
 
         /// <summary>
-        /// Checks to see if a piece has the option to jump
+        /// Checks to see if a piece has the option to jump and returns an int which tells of the direction of jump
         /// </summary>
         /// <param name="type"></param>
         /// <param name="currentCol"></param>
@@ -555,6 +555,33 @@ namespace Checkers.Model
                         }
                     }
                 }
+                //--------------------------------------------------------------------
+                if (IsInvalidEntry(currentRow + 2) == null && type == Bk)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow + 1] == W || Squares[currentCol + 1, currentRow + 1] == Wk)
+                        {
+                            if (Squares[currentCol + 2, currentRow + 2] == E)
+                            {
+                                return 3;
+                            }
+                        }
+                    }
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow + 1] == W || Squares[currentCol - 1, currentRow + 1] == Wk)
+                        {
+                            if (Squares[currentCol - 2, currentRow + 2] == E)
+                            {
+                                return 4;
+                            }
+                        }
+                    }
+                }
+                //-----------------------------------------------------------------------
                 return 0;
             }
 
@@ -586,9 +613,55 @@ namespace Checkers.Model
                         }
                     }
                 }
+                //-----------------------------------------------------------
+                if (IsInvalidEntry(currentRow - 2) == null && type == Wk)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow - 1] == B || Squares[currentCol + 1, currentRow - 1] == Bk)
+                        {
+                            if (Squares[currentCol + 2, currentRow - 2] == E)
+                            {
+                                return 1;
+                            }
+                        }
+                    }
+
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow - 1] == B || Squares[currentCol - 1, currentRow - 1] == Bk)
+                        {
+                            if (Squares[currentCol - 2, currentRow - 2] == E)
+                            {
+                                return 2;
+                            }
+                        }
+                    }
+                }
+                //---------------------------------------------------------------
                 return 0;
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Checks if a piece can be Jumped
+        /// </summary>
+        /// <param name="oldCol"></param>
+        /// <param name="oldRow"></param>
+        /// <returns></returns>
+        public bool CanBeJumped(int oldCol, int oldRow)
+        {
+            if (CanJump(Squares[oldCol + 1, oldRow - 1], oldCol+1,oldRow-1) != 4 && CanJump(Squares[oldCol - 1, oldRow - 1], oldCol - 1, oldRow - 1) != 3)
+            {
+                if (CanJump(Squares[oldCol + 1, oldRow + 1], oldCol + 1, oldRow + 1) != 2 && CanJump(Squares[oldCol - 1, oldRow + 1], oldCol - 1, oldRow + 1) != 1)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>

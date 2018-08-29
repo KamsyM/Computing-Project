@@ -44,8 +44,9 @@ namespace CheckersGUI
         private bool Highlight = false;
         private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
-        private Bitmap BlackWins = new Bitmap(@"C:\Users\Kamsi\Pictures\Black Checker Piece.png");
-        private Bitmap WhiteWins = new Bitmap(@"C:\Users\Kamsi\Pictures\White Checker Piece.png");
+        private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
+        private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
+        private System.Media.SoundPlayer StartSound = new System.Media.SoundPlayer(Properties.Resources.GameStart);
 
 
         public Form1()
@@ -55,8 +56,8 @@ namespace CheckersGUI
             Mode = Modality.BlackTurn;
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.TestingComp();
-            //var whitepieces = Pieces.Empty();
+            //var blackpieces = Pieces.JumpingBlack();
+            //var whitepieces = Pieces.JumpedWhite();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -833,6 +834,8 @@ namespace CheckersGUI
         private void StartNewGame()
         {
             menu.ShowDialog();
+            StartSound.Load();
+            StartSound.Play();
             PType = menu.PType;
             gamemode = menu.gamemode;
             //Bots = menu.Bots;
