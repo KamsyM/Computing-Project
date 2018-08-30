@@ -35,11 +35,14 @@ namespace Checkers.Model
                     BotPlayer3();
                     break;
                 case 3:
-                    BotPlayer4();
+                    BotPlayer5();
                     break;
             }
         }
 
+        /// <summary>
+        /// Picks a Random Place to move to
+        /// </summary>
         private void BotPlayer1()
         {
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
@@ -70,6 +73,9 @@ namespace Checkers.Model
             }
         }
 
+        /// <summary>
+        /// Jumps over a Piece Whenever it can
+        /// </summary>
         private void BotPlayer2()
         {
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
@@ -133,6 +139,9 @@ namespace Checkers.Model
             }
         }
 
+        /// <summary>
+        /// Jumps over a Piece Whenever it can and can also double jump
+        /// </summary>
         private void BotPlayer3()
         {
             //int jumpNo = 0;
@@ -181,6 +190,9 @@ namespace Checkers.Model
             }
         }
 
+        /// <summary>
+        /// Checks to see if a space is safe before jumping
+        /// </summary>
         private void BotPlayer4()
         {
             //int jumpNo = 0;
@@ -197,16 +209,16 @@ namespace Checkers.Model
                             case 0:
                                 break;
                             case 1:
-                                Checking(oldcol, oldrow,realtype, CheckNo.RightUp);
+                                CheckingJumps(oldcol, oldrow,realtype, CheckNo.RightUp);
                                 break;
                             case 2:
-                                Checking(oldcol, oldrow,realtype, CheckNo.LeftUp);
+                                CheckingJumps(oldcol, oldrow,realtype, CheckNo.LeftUp);
                                 break;
                             case 3:
-                                Checking(oldcol, oldrow,realtype, CheckNo.RightDown);
+                                CheckingJumps(oldcol, oldrow,realtype, CheckNo.RightDown);
                                 break;
                             case 4:
-                                Checking(oldcol, oldrow,realtype, CheckNo.LeftDown);
+                                CheckingJumps(oldcol, oldrow,realtype, CheckNo.LeftDown);
                                 break;
                             default:
                                 break;
@@ -281,12 +293,117 @@ namespace Checkers.Model
         }
 
         /// <summary>
+        /// Checks to see if a move as well as a jump is safe before moving
+        /// </summary>
+        private void BotPlayer5()
+        {
+            for (int oldrow = 0; oldrow < Board.Size; oldrow++)
+            {
+                for (int oldcol = 0; oldcol < Board.Size; oldcol++)
+                {
+                    if (!Board.IsEmptySquare(oldcol, oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
+                    {
+                        var realtype = Board.Squares[oldcol, oldrow];
+                        switch (Board.CanJump(realtype, oldcol, oldrow))
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp);
+                                break;
+                            case 2:
+                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp);
+                                break;
+                            case 3:
+                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown);
+                                break;
+                            case 4:
+                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown);
+                                break;
+                            default:
+                                break;
+                        }
+                        //Jumper(oldcol, oldrow);
+                        if (Board.IsEmptySquare(oldcol, oldrow))
+                        {
+                            return;
+                        }
+
+                    }
+
+                }
+
+            }
+            for (int oldrow = 0; oldrow < Board.Size; oldrow++)
+            {
+                for (int oldcol = 0; oldcol < Board.Size; oldcol++)
+                {
+                    if (!Board.IsEmptySquare(oldcol, oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
+                    {
+                        var realtype = Board.Squares[oldcol, oldrow];
+                        for (int newrow = 0; newrow < Board.Size; newrow++)
+                        {
+                            for (int newcol = 0; newcol < Board.Size; newcol++)
+                            {
+                                if (newrow == oldrow - 1 || newrow == oldrow + 1)
+                                {
+                                    
+                                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
+                                    {
+                                        if (!CheckingSpaces(newcol, newrow))
+                                        {
+                                            Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                            return;
+                                        }
+
+                                    }
+                                }
+
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+            for (int oldrow = 0; oldrow < Board.Size; oldrow++)
+            {
+                for (int oldcol = 0; oldcol < Board.Size; oldcol++)
+                {
+                    if (!Board.IsEmptySquare(oldcol, oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
+                    {
+                        var realtype = Board.Squares[oldcol, oldrow];
+                        for (int newrow = 0; newrow < Board.Size; newrow++)
+                        {
+                            for (int newcol = 0; newcol < Board.Size; newcol++)
+                            {
+                                if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
+                                {
+                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                    return;
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        /// <summary>
         /// Checks if a jump is safe
         /// </summary>
         /// <param name="oldcol"></param>
         /// <param name="oldrow"></param>
         /// <param name="mode"></param>
-        private void Checking(int oldcol, int oldrow, SquareValues type, CheckNo mode)
+        private void CheckingJumps(int oldcol, int oldrow, SquareValues type, CheckNo mode)
         {
             switch (mode)
             {
@@ -433,6 +550,30 @@ namespace Checkers.Model
                     break;
             }
            
+        }
+
+        /// <summary>
+        /// Checks if a move is safe
+        /// </summary>
+        private bool CheckingSpaces(int newcol, int newrow)
+        {
+            try
+            {
+                if (!Board.CanBeJumped(newcol, newrow))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
         }
 
         /// <summary>

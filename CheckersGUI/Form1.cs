@@ -384,9 +384,37 @@ namespace CheckersGUI
                 GameWonProcedure(3);
                 return;
             }
+            var a = Board.RecordPieces();
             //Bot2.Move();
             Bot.Move();
             // Bots.First().Move();
+            var b = Board.RecordPieces();
+            HighlightMoves(a,b);
+            //for (int col = 0; col < 8; col++)
+            //{
+            //    for (int row = 0; row < 8; row++)
+            //    {
+            //        if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) == SquareValues.Empty)
+            //        {
+            //            DrawSquare(col, row, blackPen, yellowBrush);
+            //            DrawCircle(col, row, blackPen, blackBrush);
+            //            Thread.Sleep(200);
+            //            DrawSquare(col, row, blackPen, greyBrush);
+            //        }
+            //    }
+            //}
+            //for (int col = 0; col < 8; col++)
+            //{
+            //    for (int row = 0; row < 8; row++)
+            //    {
+            //        if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != SquareValues.Empty)
+            //        {
+            //            DrawSquare(col, row, blackPen, yellowBrush);
+            //            DrawCircle(col, row, blackPen, blackBrush);
+            //            Thread.Sleep(200);
+            //        }
+            //    }
+            //}
             if (Board.GameIsWon())
             {
                 GameWonProcedure(4);
@@ -403,7 +431,10 @@ namespace CheckersGUI
                 GameWonProcedure(1);
                 return;
             }
+            var a = Board.RecordPieces();
             Bot.Move();
+            var b = Board.RecordPieces();
+            HighlightMoves(a, b);
             if (Board.GameIsWon())
             {
                 GameWonProcedure(2);
@@ -414,8 +445,159 @@ namespace CheckersGUI
             Mode = Modality.BlackTurn;
         }
 
-
-
+        /// <summary>
+        /// Highlights the Bots Moves
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        private void HighlightMoves(int[,] a, int[,] b)
+        {
+            var B = SquareValues.Black;
+            var Bk = SquareValues.BlackKing;
+            var W = SquareValues.White;
+            var Wk = SquareValues.WhiteKing;
+            var E = SquareValues.Empty;
+            var realtype = E;
+            var NoRowsMoved = 0;
+            var row1 = 0;
+            var row2 = 0;
+            for (int col = 0; col < 8; col++)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != E)
+                    {
+                        realtype = Board.ReadSquare(col,row);
+                        row1 = row;
+                    }
+                }
+            }
+            for (int col = 0; col < 8; col++)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) == E)
+                    {
+                        row2 = row;
+                    }
+                }
+            }
+            NoRowsMoved = Math.Abs(row1 - row2);
+            if (NoRowsMoved != 1)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    for (int row = 0; row < 8; row++)
+                    {
+                        if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != E)
+                        {
+                            DrawBoard();
+                            if (realtype == W)
+                            {
+                                DrawSquare(col, row, blackPen, yellowBrush);
+                                DrawCircle(col, row, blackPen, whiteBrush);
+                                Thread.Sleep(200);
+                            }
+                            if (realtype == Wk)
+                            {
+                                DrawSquare(col, row, blackPen, yellowBrush);
+                                DrawCircle(col, row, blackPen, whiteBrush);
+                                DrawStar(col, row, blackPen, redBrush);
+                                Thread.Sleep(200);
+                            }
+                            if (realtype == B)
+                            {
+                                DrawSquare(col, row, blackPen, yellowBrush);
+                                DrawCircle(col, row, blackPen, blackBrush);
+                                Thread.Sleep(200);
+                            }
+                            if (realtype == Bk)
+                            {
+                                DrawSquare(col, row, blackPen, yellowBrush);
+                                DrawCircle(col, row, blackPen, blackBrush);
+                                DrawStar(col, row, blackPen, redBrush);
+                                Thread.Sleep(200);
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+            for (int col = 0; col < 8; col++)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) == E)
+                    {
+                        if (realtype == W)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, whiteBrush);
+                            Thread.Sleep(200);
+                            DrawSquare(col, row, blackPen, greyBrush);
+                        }
+                        if (realtype == Wk)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, whiteBrush);
+                            DrawStar(col, row, blackPen, redBrush);
+                            Thread.Sleep(200);
+                            DrawSquare(col, row, blackPen, greyBrush);
+                        }
+                        if (realtype == B)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, blackBrush);
+                            Thread.Sleep(200);
+                            DrawSquare(col, row, blackPen, greyBrush);
+                        }
+                        if (realtype == Bk)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, blackBrush);
+                            DrawStar(col, row, blackPen, redBrush);
+                            Thread.Sleep(200);
+                            DrawSquare(col, row, blackPen, greyBrush);
+                        }
+                    }
+                }
+            }
+            for (int col = 0; col < 8; col++)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != E)
+                    {
+                        if (realtype == W)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, whiteBrush);
+                            Thread.Sleep(200);
+                        }
+                        if (realtype == Wk)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, whiteBrush);
+                            DrawStar(col, row, blackPen, redBrush);
+                            Thread.Sleep(200);
+                        }
+                        if (realtype == B)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, blackBrush);
+                            Thread.Sleep(200);
+                        }
+                        if (realtype == Bk)
+                        {
+                            DrawSquare(col, row, blackPen, yellowBrush);
+                            DrawCircle(col, row, blackPen, blackBrush);
+                            DrawStar(col, row, blackPen, redBrush);
+                            Thread.Sleep(200);
+                        }
+                    }
+                }
+            }
+        }
 
         private void StartGame1P()
         {

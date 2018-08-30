@@ -21,12 +21,12 @@ namespace Checkers.Model
         private Piece[] Pieces2;
         //private ILogger Logger;
 
-            /// <summary>
-            /// GameBoard Constructor
-            /// </summary>
-            /// <param name="size"></param>
-            /// <param name="pieces1"></param>
-            /// <param name="pieces2"></param>
+        /// <summary>
+        /// GameBoard Constructor
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="pieces1"></param>
+        /// <param name="pieces2"></param>
         public GameBoard(int size, Piece[] pieces1, Piece[] pieces2)
         {
             Size = size;
@@ -37,7 +37,7 @@ namespace Checkers.Model
             Pieces2 = pieces2;
         }
 
-        string[] ColALphabet = new string[8] {"A","B","C","D","E","F","G","H" };
+        string[] ColALphabet = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" };
 
         /// <summary>
         /// Creates the Board in CLI
@@ -138,7 +138,7 @@ namespace Checkers.Model
         /// <param name="col"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        public bool IsEmptySquare( int col, int row)
+        public bool IsEmptySquare(int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
             {
@@ -153,7 +153,7 @@ namespace Checkers.Model
         /// <param name="col"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        public bool IsBlackSquare( int col, int row)
+        public bool IsBlackSquare(int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
             {
@@ -168,7 +168,7 @@ namespace Checkers.Model
         /// <param name="col"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        public bool IsWhiteSquare( int col, int row)
+        public bool IsWhiteSquare(int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
             {
@@ -183,7 +183,7 @@ namespace Checkers.Model
         /// <param name="col"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        public bool IsBlackKingSquare( int col, int row)
+        public bool IsBlackKingSquare(int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
             {
@@ -198,7 +198,7 @@ namespace Checkers.Model
         /// <param name="col"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        public bool IsWhiteKingSquare( int col, int row)
+        public bool IsWhiteKingSquare(int col, int row)
         {
             if (col > 7 || row > 7 || col < 0 || row < 0)
             {
@@ -234,7 +234,7 @@ namespace Checkers.Model
                 Squares[oldCol + 1, oldRow - 1] = SquareValues.Empty;
             }
 
-            if (newCol == oldCol +2 && newRow == oldRow +2)
+            if (newCol == oldCol + 2 && newRow == oldRow + 2)
             {
                 Squares[oldCol + 1, oldRow + 1] = SquareValues.Empty;
             }
@@ -260,9 +260,9 @@ namespace Checkers.Model
         /// <param name="newCol"></param>
         /// <param name="newRow"></param>
         /// <returns></returns>
-        public bool IsValidMove( SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
+        public bool IsValidMove(SquareValues type, int oldCol, int oldRow, int newCol, int newRow)
         {
-            if (IsEmptySquare( newCol, newRow) == false)
+            if (IsEmptySquare(newCol, newRow) == false)
             {
                 return false;
             }
@@ -285,7 +285,7 @@ namespace Checkers.Model
                 default:
                     throw new Exception("Invalid SquareValue");
             }
-            
+
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace Checkers.Model
         /// <returns></returns>
         private bool IsValidWhiteMove(int oldCol, int oldRow, int newCol, int newRow)
         {
-            
+
             if (oldRow + 2 <= 7)
             {
                 if (oldCol + 2 <= 7 || oldCol - 2 >= 0)
@@ -493,7 +493,7 @@ namespace Checkers.Model
                 return false;
             }
 
-           
+
             return true;
         }
 
@@ -507,7 +507,7 @@ namespace Checkers.Model
         /// <returns></returns>
         public bool HasJumped(int oldCol, int oldRow, int newCol, int newRow)
         {
-            if (newCol == oldCol +2 || newCol == oldCol - 2)
+            if (newCol == oldCol + 2 || newCol == oldCol - 2)
             {
                 return true;
             }
@@ -589,7 +589,7 @@ namespace Checkers.Model
             {
                 if (IsInvalidEntry(currentRow + 2) == null)
                 {
-                    if (IsInvalidEntry(currentCol + 2) == null )
+                    if (IsInvalidEntry(currentCol + 2) == null)
                     {
 
                         if (Squares[currentCol + 1, currentRow + 1] == B || Squares[currentCol + 1, currentRow + 1] == Bk)
@@ -603,7 +603,7 @@ namespace Checkers.Model
 
                     if (IsInvalidEntry(currentCol - 2) == null)
                     {
-                   
+
                         if (Squares[currentCol - 1, currentRow + 1] == B || Squares[currentCol - 1, currentRow + 1] == Bk)
                         {
                             if (Squares[currentCol - 2, currentRow + 2] == E)
@@ -654,7 +654,7 @@ namespace Checkers.Model
         /// <returns></returns>
         public bool CanBeJumped(int oldCol, int oldRow)
         {
-            if (CanJump(Squares[oldCol + 1, oldRow - 1], oldCol+1,oldRow-1) != 4 && CanJump(Squares[oldCol - 1, oldRow - 1], oldCol - 1, oldRow - 1) != 3)
+            if (CanJump(Squares[oldCol + 1, oldRow - 1], oldCol + 1, oldRow - 1) != 4 && CanJump(Squares[oldCol - 1, oldRow - 1], oldCol - 1, oldRow - 1) != 3)
             {
                 if (CanJump(Squares[oldCol + 1, oldRow + 1], oldCol + 1, oldRow + 1) != 2 && CanJump(Squares[oldCol - 1, oldRow + 1], oldCol - 1, oldRow + 1) != 1)
                 {
@@ -683,7 +683,7 @@ namespace Checkers.Model
                             for (int newcol = 0; newcol < 8; newcol++)
                             {
                                 if (IsEmptySquare(newcol, newrow) && IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
-                                {                                   
+                                {
                                     return true;
                                 }
 
@@ -705,7 +705,7 @@ namespace Checkers.Model
         /// <param name="oldCol"></param>
         /// <param name="oldRow"></param>
         /// <returns></returns>
-        public bool NotYourPiece( SquareValues type, int oldCol, int oldRow)
+        public bool NotYourPiece(SquareValues type, int oldCol, int oldRow)
         {
             if (type == SquareValues.Black)
             {
@@ -716,7 +716,7 @@ namespace Checkers.Model
                 return true;
             }
 
-            if (type == SquareValues.White )
+            if (type == SquareValues.White)
             {
                 if (Squares[oldCol, oldRow] != SquareValues.Black && Squares[oldCol, oldRow] != SquareValues.BlackKing)
                 {
@@ -733,7 +733,7 @@ namespace Checkers.Model
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string IsInvalidEntry( int rowOrColumn)
+        public string IsInvalidEntry(int rowOrColumn)
         {
             if (rowOrColumn > 7 || rowOrColumn < 0)
             {
@@ -824,6 +824,27 @@ namespace Checkers.Model
             {
                 return -1;
             }
+        }
+
+        /// <summary>
+        /// Records all the Pieces and their position on the board
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public int[,] RecordPieces()
+        {
+            int[,] PiecePos = new int[8,8];
+            for (int col = 0; col < 8; col++)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    if (Squares[col, row] != SquareValues.Empty)
+                    {
+                        PiecePos[col, row] = 1;
+                    }
+                }
+            }
+            return PiecePos;
         }
     }
 }
