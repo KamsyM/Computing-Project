@@ -128,5 +128,8 @@
   <ItemGroup>
     <None Include="Resources\GameStart.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Computing Project.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

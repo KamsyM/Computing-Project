@@ -118,22 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="achievement_mp3_sound__online_audio_converter_com_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\achievement-mp3-sound (online-audio-converter.com).wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Aha_Soft_Chess_Chess_board" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Aha-Soft-Chess-Chess-board.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Black_Checker_Piece" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Black Checker Piece.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GameStart" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GameStart.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="White_Checker_Piece" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\White Checker Piece.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Computing_Project" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Computing Project.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="CheckersGUI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CheckersGUI.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

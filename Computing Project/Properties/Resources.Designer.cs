@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CheckersGUI.Properties {
+namespace Computing_Project.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CheckersGUI.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CheckersGUI.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Computing_Project.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,66 +61,18 @@ namespace CheckersGUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream achievement_mp3_sound__online_audio_converter_com_ {
-            get {
-                return ResourceManager.GetStream("achievement_mp3_sound__online_audio_converter_com_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Aha_Soft_Chess_Chess_board {
-            get {
-                object obj = ResourceManager.GetObject("Aha_Soft_Chess_Chess_board", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Black_Checker_Piece {
-            get {
-                object obj = ResourceManager.GetObject("Black_Checker_Piece", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Computing_Project {
+        internal static byte[] CheckersGUI {
             get {
-                object obj = ResourceManager.GetObject("Computing_Project", resourceCulture);
+                object obj = ResourceManager.GetObject("CheckersGUI", resourceCulture);
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream GameStart {
-            get {
-                return ResourceManager.GetStream("GameStart", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap White_Checker_Piece {
-            get {
-                object obj = ResourceManager.GetObject("White_Checker_Piece", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
 
-        public static byte[] GetComputingProject()
+        public static byte[] GetGUI()
         {
-            return Computing_Project;
+            return CheckersGUI;
         }
     }
 }

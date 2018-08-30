@@ -7,6 +7,8 @@ using Checkers.Model;
 using Checkers.DataFixture;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.IO;
+using Computing_Project.Properties;
 
 namespace Checkers.UI
 {
@@ -43,11 +45,29 @@ namespace Checkers.UI
                         Start1PGame(Board);
                         break;
                     case '3':
-                        var processStartInfo = new ProcessStartInfo();
-                        processStartInfo.WorkingDirectory = @"C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug";
-                        processStartInfo.FileName = @"C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug\CheckersGUI.exe";
-                        Process.Start(processStartInfo);
+                        var retry = true;
+                        while (retry)
+                        {
+                            try
+                            {
+                                string tempExeName = Path.Combine(Directory.GetCurrentDirectory(), "GUI.exe");
+                                using (FileStream fsDst = new FileStream(tempExeName, FileMode.CreateNew, FileAccess.Write))
+                                {
+                                    byte[] bytes = Resources.GetGUI();
+
+                                    fsDst.Write(bytes, 0, bytes.Length);
+                                }
+                                Process.Start(tempExeName);
+                                retry = false;
+                            }
+                            catch (Exception)
+                            {
+                                File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "GUI.exe"));
+
+                            }
+                        }
                         running = false;
+                        Application.Exit();                       
                         break;
                     case '0':
                         running = false;

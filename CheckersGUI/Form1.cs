@@ -1,12 +1,15 @@
 ﻿using Checkers.DataFixture;
 using Checkers.Model;
+using CheckersGUI.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -946,10 +949,27 @@ namespace CheckersGUI
 
         private void CLIversion_Click(object sender, EventArgs e)
         {
-            var processStartInfo = new ProcessStartInfo();
-            processStartInfo.WorkingDirectory = @"C:\Users\Kamsi\source\repos\Computing - Project\Computing Project\bin\Debug";
-            processStartInfo.FileName = @"C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Debug\Computing Project.exe";
-            Process.Start(processStartInfo);
+            var retry = true;
+            while (retry)
+            {
+                try
+                {
+                    string tempExeName = Path.Combine(Directory.GetCurrentDirectory(), "Checkers.exe");
+                    using (FileStream fsDst = new FileStream(tempExeName, FileMode.CreateNew, FileAccess.Write))
+                    {
+                        byte[] bytes = Resources.GetComputingProject();
+
+                        fsDst.Write(bytes, 0, bytes.Length);
+                    }
+                    Process.Start(tempExeName);
+                    retry = false;
+                }
+                catch (Exception)
+                {
+                    File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Checkers.exe"));
+
+                }
+            }
             Application.Exit();
         }
     }
