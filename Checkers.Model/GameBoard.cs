@@ -838,9 +838,25 @@ namespace Checkers.Model
             {
                 for (int row = 0; row < 8; row++)
                 {
-                    if (Squares[col, row] != SquareValues.Empty)
+                    switch (Squares[col,row])
                     {
-                        PiecePos[col, row] = 1;
+                        case SquareValues.Empty:
+                            PiecePos[col, row] = 0;
+                            break;
+                        case SquareValues.Black:
+                            PiecePos[col, row] = 1;
+                            break;
+                        case SquareValues.BlackKing:
+                            PiecePos[col, row] = 2;
+                            break;
+                        case SquareValues.White:
+                            PiecePos[col, row] = 3;
+                            break;
+                        case SquareValues.WhiteKing:
+                            PiecePos[col, row] = 4;
+                            break;
+                        default:
+                            break;
                     }
                 }
             }

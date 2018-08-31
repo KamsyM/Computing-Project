@@ -25,3 +25,5 @@ C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Debug\Checke
 C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Debug\Checkers.UI.csproj.CopyComplete
 C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Debug\Computing Project.exe
 C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Debug\Computing Project.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Debug\Computing_Project.Properties.Resources.resources
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Debug\Checkers.UI.csproj.GenerateResource.cache

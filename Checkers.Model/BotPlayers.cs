@@ -350,7 +350,7 @@ namespace Checkers.Model
                                     
                                     if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                     {
-                                        if (!CheckingSpaces(newcol, newrow))
+                                        if (CheckingSpaces(oldcol, oldrow, newcol, newrow))
                                         {
                                             Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
                                             return;
@@ -555,22 +555,32 @@ namespace Checkers.Model
         /// <summary>
         /// Checks if a move is safe
         /// </summary>
-        private bool CheckingSpaces(int newcol, int newrow)
+        private bool CheckingSpaces(int oldcol, int oldrow, int newcol, int newrow)
         {
             try
             {
+                var type = Board.ReadSquare(oldcol,oldrow);
+                a = Board.Squares[oldcol, oldrow];
+                b = Board.Squares[newcol, newrow];               
+                Board.Squares[oldcol, oldrow] = SquareValues.Empty;
+                Board.Squares[newcol, newrow] = type;
                 if (!Board.CanBeJumped(newcol, newrow))
                 {
+                    Board.Squares[oldcol, oldrow] = a;
+                    Board.Squares[newcol, newrow] = b;
                     return true;
                 }
                 else
                 {
+                    Board.Squares[oldcol, oldrow] = a;
+                    Board.Squares[newcol, newrow] = b;
                     return false;
                 }
             }
             catch (Exception)
             {
-
+                Board.Squares[oldcol, oldrow] = a;
+                Board.Squares[newcol, newrow] = b;
                 return false;
             }
 
