@@ -654,14 +654,23 @@ namespace Checkers.Model
         /// <returns></returns>
         public bool CanBeJumped(int oldCol, int oldRow)
         {
-            if (CanJump(Squares[oldCol + 1, oldRow - 1], oldCol + 1, oldRow - 1) != 4 && CanJump(Squares[oldCol - 1, oldRow - 1], oldCol - 1, oldRow - 1) != 3)
+            try
             {
-                if (CanJump(Squares[oldCol + 1, oldRow + 1], oldCol + 1, oldRow + 1) != 2 && CanJump(Squares[oldCol - 1, oldRow + 1], oldCol - 1, oldRow + 1) != 1)
+                if (CanJump(Squares[oldCol + 1, oldRow - 1], oldCol + 1, oldRow - 1) != 4 && CanJump(Squares[oldCol - 1, oldRow - 1], oldCol - 1, oldRow - 1) != 3)
                 {
-                    return false;
+                    if (CanJump(Squares[oldCol + 1, oldRow + 1], oldCol + 1, oldRow + 1) != 2 && CanJump(Squares[oldCol - 1, oldRow + 1], oldCol - 1, oldRow + 1) != 1)
+                    {
+                        return false;
+                    }
                 }
+                return true;
             }
-            return true;
+            catch (Exception)
+            {
+
+                return false;
+            }
+
         }
 
         /// <summary>

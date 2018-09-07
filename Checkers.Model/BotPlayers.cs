@@ -84,6 +84,7 @@ namespace Checkers.Model
                 {
                     if (!Board.IsEmptySquare(oldcol, oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
                     {
+                        
                         var realtype = Board.Squares[oldcol, oldrow];
                         switch (Board.CanJump(realtype, oldcol, oldrow))
                         {

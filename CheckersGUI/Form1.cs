@@ -57,10 +57,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.JumpingBlack();
-            //var whitepieces = Pieces.JumpedWhite();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.TestingComp2();
+            var whitepieces = Pieces.Empty();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -499,7 +499,7 @@ namespace CheckersGUI
             NoRowsMoved = Math.Abs(row1 - row2);
             if (NoRowsMoved != 1)
             {
-                
+
                 for (int col = 0; col < 8; col++)
                 {
                     for (int row = 0; row < 8; row++)
@@ -509,7 +509,7 @@ namespace CheckersGUI
                             //DrawBoard();
                             if (realtype == W)
                             {
-                                if (a[col,row] == 3)
+                                if (a[col, row] == 3)
                                 {
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, whiteBrush);
@@ -519,26 +519,26 @@ namespace CheckersGUI
                             }
                             if (realtype == Wk)
                             {
-                                if (a[col,row] == 4)
+                                if (a[col, row] == 4)
                                 {
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, whiteBrush);
                                     DrawStar(col, row, blackPen, redBrush);
                                     Thread.Sleep(200);
-                                }                               
+                                }
                             }
                             if (realtype == B)
                             {
-                                if (a[col,row] == 1)
+                                if (a[col, row] == 1)
                                 {
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, blackBrush);
                                     Thread.Sleep(200);
-                                }                          
+                                }
                             }
                             if (realtype == Bk)
                             {
-                                if (a[col,row] == 2)
+                                if (a[col, row] == 2)
                                 {
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, blackBrush);
@@ -547,6 +547,12 @@ namespace CheckersGUI
                                 }
                             }
                         }
+                    }
+                }
+                for (int col = 0; col < 8; col++)
+                {
+                    for (int row = 0; row < 8; row++)
+                    {
                         if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != E)
                         {
                             DrawBoard();

@@ -12,6 +12,7 @@ namespace Checkers.Model
         {
             Board = board;
             Type = type;
+            BotName = "Bot1";
             
         }
 

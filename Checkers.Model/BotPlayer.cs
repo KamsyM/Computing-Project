@@ -11,6 +11,7 @@ namespace Checkers.Model
         public SquareValues Type;
         public GameBoard Board;
         public int Difficuty;
+        public string BotName;
 
         public BotPlayer(GameBoard board, SquareValues type)
         {

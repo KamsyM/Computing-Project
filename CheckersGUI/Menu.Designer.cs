@@ -38,13 +38,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PlayerPieceType = new System.Windows.Forms.ComboBox();
             this.Tab2P = new System.Windows.Forms.TabPage();
+            this.Highlight = new System.Windows.Forms.CheckBox();
             this.Name2P2 = new System.Windows.Forms.TextBox();
             this.Name2P1 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.Highlight = new System.Windows.Forms.CheckBox();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
@@ -149,6 +149,18 @@
             this.Tab2P.Text = "Two-Player";
             this.Tab2P.UseVisualStyleBackColor = true;
             // 
+            // Highlight
+            // 
+            this.Highlight.AutoSize = true;
+            this.Highlight.Checked = true;
+            this.Highlight.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.Highlight.Location = new System.Drawing.Point(440, 35);
+            this.Highlight.Name = "Highlight";
+            this.Highlight.Size = new System.Drawing.Size(125, 17);
+            this.Highlight.TabIndex = 4;
+            this.Highlight.Text = "Highlight Movements";
+            this.Highlight.UseVisualStyleBackColor = true;
+            // 
             // Name2P2
             // 
             this.Name2P2.Location = new System.Drawing.Point(143, 72);
@@ -203,18 +215,6 @@
             this.btnCancel.Size = new System.Drawing.Size(88, 36);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "&Cancel";
-            // 
-            // Highlight
-            // 
-            this.Highlight.AutoSize = true;
-            this.Highlight.Checked = true;
-            this.Highlight.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Highlight.Location = new System.Drawing.Point(440, 35);
-            this.Highlight.Name = "Highlight";
-            this.Highlight.Size = new System.Drawing.Size(125, 17);
-            this.Highlight.TabIndex = 4;
-            this.Highlight.Text = "Highlight Movements";
-            this.Highlight.UseVisualStyleBackColor = true;
             // 
             // Menu
             // 
