@@ -20,13 +20,14 @@ namespace Checkers.UI
             Console.WriteLine();
             bool running = true;
             GameBoard Board = null;
+            Restart:
             while (running == true)
             {
                 DisplayMenu();
                 char menuchoice = Console.ReadLine().ToCharArray()[0];
                 switch (menuchoice)
                 {
-                    case '1':
+                    case '1':                        
                         var blackpieces = Pieces.BlackPlacements();
                         var whitepieces = Pieces.WhitePlacements();
                         Board = new GameBoard(8, blackpieces, whitepieces);
@@ -85,6 +86,8 @@ namespace Checkers.UI
         {
             Console.WriteLine();
             Console.WriteLine("--- Menu ---");
+            Console.WriteLine();
+            Console.WriteLine("Enter ` in order to return back to menu at any time");
             Console.WriteLine();
             Console.WriteLine("1. Single Player");
             Console.WriteLine("2. Two Players");

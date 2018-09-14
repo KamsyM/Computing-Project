@@ -57,10 +57,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            //var blackpieces = Pieces.BlackPlacements();
-            //var whitepieces = Pieces.WhitePlacements();
-            var blackpieces = Pieces.TestingComp2();
-            var whitepieces = Pieces.Empty();
+            var blackpieces = Pieces.BlackPlacements();
+            var whitepieces = Pieces.WhitePlacements();
+            //var blackpieces = Pieces.JumpingWhite();
+            //var whitepieces = Pieces.JumpedBlack();
             Board = new GameBoard(8, blackpieces, whitepieces);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
@@ -312,6 +312,27 @@ namespace CheckersGUI
            
         }
 
+        private void BotMatch()
+        {
+                if (turn == 1)
+                {
+                    BlackBotMove();
+                    Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                }
+                if (turn == 2)
+                {
+                    Thread.Sleep(1000);
+                    WhiteBotMove();
+                    if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
+                    {
+                        GameWonProcedure(2);
+                        return;
+                    }
+                    Positions.Clear();
+                    return;
+                }           
+        }
+
         private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype)
         {
             switch (realtype)
@@ -390,31 +411,6 @@ namespace CheckersGUI
             // Bots.First().Move();
             var b = Board.RecordPieces();
             HighlightMoves(a,b);
-            //for (int col = 0; col < 8; col++)
-            //{
-            //    for (int row = 0; row < 8; row++)
-            //    {
-            //        if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) == SquareValues.Empty)
-            //        {
-            //            DrawSquare(col, row, blackPen, yellowBrush);
-            //            DrawCircle(col, row, blackPen, blackBrush);
-            //            Thread.Sleep(200);
-            //            DrawSquare(col, row, blackPen, greyBrush);
-            //        }
-            //    }
-            //}
-            //for (int col = 0; col < 8; col++)
-            //{
-            //    for (int row = 0; row < 8; row++)
-            //    {
-            //        if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != SquareValues.Empty)
-            //        {
-            //            DrawSquare(col, row, blackPen, yellowBrush);
-            //            DrawCircle(col, row, blackPen, blackBrush);
-            //            Thread.Sleep(200);
-            //        }
-            //    }
-            //}
             if (Board.GameIsWon())
             {
                 GameWonProcedure(4);
@@ -1112,6 +1108,11 @@ namespace CheckersGUI
                     lblNameP1.Text = menu.name2P1;
                     lblNameP2.Text = menu.name2P2;
                     StartGame2P();
+                    break;
+                case 2:
+                    lblNameP1.Text = menu.nameCG1;
+                    lblNameP2.Text = menu.nameCG2;
+                    BotMatch();
                     break;
                 default:
                     lblNameP1.Text = menu.name1P;

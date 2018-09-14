@@ -45,15 +45,26 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.TabCG = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.NameCG1 = new System.Windows.Forms.TextBox();
+            this.NameCG2 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.CG1Diff = new System.Windows.Forms.ComboBox();
+            this.CG2Diff = new System.Windows.Forms.ComboBox();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
+            this.TabCG.SuspendLayout();
             this.SuspendLayout();
             // 
             // Gamemode
             // 
             this.Gamemode.Controls.Add(this.Tab1P);
             this.Gamemode.Controls.Add(this.Tab2P);
+            this.Gamemode.Controls.Add(this.TabCG);
             this.Gamemode.Location = new System.Drawing.Point(4, 12);
             this.Gamemode.Name = "Gamemode";
             this.Gamemode.SelectedIndex = 0;
@@ -216,6 +227,100 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "&Cancel";
             // 
+            // TabCG
+            // 
+            this.TabCG.Controls.Add(this.CG2Diff);
+            this.TabCG.Controls.Add(this.CG1Diff);
+            this.TabCG.Controls.Add(this.label9);
+            this.TabCG.Controls.Add(this.label8);
+            this.TabCG.Controls.Add(this.NameCG2);
+            this.TabCG.Controls.Add(this.NameCG1);
+            this.TabCG.Controls.Add(this.label7);
+            this.TabCG.Controls.Add(this.label6);
+            this.TabCG.Location = new System.Drawing.Point(4, 22);
+            this.TabCG.Name = "TabCG";
+            this.TabCG.Padding = new System.Windows.Forms.Padding(3);
+            this.TabCG.Size = new System.Drawing.Size(592, 298);
+            this.TabCG.TabIndex = 2;
+            this.TabCG.Text = "Comp-Game";
+            this.TabCG.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(25, 28);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(124, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Computer Player 1 Name";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(25, 60);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(124, 13);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "Computer Player 2 Name";
+            // 
+            // NameCG1
+            // 
+            this.NameCG1.Location = new System.Drawing.Point(172, 28);
+            this.NameCG1.Name = "NameCG1";
+            this.NameCG1.Size = new System.Drawing.Size(144, 20);
+            this.NameCG1.TabIndex = 7;
+            this.NameCG1.Text = "Player 1";
+            // 
+            // NameCG2
+            // 
+            this.NameCG2.Location = new System.Drawing.Point(172, 60);
+            this.NameCG2.Name = "NameCG2";
+            this.NameCG2.Size = new System.Drawing.Size(144, 20);
+            this.NameCG2.TabIndex = 8;
+            this.NameCG2.Text = "Player 2";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(82, 134);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(88, 13);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Player 1 Difficulty";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(302, 134);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(88, 13);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Player 2 Difficulty";
+            // 
+            // CG1Diff
+            // 
+            this.CG1Diff.FormattingEnabled = true;
+            this.CG1Diff.Items.AddRange(new object[] {
+            "Beginner",
+            "Intermediate",
+            "Advanced"});
+            this.CG1Diff.Location = new System.Drawing.Point(85, 170);
+            this.CG1Diff.Name = "CG1Diff";
+            this.CG1Diff.Size = new System.Drawing.Size(137, 21);
+            this.CG1Diff.TabIndex = 11;
+            // 
+            // CG2Diff
+            // 
+            this.CG2Diff.FormattingEnabled = true;
+            this.CG2Diff.Items.AddRange(new object[] {
+            "Beginner",
+            "Intermediate",
+            "Advanced"});
+            this.CG2Diff.Location = new System.Drawing.Point(305, 170);
+            this.CG2Diff.Name = "CG2Diff";
+            this.CG2Diff.Size = new System.Drawing.Size(137, 21);
+            this.CG2Diff.TabIndex = 12;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,6 +338,8 @@
             this.Tab1P.PerformLayout();
             this.Tab2P.ResumeLayout(false);
             this.Tab2P.PerformLayout();
+            this.TabCG.ResumeLayout(false);
+            this.TabCG.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -255,5 +362,14 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.CheckBox Highlight;
+        private System.Windows.Forms.TabPage TabCG;
+        private System.Windows.Forms.TextBox NameCG2;
+        private System.Windows.Forms.TextBox NameCG1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox CG2Diff;
+        private System.Windows.Forms.ComboBox CG1Diff;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
     }
 }
