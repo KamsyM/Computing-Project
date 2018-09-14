@@ -11,4 +11,3 @@ C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\bin\Debug\Checkers.
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.csproj.CoreCompileInputs.cache
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.dll
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.pdb
-C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.csprojAssemblyReference.cache

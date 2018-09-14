@@ -32,7 +32,7 @@ namespace CheckersGUI
         Graphics g;
         public GameBoard Board;
         private BotPlayers Bot;
-        //private BotPlayers Bot2;
+        private BotPlayers Bot2;
         private Modality Mode;
         private int gamemode = 0;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
@@ -314,10 +314,25 @@ namespace CheckersGUI
 
         private void BotMatch()
         {
+            Bot = new BotPlayers(Board, SquareValues.Black, menu.CG1diff);
+            Bot2 = new BotPlayers(Board, SquareValues.White, menu.CG2diff);
+            Board.InitialiseEmptyBoard();
+            Board.InitializePieces();
+            DrawBoard();
+            bool cont = true;
+            while (!Board.GameIsWon() && cont == true)
+            {            
                 if (turn == 1)
                 {
                     BlackBotMove();
+                    if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
+                    {
+                        GameWonProcedure(1);
+                        cont = false;
+                        return;
+                    }
                     Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                    turn = 2;
                 }
                 if (turn == 2)
                 {
@@ -326,12 +341,17 @@ namespace CheckersGUI
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                     {
                         GameWonProcedure(2);
+                        cont = false;
                         return;
                     }
-                    Positions.Clear();
-                    return;
-                }           
+                    turn = 1;
+                    
+                }
+            }
+            return;
         }
+
+
 
         private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype)
         {
@@ -428,7 +448,14 @@ namespace CheckersGUI
                 return;
             }
             var a = Board.RecordPieces();
-            Bot.Move();
+            if (gamemode == 2)
+            {
+                Bot2.Move();
+            }
+            else
+            {
+                Bot.Move();
+            }          
             var b = Board.RecordPieces();
             HighlightMoves(a, b);
             if (Board.GameIsWon())
@@ -1084,6 +1111,13 @@ namespace CheckersGUI
             PType = menu.PType;
             gamemode = menu.gamemode;
             //Bots = menu.Bots;
+            if (gamemode == 2)
+            {
+                lblNameP1.Text = menu.nameCG1;
+                lblNameP2.Text = menu.nameCG2;
+                BotMatch();
+                return;
+            }
             switch (PType)
             {
                 case SquareValues.Black:
@@ -1108,11 +1142,6 @@ namespace CheckersGUI
                     lblNameP1.Text = menu.name2P1;
                     lblNameP2.Text = menu.name2P2;
                     StartGame2P();
-                    break;
-                case 2:
-                    lblNameP1.Text = menu.nameCG1;
-                    lblNameP2.Text = menu.nameCG2;
-                    BotMatch();
                     break;
                 default:
                     lblNameP1.Text = menu.name1P;

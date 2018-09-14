@@ -15,7 +15,11 @@ namespace Checkers.Model
         public int Difficuty;
         public SquareValues a;
         public SquareValues b;
-
+        public Random rnd = new Random();
+        private KeyValuePair<int, int> OldPosition = new KeyValuePair<int, int>();
+        private KeyValuePair<int, int> NewPosition = new KeyValuePair<int, int>();
+        private Dictionary<int, int> pos = new Dictionary<int, int>();
+        private Dictionary<KeyValuePair<int,int>, KeyValuePair<int, int>> BotPositions = new Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>>();
         public BotPlayers(GameBoard board, SquareValues type, int difficulty)
         {
             Type = type;
@@ -40,6 +44,8 @@ namespace Checkers.Model
             }
         }
 
+
+
         /// <summary>
         /// Picks a Random Place to move to
         /// </summary>
@@ -58,19 +64,45 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                    return;
+                                    try
+                                    {
+                                        pos.Add(oldcol, oldrow);
+                                        pos.Add(newcol, newrow);
+                                        OldPosition = pos.First();
+                                        NewPosition = pos.Last();
+                                        pos.Clear();
+                                        BotPositions.Add(OldPosition, NewPosition);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                        Options.Add(BotPositions[OldPosition]);
+                                        Options.Add(NewPosition);
+                                        BotPositions.Remove(OldPosition);
+                                        BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                    }
                                 }
-                                
+
                             }
-                            
+
                         }
-                        
+
                     }
                     
                 }
                 
             }
+            var a = RandomValues(BotPositions);
+            var oldCol = a.Key;
+            var oldRow = a.Value;
+            var NewPlaces = BotPositions[a];
+            var newCol = NewPlaces.Key;
+            var newRow = NewPlaces.Value;
+            Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+            BotPositions.Clear();
+            return;
+            
         }
 
         /// <summary>
@@ -125,8 +157,26 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                    return;
+                                    try
+                                    {
+                                        pos.Add(oldcol, oldrow);
+                                        pos.Add(newcol, newrow);
+                                        OldPosition = pos.First();
+                                        NewPosition = pos.Last();
+                                        pos.Clear();
+                                        BotPositions.Add(OldPosition, NewPosition);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                        Options.Add(BotPositions[OldPosition]);
+                                        Options.Add(NewPosition);
+                                        BotPositions.Remove(OldPosition);
+                                        BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                    }
+                                    //Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                    //return;
                                 }
 
                             }
@@ -138,6 +188,15 @@ namespace Checkers.Model
                 }
 
             }
+            var a = RandomValues(BotPositions);
+            var oldCol = a.Key;
+            var oldRow = a.Value;
+            var NewPlaces = BotPositions[a];
+            var newCol = NewPlaces.Key;
+            var newRow = NewPlaces.Value;
+            Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+            BotPositions.Clear();
+            return;
         }
 
         /// <summary>
@@ -145,6 +204,12 @@ namespace Checkers.Model
         /// </summary>
         private void BotPlayer3()
         {
+            var a = new KeyValuePair<int, int>();
+            var oldCol = 0;
+            var oldRow = 0;
+            var NewPlaces = new KeyValuePair<int, int>();
+            var newCol = 0;
+            var newRow = 0;
             //int jumpNo = 0;
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
             {
@@ -176,8 +241,26 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                    return;
+                                    try
+                                    {
+                                        pos.Add(oldcol, oldrow);
+                                        pos.Add(newcol, newrow);
+                                        OldPosition = pos.First();
+                                        NewPosition = pos.Last();
+                                        pos.Clear();
+                                        BotPositions.Add(OldPosition, NewPosition);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                        Options.Add(BotPositions[OldPosition]);
+                                        Options.Add(NewPosition);
+                                        BotPositions.Remove(OldPosition);
+                                        BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                    }
+                                    //Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                    //return;
                                 }
 
                             }
@@ -189,6 +272,15 @@ namespace Checkers.Model
                 }
 
             }
+            a = RandomValues(BotPositions);
+            oldCol = a.Key;
+            oldRow = a.Value;
+            NewPlaces = BotPositions[a];
+            newCol = NewPlaces.Key;
+            newRow = NewPlaces.Value;
+            Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+            BotPositions.Clear();
+            return;
         }
 
         /// <summary>
@@ -196,6 +288,12 @@ namespace Checkers.Model
         /// </summary>
         private void BotPlayer4()
         {
+            var a = new KeyValuePair<int, int>();
+            var oldCol = 0;
+            var oldRow = 0;
+            var NewPlaces = new KeyValuePair<int, int>();
+            var newCol = 0;
+            var newRow = 0;
             //int jumpNo = 0;
 
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
@@ -250,8 +348,26 @@ namespace Checkers.Model
                                 {
                                     if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                     {
-                                        Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                        return;
+                                        try
+                                        {
+                                            pos.Add(oldcol, oldrow);
+                                            pos.Add(newcol, newrow);
+                                            OldPosition = pos.First();
+                                            NewPosition = pos.Last();
+                                            pos.Clear();
+                                            BotPositions.Add(OldPosition, NewPosition);
+                                        }
+                                        catch (Exception)
+                                        {
+                                            List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                            Options.Add(BotPositions[OldPosition]);
+                                            Options.Add(NewPosition);
+                                            BotPositions.Remove(OldPosition);
+                                            BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                        }
+                                        //Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                        //return;
                                     }
                                 }
 
@@ -264,6 +380,18 @@ namespace Checkers.Model
 
                 }
 
+            }
+            if (BotPositions.Count != 0)
+            {
+                a = RandomValues(BotPositions);
+                oldCol = a.Key;
+                oldRow = a.Value;
+                NewPlaces = BotPositions[a];
+                newCol = NewPlaces.Key;
+                newRow = NewPlaces.Value;
+                Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+                BotPositions.Clear();
+                return;
             }
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
             {
@@ -278,8 +406,26 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                    return;
+                                    try
+                                    {
+                                        pos.Add(oldcol, oldrow);
+                                        pos.Add(newcol, newrow);
+                                        OldPosition = pos.First();
+                                        NewPosition = pos.Last();
+                                        pos.Clear();
+                                        BotPositions.Add(OldPosition, NewPosition);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                        Options.Add(BotPositions[OldPosition]);
+                                        Options.Add(NewPosition);
+                                        BotPositions.Remove(OldPosition);
+                                        BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                    }
+                                    //Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                    //return;
                                 }
 
                             }
@@ -291,6 +437,15 @@ namespace Checkers.Model
                 }
 
             }
+            a = RandomValues(BotPositions);
+            oldCol = a.Key;
+            oldRow = a.Value;
+            NewPlaces = BotPositions[a];
+            newCol = NewPlaces.Key;
+            newRow = NewPlaces.Value;
+            Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+            BotPositions.Clear();
+            return;
         }
 
         /// <summary>
@@ -298,6 +453,12 @@ namespace Checkers.Model
         /// </summary>
         private void BotPlayer5()
         {
+            var a = new KeyValuePair<int,int>();
+            var oldCol = 0;
+            var oldRow = 0;
+            var NewPlaces = new KeyValuePair<int, int>();
+            var newCol = 0;
+            var newRow = 0;
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
             {
                 for (int oldcol = 0; oldcol < Board.Size; oldcol++)
@@ -353,8 +514,26 @@ namespace Checkers.Model
                                     {
                                         if (CheckingSpaces(oldcol, oldrow, newcol, newrow))
                                         {
-                                            Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                            return;
+                                            try
+                                            {
+                                                pos.Add(oldcol, oldrow);
+                                                pos.Add(newcol, newrow);
+                                                OldPosition = pos.First();
+                                                NewPosition = pos.Last();
+                                                pos.Clear();
+                                                BotPositions.Add(OldPosition, NewPosition);
+                                            }
+                                            catch (Exception)
+                                            {
+                                                List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                                Options.Add(BotPositions[OldPosition]);
+                                                Options.Add(NewPosition);
+                                                BotPositions.Remove(OldPosition);
+                                                BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                            }
+                                            //Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                            //return;
                                         }
 
                                     }
@@ -370,6 +549,19 @@ namespace Checkers.Model
                 }
 
             }
+            if (BotPositions.Count != 0)
+            {
+                a = RandomValues(BotPositions);
+                oldCol = a.Key;
+                oldRow = a.Value;
+                NewPlaces = BotPositions[a];
+                newCol = NewPlaces.Key;
+                newRow = NewPlaces.Value;
+                Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+                BotPositions.Clear();
+                return;
+            }
+
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
             {
                 for (int oldcol = 0; oldcol < Board.Size; oldcol++)
@@ -383,8 +575,26 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                    return;
+                                    try
+                                    {
+                                        pos.Add(oldcol, oldrow);
+                                        pos.Add(newcol, newrow);
+                                        OldPosition = pos.First();
+                                        NewPosition = pos.Last();
+                                        pos.Clear();
+                                        BotPositions.Add(OldPosition, NewPosition);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                        Options.Add(BotPositions[OldPosition]);
+                                        Options.Add(NewPosition);
+                                        BotPositions.Remove(OldPosition);
+                                        BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                    }
+                                    //Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+                                    //return;
                                 }
 
                             }
@@ -396,6 +606,15 @@ namespace Checkers.Model
                 }
 
             }
+            a = RandomValues(BotPositions);
+            oldCol = a.Key;
+            oldRow = a.Value;
+            NewPlaces = BotPositions[a];
+            newCol = NewPlaces.Key;
+            newRow = NewPlaces.Value;
+            Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+            BotPositions.Clear();
+            return;
         }
 
         /// <summary>
@@ -635,6 +854,17 @@ namespace Checkers.Model
                 default:
                     return;
             }
+        }
+
+        public KeyValuePair<int, int> RandomValues(Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>> dict)
+        {
+            List<KeyValuePair<int, int>> values = new List<KeyValuePair<int, int>>();
+            foreach (var item in dict)
+            {
+                values.Add(item.Key);
+            }
+            int size = values.Count;
+            return values[rnd.Next(size)];          
         }
     }
 }
