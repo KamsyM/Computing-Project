@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Timers;
 
 namespace CheckersGUI
 {
@@ -66,9 +67,19 @@ namespace CheckersGUI
                 " \nClick the Game tab on the top left to begin";
         }
 
+        private static void delay(int Time_delay)
+        {
+            int i = 0;
+            //  ameTir = new System.Timers.Timer();
+            var _delayTimer = new System.Timers.Timer();
+            _delayTimer.Interval = Time_delay;
+            _delayTimer.AutoReset = false; //so that it only calls the method once
+            _delayTimer.Elapsed += (s, args) => i = 1;
+            _delayTimer.Start();
+            while (i == 0) { };
+        }
 
-
-        private void Grid_MouseClick(object sender, MouseEventArgs e)
+        private async void Grid_MouseClick(object sender, MouseEventArgs e)
         {
             int X = e.X ;
             int Y = e.Y;
@@ -221,7 +232,7 @@ namespace CheckersGUI
                         }
                         if (turn == 2)
                         {
-                            Thread.Sleep(1000);
+                            await Task.Delay(1000);
                             WhiteBotMove();
                             if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
@@ -245,7 +256,7 @@ namespace CheckersGUI
                         }
                         if (turn == 1)
                         {
-                            Thread.Sleep(1000);
+                            await Task.Delay(1000);
                             BlackBotMove();
                             if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
@@ -312,7 +323,7 @@ namespace CheckersGUI
            
         }
 
-        private void BotMatch()
+        private async void BotMatch()
         {
             Bot = new BotPlayers(Board, SquareValues.Black, menu.CG1diff);
             Bot2 = new BotPlayers(Board, SquareValues.White, menu.CG2diff);
@@ -320,23 +331,28 @@ namespace CheckersGUI
             Board.InitializePieces();
             DrawBoard();
             bool cont = true;
+            Messages.Text = "Simulating Game...";
             while (!Board.GameIsWon() && cont == true)
             {            
                 if (turn == 1)
                 {
+                    await Task.Delay(800);
                     BlackBotMove();
+                    if (Board.GameIsWon())
+                    {
+                        return;
+                    }
                     if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                     {
                         GameWonProcedure(1);
                         cont = false;
                         return;
                     }
-                    Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                     turn = 2;
                 }
                 if (turn == 2)
                 {
-                    Thread.Sleep(1000);
+                    await Task.Delay(800);
                     WhiteBotMove();
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                     {
@@ -420,6 +436,14 @@ namespace CheckersGUI
 
         private void BlackBotMove()
         {
+            if (gamemode == 2)
+            {
+                if (!Board.CanMove(SquareValues.Black))
+                {
+                    GameWonProcedure(2);
+                    return;
+                }
+            }
             if (!Board.CanMove(SquareValues.Black))
             {
                 GameWonProcedure(3);
@@ -431,12 +455,20 @@ namespace CheckersGUI
             // Bots.First().Move();
             var b = Board.RecordPieces();
             HighlightMoves(a,b);
+            if (gamemode == 2)
+            {
+                if (Board.GameIsWon())
+                {
+                    GameWonProcedure(1);
+                    return;
+                }
+            }
             if (Board.GameIsWon())
             {
                 GameWonProcedure(4);
                 return;
             }
-            DrawBoard();
+            //DrawBoard();
             Mode = Modality.WhiteTurn;
         }
 
@@ -463,7 +495,7 @@ namespace CheckersGUI
                 GameWonProcedure(2);
                 return;
             }
-            DrawBoard();
+            //DrawBoard();
             turn = 1;
             Mode = Modality.BlackTurn;
         }
@@ -473,7 +505,7 @@ namespace CheckersGUI
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        private void HighlightMoves(int[,] a, int[,] b)
+        private async void HighlightMoves(int[,] a, int[,] b)
         {
             var B = SquareValues.Black;
             var Bk = SquareValues.BlackKing;
@@ -536,7 +568,7 @@ namespace CheckersGUI
                                 {
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, whiteBrush);
-                                    Thread.Sleep(200);
+                                    await Task.Delay(200);
                                 }
 
                             }
@@ -547,7 +579,7 @@ namespace CheckersGUI
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, whiteBrush);
                                     DrawStar(col, row, blackPen, redBrush);
-                                    Thread.Sleep(200);
+                                    await Task.Delay(200);
                                 }
                             }
                             if (realtype == B)
@@ -556,7 +588,7 @@ namespace CheckersGUI
                                 {
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, blackBrush);
-                                    Thread.Sleep(200);
+                                    await Task.Delay(200);
                                 }
                             }
                             if (realtype == Bk)
@@ -566,7 +598,7 @@ namespace CheckersGUI
                                     DrawSquare(col, row, blackPen, yellowBrush);
                                     DrawCircle(col, row, blackPen, blackBrush);
                                     DrawStar(col, row, blackPen, redBrush);
-                                    Thread.Sleep(200);
+                                    await Task.Delay(200);
                                 }
                             }
                         }
@@ -583,27 +615,31 @@ namespace CheckersGUI
                             {
                                 DrawSquare(col, row, blackPen, yellowBrush);
                                 DrawCircle(col, row, blackPen, whiteBrush);
-                                Thread.Sleep(200);
+                                await Task.Delay(200);
+                                DrawBoard();
                             }
                             if (realtype == Wk)
                             {
                                 DrawSquare(col, row, blackPen, yellowBrush);
                                 DrawCircle(col, row, blackPen, whiteBrush);
                                 DrawStar(col, row, blackPen, redBrush);
-                                Thread.Sleep(200);
+                                await Task.Delay(200);
+                                DrawBoard();
                             }
                             if (realtype == B)
                             {
                                 DrawSquare(col, row, blackPen, yellowBrush);
                                 DrawCircle(col, row, blackPen, blackBrush);
-                                Thread.Sleep(200);
+                                await Task.Delay(200);
+                                DrawBoard();
                             }
                             if (realtype == Bk)
                             {
                                 DrawSquare(col, row, blackPen, yellowBrush);
                                 DrawCircle(col, row, blackPen, blackBrush);
                                 DrawStar(col, row, blackPen, redBrush);
-                                Thread.Sleep(200);
+                                await Task.Delay(200);
+                                DrawBoard();
                             }
                         }
                     }
@@ -620,7 +656,8 @@ namespace CheckersGUI
                         {
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, whiteBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
+                            //Thread.Sleep(200);
                             DrawSquare(col, row, blackPen, greyBrush);
                         }
                         if (realtype == Wk)
@@ -628,14 +665,14 @@ namespace CheckersGUI
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, whiteBrush);
                             DrawStar(col, row, blackPen, redBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
                             DrawSquare(col, row, blackPen, greyBrush);
                         }
                         if (realtype == B)
                         {
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, blackBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
                             DrawSquare(col, row, blackPen, greyBrush);
                         }
                         if (realtype == Bk)
@@ -643,7 +680,7 @@ namespace CheckersGUI
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, blackBrush);
                             DrawStar(col, row, blackPen, redBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
                             DrawSquare(col, row, blackPen, greyBrush);
                         }
                     }
@@ -659,27 +696,32 @@ namespace CheckersGUI
                         {
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, whiteBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
+                            DrawBoard();
+                            //Thread.Sleep(200);
                         }
                         if (realtype == Wk)
                         {
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, whiteBrush);
                             DrawStar(col, row, blackPen, redBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
+                            DrawBoard();
                         }
                         if (realtype == B)
                         {
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, blackBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
+                            DrawBoard();
                         }
                         if (realtype == Bk)
                         {
                             DrawSquare(col, row, blackPen, yellowBrush);
                             DrawCircle(col, row, blackPen, blackBrush);
                             DrawStar(col, row, blackPen, redBrush);
-                            Thread.Sleep(200);
+                            await Task.Delay(200);
+                            DrawBoard();
                         }
                     }
                 }
