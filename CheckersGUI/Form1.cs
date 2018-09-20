@@ -340,12 +340,15 @@ namespace CheckersGUI
                     BlackBotMove();
                     if (Board.GameIsWon())
                     {
+                        cont = false;
+                        turn = 1;
                         return;
                     }
                     if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                     {
                         GameWonProcedure(1);
                         cont = false;
+                        turn = 1;
                         return;
                     }
                     turn = 2;
@@ -358,12 +361,14 @@ namespace CheckersGUI
                     {
                         GameWonProcedure(2);
                         cont = false;
+                        turn = 1;
                         return;
                     }
                     turn = 1;
                     
                 }
             }
+            turn = 1;
             return;
         }
 
