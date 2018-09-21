@@ -46,11 +46,13 @@ namespace CheckersGUI
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
         private bool Highlight = false;
+        bool cont = true;
         private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
         private System.Media.SoundPlayer StartSound = new System.Media.SoundPlayer(Properties.Resources.GameStart);
+        CancellationTokenSource source = new CancellationTokenSource();
 
 
         public Form1()
@@ -330,7 +332,7 @@ namespace CheckersGUI
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
             DrawBoard();
-            bool cont = true;
+            cont = true;
             Messages.Text = "Simulating Game...";
             while (!Board.GameIsWon() && cont == true)
             {            
@@ -349,6 +351,10 @@ namespace CheckersGUI
                         GameWonProcedure(1);
                         cont = false;
                         turn = 1;
+                        return;
+                    }
+                    if (cont == false)
+                    {
                         return;
                     }
                     turn = 2;
@@ -1147,11 +1153,13 @@ namespace CheckersGUI
 
         private void MenuNewGame_Click(object sender, EventArgs e)
         {
+            cont = false;
             StartNewGame();
         }
 
         private void StartNewGame()
         {
+            //CancellationToken token = source.Token;
             menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
@@ -1233,6 +1241,7 @@ namespace CheckersGUI
 
         private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            cont = false;
             Board.InitialiseEmptyBoard();
             DrawBoard();
         }
@@ -1272,6 +1281,7 @@ namespace CheckersGUI
 
         private void CLIversion_Click(object sender, EventArgs e)
         {
+            cont = false;
             var retry = true;
             while (retry)
             {
