@@ -1244,6 +1244,7 @@ namespace CheckersGUI
             cont = false;
             Board.InitialiseEmptyBoard();
             DrawBoard();
+            Messages.Text = "Click on New Game to Start Again";
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
