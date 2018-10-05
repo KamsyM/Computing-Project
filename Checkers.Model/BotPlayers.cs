@@ -28,6 +28,61 @@ namespace Checkers.Model
             
         }
 
+        /// <summary>
+        /// Simulates a game with 2 given Bots and returns the winner in terms of the player number
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="Bot"></param>
+        /// <param name="Bot2"></param>
+        /// <returns></returns>
+        public static int PlayBots(GameBoard board, BotPlayers Bot, BotPlayers Bot2)
+        {
+            int turn = 1;
+            board.InitialiseEmptyBoard();
+            board.InitializePieces();
+            bool cont = true;
+            while (!board.GameIsWon() && cont == true)
+            {
+                if (turn == 1)
+                {
+                    Bot.Move();
+                    if (board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 1;
+                    }
+                    if (!board.CanMove(SquareValues.White) && !board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 1;
+                    }
+                    turn = 2;
+                }
+                if (turn == 2)
+                {
+                    Bot2.Move();
+                    if (board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 2;
+                    }
+                    if (!board.CanMove(SquareValues.Black) && !board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 2;
+                    }
+                    turn = 1;
+
+                }
+            }
+            turn = 1;
+            return 0;
+        }
+
         public void Move()
         {
             switch (Difficuty)
