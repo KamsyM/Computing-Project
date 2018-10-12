@@ -35,7 +35,7 @@ namespace Checkers.Model
         /// <param name="Bot"></param>
         /// <param name="Bot2"></param>
         /// <returns></returns>
-        public static int PlayBots(GameBoard board, BotPlayerTempV Bot, BotPlayerTempV Bot2)
+        public static int PlayBots(GameBoard board, BotPlayer Bot, BotPlayer Bot2)
         {
             int turn = 1;
             board.InitialiseEmptyBoard();

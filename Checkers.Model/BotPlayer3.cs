@@ -6,45 +6,35 @@ using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-    public class BotPlayer2 : BotPlayer
+    public class BotPlayer3 : BotPlayer
     {
-        public BotPlayer2(GameBoard board, SquareValues type) : base(board, type)
+        public BotPlayer3(GameBoard board, SquareValues type) : base(board, type)
         {
             Board = board;
             Type = type;
-            BotName = "Level 2";
+            BotName = "Level 3";
         }
 
         public override void Move()
         {
+            var a = new KeyValuePair<int, int>();
+            var oldCol = 0;
+            var oldRow = 0;
+            var NewPlaces = new KeyValuePair<int, int>();
+            var newCol = 0;
+            var newRow = 0;
+            //int jumpNo = 0;
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)
             {
                 for (int oldcol = 0; oldcol < Board.Size; oldcol++)
                 {
                     if (!Board.IsEmptySquare(oldcol, oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
                     {
-
-                        var realtype = Board.Squares[oldcol, oldrow];
-                        switch (Board.CanJump(realtype, oldcol, oldrow))
+                        Jumper(oldcol, oldrow);
+                        if (Board.IsEmptySquare(oldcol, oldrow))
                         {
-                            case 0:
-                                continue;
-                            case 1:
-                                Board.MovePiece(realtype, oldcol, oldrow, oldcol + 2, oldrow - 2);
-                                return;
-                            case 2:
-                                Board.MovePiece(realtype, oldcol, oldrow, oldcol - 2, oldrow - 2);
-                                return;
-                            case 3:
-                                Board.MovePiece(realtype, oldcol, oldrow, oldcol + 2, oldrow + 2);
-                                return;
-                            case 4:
-                                Board.MovePiece(realtype, oldcol, oldrow, oldcol - 2, oldrow + 2);
-                                return;
-                            default:
-                                return;
+                            return;
                         }
-
 
                     }
 
@@ -95,12 +85,12 @@ namespace Checkers.Model
                 }
 
             }
-            var a = RandomValues(BotPositions);
-            var oldCol = a.Key;
-            var oldRow = a.Value;
-            var NewPlaces = BotPositions[a];
-            var newCol = NewPlaces.Key;
-            var newRow = NewPlaces.Value;
+            a = RandomValues(BotPositions);
+            oldCol = a.Key;
+            oldRow = a.Value;
+            NewPlaces = BotPositions[a];
+            newCol = NewPlaces.Key;
+            newRow = NewPlaces.Value;
             Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
             BotPositions.Clear();
             return;

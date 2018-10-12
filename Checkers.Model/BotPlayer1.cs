@@ -12,8 +12,7 @@ namespace Checkers.Model
         {
             Board = board;
             Type = type;
-            BotName = "Bot1";
-            
+            BotName = "Level 1";          
         }
 
         public override void Move()
@@ -31,8 +30,24 @@ namespace Checkers.Model
                             {
                                 if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, oldcol, oldrow, newcol, newrow))
                                 {
-                                    Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
-                                    return;
+                                    try
+                                    {
+                                        pos.Add(oldcol, oldrow);
+                                        pos.Add(newcol, newrow);
+                                        OldPosition = pos.First();
+                                        NewPosition = pos.Last();
+                                        pos.Clear();
+                                        BotPositions.Add(OldPosition, NewPosition);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        List<KeyValuePair<int, int>> Options = new List<KeyValuePair<int, int>>();
+                                        Options.Add(BotPositions[OldPosition]);
+                                        Options.Add(NewPosition);
+                                        BotPositions.Remove(OldPosition);
+                                        BotPositions.Add(OldPosition, Options[rnd.Next(2)]);
+
+                                    }
                                 }
 
                             }
@@ -44,6 +59,15 @@ namespace Checkers.Model
                 }
 
             }
+            var a = RandomValues(BotPositions);
+            var oldCol = a.Key;
+            var oldRow = a.Value;
+            var NewPlaces = BotPositions[a];
+            var newCol = NewPlaces.Key;
+            var newRow = NewPlaces.Value;
+            Board.MovePiece(Board.Squares[oldCol, oldRow], oldCol, oldRow, newCol, newRow);
+            BotPositions.Clear();
+            return;
         }
     }
 }

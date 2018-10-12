@@ -64,14 +64,6 @@
       <Project>{c9686036-8172-4142-aae7-8df959c28564}</Project>
       <Name>Checkers.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CheckersGUI\CheckersGUI.csproj">
-      <Project>{1b182b5a-605a-4966-b4a9-0de8dde656b6}</Project>
-      <Name>CheckersGUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Computing Project\Checkers.UI.csproj">
-      <Project>{13993768-ce42-4009-b5f9-8af91ab75789}</Project>
-      <Name>Checkers.UI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

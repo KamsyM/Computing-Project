@@ -32,14 +32,14 @@ namespace CheckersGUI
         const int boardSize = 8;
         Graphics g;
         public GameBoard Board;
-        private BotPlayerTempV Bot;
-        private BotPlayerTempV Bot2;
+        private BotPlayer Bot;
+        private BotPlayer Bot2;
         private Modality Mode;
         private int gamemode = 0;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
         private int turn = 1;
         private bool PlayerBlack = true;
-        private Menu menu = new Menu();
+        private Menu menu;
         private PopUp popUp;
         private SquareValues PType = SquareValues.Empty;
         private Point Player1Pic = new Point(518, 87);
@@ -47,7 +47,7 @@ namespace CheckersGUI
         private bool MultiJump = false;
         private bool Highlight = false;
         bool cont = true;
-        private SquareValues BotType = SquareValues.Empty;
+        //private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
@@ -65,6 +65,7 @@ namespace CheckersGUI
             //var blackpieces = Pieces.JumpingWhite();
             //var whitepieces = Pieces.JumpedBlack();
             Board = new GameBoard(8, blackpieces, whitepieces);
+            menu = new Menu(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
         }
@@ -169,7 +170,7 @@ namespace CheckersGUI
                                 {
                                     BlackHighlight(OldColumn, OldRow, realtype,false);
                                 }
-                                if (menu.difficulty == 1 && gamemode == 0)
+                                if (menu.beginner && gamemode == 0)
                                 {
                                     BlackHighlight(OldColumn, OldRow, realtype,false);
                                 }
@@ -192,7 +193,7 @@ namespace CheckersGUI
                                 {
                                     WhiteHighlight(OldColumn, OldRow, realtype, false);
                                 }
-                                if (menu.difficulty == 1 && gamemode == 0)
+                                if (menu.beginner && gamemode == 0)
                                 {
                                     WhiteHighlight(OldColumn, OldRow, realtype,false);
                                 }
@@ -319,8 +320,10 @@ namespace CheckersGUI
         /// </summary>
         private async void BotMatch()
         {
-            Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
-            Bot2 = new BotPlayerTempV(Board, SquareValues.White, menu.CG2diff);
+            Bot = menu.Bot1;
+            Bot2 = menu.Bot2;
+            //Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
+            //Bot2 = new BotPlayerTempV(Board, SquareValues.White, menu.CG2diff);
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
             DrawBoard();
@@ -1201,6 +1204,7 @@ namespace CheckersGUI
         private void StartNewGame()
         {
             //CancellationToken token = source.Token;
+
             menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
@@ -1214,19 +1218,20 @@ namespace CheckersGUI
                 BotMatch();
                 return;
             }
-            switch (PType)
-            {
-                case SquareValues.Black:
-                    BotType = SquareValues.White;
-                    break;
-                case SquareValues.White:
-                    BotType = SquareValues.Black;
-                    break;
-                default:
-                    break;
-            }
+            //switch (PType)
+            //{
+            //    case SquareValues.Black:
+            //        BotType = SquareValues.White;
+            //        break;
+            //    case SquareValues.White:
+            //        BotType = SquareValues.Black;
+            //        break;
+            //    default:
+            //        break;
+            //}
             //Bots.Add(new BotPlayer1(Board, BotType));
-            Bot = new BotPlayerTempV(Board, BotType, menu.difficulty);
+            Bot = menu.Bot;
+            //Bot = new BotPlayerTempV(Board, BotType, menu.difficulty);
             //Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
             switch (gamemode)
             {
