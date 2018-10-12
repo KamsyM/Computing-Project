@@ -167,15 +167,15 @@ namespace CheckersGUI
                             {
                                 if (menu.highlight && gamemode == 1)
                                 {
-                                    BlackHighlight(OldColumn, OldRow, realtype);
+                                    BlackHighlight(OldColumn, OldRow, realtype,false);
                                 }
                                 if (menu.difficulty == 1 && gamemode == 0)
                                 {
-                                    BlackHighlight(OldColumn, OldRow, realtype);
+                                    BlackHighlight(OldColumn, OldRow, realtype,false);
                                 }
                                 if (Highlight)
                                 {
-                                    BlackHighlight(OldColumn, OldRow, realtype);
+                                    BlackHighlight(OldColumn, OldRow, realtype,false);
                                 }
                                 Messages.Text = "Now select where you would like to move to";
                             }
@@ -190,15 +190,15 @@ namespace CheckersGUI
                             {
                                 if (menu.highlight && gamemode == 1)
                                 {
-                                    WhiteHighlight(OldColumn, OldRow, realtype);
+                                    WhiteHighlight(OldColumn, OldRow, realtype, false);
                                 }
                                 if (menu.difficulty == 1 && gamemode == 0)
                                 {
-                                    WhiteHighlight(OldColumn, OldRow, realtype);
+                                    WhiteHighlight(OldColumn, OldRow, realtype,false);
                                 }
                                 if (Highlight)
                                 {
-                                    WhiteHighlight(OldColumn, OldRow, realtype);
+                                    WhiteHighlight(OldColumn, OldRow, realtype,false);
                                 }
                                 Messages.Text = "Now select where you would like to move to";
                             }
@@ -314,6 +314,9 @@ namespace CheckersGUI
            
         }
 
+        /// <summary>
+        /// Plays a match against bots
+        /// </summary>
         private async void BotMatch()
         {
             Bot = new BotPlayers(Board, SquareValues.Black, menu.CG1diff);
@@ -367,9 +370,14 @@ namespace CheckersGUI
             return;
         }
 
-
-
-        private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype)
+        /// <summary>
+        /// Highlights White Users possible moves
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        /// <param name="DoubleJump"></param>
+        private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype, bool DoubleJump)
         {
             switch (realtype)
             {
@@ -391,18 +399,34 @@ namespace CheckersGUI
             {
                 for (int newcol = 0; newcol < Board.Size; newcol++)
                 {
-                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
-                    {
-                        DrawSquare(newcol, newrow, blackPen, blueBrush);
+                    if (!DoubleJump)
+                    {                    
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
 
+                        }
                     }
-
+                    if (DoubleJump)
+                    {
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow) && Math.Abs(newrow-OldRow) > 1)
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
+                        }
+                    }
                 }
 
             }
         }
 
-        private void BlackHighlight(int OldColumn, int OldRow, SquareValues realtype)
+        /// <summary>
+        /// Highlights Black Users possible moves
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        /// <param name="DoubleJump"></param>
+        private void BlackHighlight(int OldColumn, int OldRow, SquareValues realtype, bool DoubleJump)
         {
             switch (realtype)
             {
@@ -423,17 +447,30 @@ namespace CheckersGUI
             {
                 for (int newcol = 0; newcol < Board.Size; newcol++)
                 {
-                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
-                    {
-                        DrawSquare(newcol, newrow, blackPen, blueBrush);
+                    if (!DoubleJump)
+                    {                 
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
 
+                        }
                     }
+                    if (DoubleJump)
+                    {
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow) && Math.Abs(newrow - OldRow) > 1)
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
 
+                        }
+                    }
                 }
 
             }
         }
 
+        /// <summary>
+        /// Moves the Black bot piece
+        /// </summary>
         private void BlackBotMove()
         {
             if (gamemode == 2)
@@ -472,6 +509,9 @@ namespace CheckersGUI
             Mode = Modality.WhiteTurn;
         }
 
+        /// <summary>
+        /// Moves the white bot piece
+        /// </summary>
         private void WhiteBotMove()
         {
             if (!Board.CanMove(SquareValues.White))
@@ -728,6 +768,9 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Starts a One Player Game
+        /// </summary>
         private void StartGame1P()
         {
             if (PType == SquareValues.Black)
@@ -765,7 +808,9 @@ namespace CheckersGUI
 
         }
 
-
+        /// <summary>
+        /// Starts a two player game
+        /// </summary>
         private void StartGame2P()
         {
             Board.InitialiseEmptyBoard();
@@ -778,7 +823,9 @@ namespace CheckersGUI
             DrawSquare(3, 3, blackPen, greyBrush);
         }
 
-
+        /// <summary>
+        /// Performs the Black Players move
+        /// </summary>
         private void BlackTurn()
         {
             Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
@@ -829,6 +876,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            BlackHighlight(NewColumn,NewRow, Board.ReadSquare(NewColumn,NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -845,6 +893,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            BlackHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn, NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -870,8 +919,9 @@ namespace CheckersGUI
             return;
         }
 
-
-
+        /// <summary>
+        /// Performs the White players move
+        /// </summary>
         private void WhiteTurn()
         {
             Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
@@ -922,6 +972,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            WhiteHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn, NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -937,6 +988,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            WhiteHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn,NewRow),true);
                             MultiJump = true;
                             return;
                         }
