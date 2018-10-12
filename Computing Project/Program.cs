@@ -102,7 +102,7 @@ namespace Checkers.UI
             bool running = true;
             while (running)
             {
-                BotPlayers Bot = null;
+                BotPlayerTempV Bot = null;
                 Console.WriteLine("Black or White");
                 string response = Console.ReadLine().ToUpper();
                 char PlayerType = response[0];
@@ -113,7 +113,7 @@ namespace Checkers.UI
                     Console.WriteLine();
                     Console.WriteLine("Select Player Difficulty (1 - 3)");
                     int difficulty = Convert.ToInt32(Console.ReadLine());
-                    Bot = new BotPlayers(board, SquareValues.White, difficulty);
+                    Bot = new BotPlayerTempV(board, SquareValues.White, difficulty);
                     while (!GameWon)
                     {
                         board.PrintBoard();
@@ -149,7 +149,7 @@ namespace Checkers.UI
                     Console.WriteLine();
                     Console.WriteLine("Select Player Difficulty (1 - 3)");
                     int difficulty = Convert.ToInt32(Console.ReadLine());
-                    Bot = new BotPlayers(board, SquareValues.Black, difficulty);
+                    Bot = new BotPlayerTempV(board, SquareValues.Black, difficulty);
                     while (!GameWon)
                     {
                         

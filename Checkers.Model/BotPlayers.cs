@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Checkers.Model
 {
-    public class BotPlayers
+    public class BotPlayerTempV
     {
         public SquareValues Type;
         public GameBoard Board;
@@ -20,7 +20,7 @@ namespace Checkers.Model
         private KeyValuePair<int, int> NewPosition = new KeyValuePair<int, int>();
         private Dictionary<int, int> pos = new Dictionary<int, int>();
         private Dictionary<KeyValuePair<int,int>, KeyValuePair<int, int>> BotPositions = new Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>>();
-        public BotPlayers(GameBoard board, SquareValues type, int difficulty)
+        public BotPlayerTempV(GameBoard board, SquareValues type, int difficulty)
         {
             Type = type;
             Board = board;
@@ -35,7 +35,7 @@ namespace Checkers.Model
         /// <param name="Bot"></param>
         /// <param name="Bot2"></param>
         /// <returns></returns>
-        public static int PlayBots(GameBoard board, BotPlayers Bot, BotPlayers Bot2)
+        public static int PlayBots(GameBoard board, BotPlayerTempV Bot, BotPlayerTempV Bot2)
         {
             int turn = 1;
             board.InitialiseEmptyBoard();

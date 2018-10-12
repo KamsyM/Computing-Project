@@ -32,8 +32,8 @@ namespace CheckersGUI
         const int boardSize = 8;
         Graphics g;
         public GameBoard Board;
-        private BotPlayers Bot;
-        private BotPlayers Bot2;
+        private BotPlayerTempV Bot;
+        private BotPlayerTempV Bot2;
         private Modality Mode;
         private int gamemode = 0;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
@@ -319,8 +319,8 @@ namespace CheckersGUI
         /// </summary>
         private async void BotMatch()
         {
-            Bot = new BotPlayers(Board, SquareValues.Black, menu.CG1diff);
-            Bot2 = new BotPlayers(Board, SquareValues.White, menu.CG2diff);
+            Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
+            Bot2 = new BotPlayerTempV(Board, SquareValues.White, menu.CG2diff);
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
             DrawBoard();
@@ -1226,7 +1226,7 @@ namespace CheckersGUI
                     break;
             }
             //Bots.Add(new BotPlayer1(Board, BotType));
-            Bot = new BotPlayers(Board, BotType, menu.difficulty);
+            Bot = new BotPlayerTempV(Board, BotType, menu.difficulty);
             //Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
             switch (gamemode)
             {

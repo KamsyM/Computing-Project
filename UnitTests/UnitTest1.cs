@@ -19,11 +19,11 @@ namespace UnitTests
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             var Board = new GameBoard(8, blackpieces, whitepieces);
-            var Bot = new BotPlayers(Board, SquareValues.Black, 2);
-            var Bot2 = new BotPlayers(Board, SquareValues.White, 1);
+            var Bot = new BotPlayerTempV(Board, SquareValues.Black, 2);
+            var Bot2 = new BotPlayerTempV(Board, SquareValues.White, 1);
             for (int i = 0; i < 100; i++)
             {
-                winner = BotPlayers.PlayBots(Board, Bot, Bot2);
+                winner = BotPlayerTempV.PlayBots(Board, Bot, Bot2);
                 switch (winner)
                 {
                     case 1:
@@ -49,11 +49,11 @@ namespace UnitTests
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             var Board = new GameBoard(8, blackpieces, whitepieces);
-            var Bot = new BotPlayers(Board, SquareValues.Black, 3);
-            var Bot2 = new BotPlayers(Board, SquareValues.White, 2);
+            var Bot = new BotPlayerTempV(Board, SquareValues.Black, 3);
+            var Bot2 = new BotPlayerTempV(Board, SquareValues.White, 2);
             for (int i = 0; i < 100; i++)
             {
-                winner = BotPlayers.PlayBots(Board, Bot, Bot2);
+                winner = BotPlayerTempV.PlayBots(Board, Bot, Bot2);
                 switch (winner)
                 {
                     case 1:
@@ -78,11 +78,11 @@ namespace UnitTests
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             var Board = new GameBoard(8, blackpieces, whitepieces);
-            var Bot = new BotPlayers(Board, SquareValues.Black, 3);
-            var Bot2 = new BotPlayers(Board, SquareValues.White, 3);
+            var Bot = new BotPlayerTempV(Board, SquareValues.Black, 3);
+            var Bot2 = new BotPlayerTempV(Board, SquareValues.White, 3);
             for (int i = 0; i < 100; i++)
             {
-                winner = BotPlayers.PlayBots(Board, Bot, Bot2);
+                winner = BotPlayerTempV.PlayBots(Board, Bot, Bot2);
                 switch (winner)
                 {
                     case 1:
