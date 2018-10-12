@@ -51,6 +51,7 @@
     <Compile Include="BotPlayer3.cs" />
     <Compile Include="BotPlayer4.cs" />
     <Compile Include="BotPlayer5.cs" />
+    <Compile Include="BotPlayers.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GameBoard.cs" />
     <Compile Include="Piece.cs" />

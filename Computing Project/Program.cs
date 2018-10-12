@@ -87,8 +87,8 @@ namespace Checkers.UI
             Console.WriteLine();
             Console.WriteLine("--- Menu ---");
             Console.WriteLine();
-            Console.WriteLine("Enter ` in order to return back to menu at any time");
-            Console.WriteLine();
+            //Console.WriteLine("Enter ` in order to return back to menu at any time");
+           // Console.WriteLine();
             Console.WriteLine("1. Single Player");
             Console.WriteLine("2. Two Players");
             Console.WriteLine("3. GUI Version");
@@ -111,7 +111,7 @@ namespace Checkers.UI
                 if (PlayerType == 'B')
                 {
                     Console.WriteLine();
-                    Console.WriteLine("Select Player Difficulty (1 - 3)");
+                    Console.WriteLine("Select Player Difficulty (1 - 5)");
                     int difficulty = Convert.ToInt32(Console.ReadLine());
                     Bot = new BotPlayerTempV(board, SquareValues.White, difficulty);
                     while (!GameWon)
@@ -147,7 +147,7 @@ namespace Checkers.UI
                 if (PlayerType == 'W')
                 {
                     Console.WriteLine();
-                    Console.WriteLine("Select Player Difficulty (1 - 3)");
+                    Console.WriteLine("Select Player Difficulty (1 - 5)");
                     int difficulty = Convert.ToInt32(Console.ReadLine());
                     Bot = new BotPlayerTempV(board, SquareValues.Black, difficulty);
                     while (!GameWon)
