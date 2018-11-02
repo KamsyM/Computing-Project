@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Checkers.DataFixture;
 using Checkers.Model;
 using CheckersGUI;
+using System.Reflection;
 
 namespace CheckersGUI
 {
@@ -29,9 +30,8 @@ namespace CheckersGUI
         public BotPlayer Bot1;
         public BotPlayer Bot2;
         public GameBoard Board;
-        //public List<BotPlayer> Bots = new List<BotPlayer>();
-        //private SquareValues BotType;
-
+        public List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+        //public List<object> instances = BotNames.Select(t => Activator.CreateInstance(t) as t);
 
         public Menu(GameBoard board)
         {
@@ -89,49 +89,16 @@ namespace CheckersGUI
 
 
 
-            // Difficulty.Items =
-
-            //switch ((string)Difficulty.SelectedItem)
-            //{
-            //    case "Beginner":
-            //        //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-            //        Bot = new BotPlayer1(Board, BotType);
-            //        beginner = true;
-            //        break;
-            //    case "Intermediate":
-            //        // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-            //        Bot = new BotPlayer3(Board, BotType);
-            //        break;
-            //    case "Advanced":
-            //        Bot = new BotPlayer5(Board, BotType);
-            //        break;
-            //    default:
-            //        Bot = new BotPlayer3(Board, BotType);
-            //        break;
-            //}
             if (Difficulty.SelectedItem != null)
             {
                 Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
                 Bot.Type = BotType;
+                //Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem);
+                //Bot = (BotPlayer)Activator.CreateInstance("MyAssembly", "BotPlayer");
             }
 
-            //switch ((string)CG1Diff.SelectedItem)
-            //{
-            //    case "Beginner":
-            //        //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-            //        Bot1 = new BotPlayer1(Board, SquareValues.Black);
-            //        break;
-            //    case "Intermediate":
-            //        // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-            //        Bot1 = new BotPlayer3(Board, SquareValues.Black);
-            //        break;
-            //    case "Advanced":
-            //        Bot1 = new BotPlayer5(Board, SquareValues.Black);
-            //        break;
-            //    default:
-            //        Bot1 = new BotPlayer3(Board, SquareValues.Black);
-            //        break;
-            //}
+
+
             if (CG1Diff.SelectedItem != null)
             {
 
@@ -139,25 +106,6 @@ namespace CheckersGUI
                 Bot1.Type = SquareValues.Black;
 
             }
-
-
-            //switch ((string)CG2Diff.SelectedItem)
-            //{
-            //    case "Beginner":
-            //        //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-            //        Bot2 = new BotPlayer1(Board, SquareValues.White);
-            //        break;
-            //    case "Intermediate":
-            //        // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-            //        Bot2 = new BotPlayer3(Board, SquareValues.White);
-            //        break;
-            //    case "Advanced":
-            //        Bot2 = new BotPlayer5(Board, SquareValues.White);
-            //        break;
-            //    default:
-            //        Bot2 = new BotPlayer3(Board, SquareValues.White);
-            //        break;
-            //}
 
             if (CG2Diff.SelectedItem != null)
             {

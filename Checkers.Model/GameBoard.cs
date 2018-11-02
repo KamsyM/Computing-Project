@@ -33,7 +33,7 @@ namespace Checkers.Model
             Squares = new SquareValues[Size, Size];
             InitialiseEmptyBoard();
 
-            List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+
 
             Pieces1 = pieces1;
             Pieces2 = pieces2;
