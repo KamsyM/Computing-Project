@@ -15,6 +15,11 @@ namespace Checkers.Model
             BotName = "Level 2";
         }
 
+        public override string ToString()
+        {
+            return BotName;
+        }
+
         public override void Move()
         {
             for (int oldrow = 0; oldrow < Board.Size; oldrow++)

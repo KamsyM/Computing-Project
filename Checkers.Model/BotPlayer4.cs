@@ -15,6 +15,11 @@ namespace Checkers.Model
             BotName = "Level 4";
         }
 
+        public override string ToString()
+        {
+            return BotName;
+        }
+
         public override void Move()
         {
             var a = new KeyValuePair<int, int>();

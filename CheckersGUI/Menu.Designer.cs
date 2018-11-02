@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.Gamemode = new System.Windows.Forms.TabControl();
             this.Tab1P = new System.Windows.Forms.TabPage();
@@ -54,10 +55,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
             this.TabCG.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pieceBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // Gamemode
@@ -107,10 +110,7 @@
             // Difficulty
             // 
             this.Difficulty.FormattingEnabled = true;
-            this.Difficulty.Items.AddRange(new object[] {
-            "Beginner",
-            "Intermediate",
-            "Advanced"});
+            this.Difficulty.Items.AddRange(BotList().ToArray());
             this.Difficulty.Location = new System.Drawing.Point(205, 181);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.Size = new System.Drawing.Size(137, 21);
@@ -321,6 +321,10 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "&Cancel";
             // 
+            // pieceBindingSource
+            // 
+            this.pieceBindingSource.DataSource = typeof(Checkers.Model.Piece);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,6 +344,7 @@
             this.Tab2P.PerformLayout();
             this.TabCG.ResumeLayout(false);
             this.TabCG.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pieceBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -371,5 +376,6 @@
         private System.Windows.Forms.ComboBox CG1Diff;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.BindingSource pieceBindingSource;
     }
 }

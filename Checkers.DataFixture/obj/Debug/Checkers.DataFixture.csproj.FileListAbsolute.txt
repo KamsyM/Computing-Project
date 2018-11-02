@@ -19,3 +19,14 @@ C:\Users\Kamsi\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Che
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.csproj.CopyComplete
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.dll
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.pdb
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\bin\Debug\Checkers.DataFixture.dll.config
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\bin\Debug\Checkers.DataFixture.dll
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\bin\Debug\Checkers.DataFixture.pdb
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\bin\Debug\Checkers.Model.dll
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\bin\Debug\Checkers.Model.pdb
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\bin\Debug\Checkers.Model.dll.config
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.csprojAssemblyReference.cache
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.csproj.CoreCompileInputs.cache
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.csproj.CopyComplete
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.dll
+C:\Users\14ICT255\source\repos\Computing-Project\Checkers.DataFixture\obj\Debug\Checkers.DataFixture.pdb

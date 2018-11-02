@@ -65,6 +65,8 @@ namespace CheckersGUI
             //var blackpieces = Pieces.JumpingWhite();
             //var whitepieces = Pieces.JumpedBlack();
             Board = new GameBoard(8, blackpieces, whitepieces);
+            Board.InitialiseEmptyBoard();
+            Board.InitializePieces();
             menu = new Menu(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";

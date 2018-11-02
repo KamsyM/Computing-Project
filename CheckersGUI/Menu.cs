@@ -15,13 +15,9 @@ namespace CheckersGUI
 {
     public partial class Menu : Form
     {
-       //private Form1 IniForm;
         public SquareValues PType;
         public SquareValues BotType;
         public bool beginner = false;
-        //public int difficulty;
-        //public int CG1diff;
-        //public int CG2diff;
         public int gamemode;
         public bool highlight;
         public string name1P;
@@ -43,6 +39,16 @@ namespace CheckersGUI
             Board = board;
         }
 
+        public List<BotPlayer> BotList()
+        {
+            List<BotPlayer> botlist = new List<BotPlayer>();
+            botlist.Add(new BotPlayer1(Board, BotType));
+            botlist.Add(new BotPlayer2(Board, BotType));
+            botlist.Add(new BotPlayer3(Board, BotType));
+            botlist.Add(new BotPlayer4(Board, BotType));
+            botlist.Add(new BotPlayer5(Board, BotType));
+            return botlist;
+        }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -81,48 +87,44 @@ namespace CheckersGUI
                     break;
             }
 
-            switch ((string)Difficulty.SelectedItem)
-            {
-                case "Beginner":
-                    //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-                    Bot = new BotPlayer1(Board, BotType);
-                    beginner = true;
-                    //difficulty = 1;
-                    break;
-                case "Intermediate":
-                    // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-                    Bot = new BotPlayer3(Board, BotType);
-                    //difficulty = 2;
-                    break;
-                case "Advanced":
-                    Bot = new BotPlayer5(Board, BotType);
-                    //difficulty = 3;
-                    break;
-                default:
-                    Bot = new BotPlayer3(Board, BotType);
-                    //difficulty = 2;
-                    break;
-            }
+
+            Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
+            // Difficulty.Items =
+
+            //switch ((string)Difficulty.SelectedItem)
+            //{
+            //    case "Beginner":
+            //        //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
+            //        Bot = new BotPlayer1(Board, BotType);
+            //        beginner = true;
+            //        break;
+            //    case "Intermediate":
+            //        // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
+            //        Bot = new BotPlayer3(Board, BotType);
+            //        break;
+            //    case "Advanced":
+            //        Bot = new BotPlayer5(Board, BotType);
+            //        break;
+            //    default:
+            //        Bot = new BotPlayer3(Board, BotType);
+            //        break;
+            //}
 
             switch ((string)CG1Diff.SelectedItem)
             {
                 case "Beginner":
                     //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
                     Bot1 = new BotPlayer1(Board, SquareValues.Black);
-                    //CG1diff = 1;
                     break;
                 case "Intermediate":
                     // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
                     Bot1 = new BotPlayer3(Board, SquareValues.Black);
-                   // CG1diff = 2;
                     break;
                 case "Advanced":
                     Bot1 = new BotPlayer5(Board, SquareValues.Black);
-                    //CG1diff = 3;
                     break;
                 default:
                     Bot1 = new BotPlayer3(Board, SquareValues.Black);
-                    //CG1diff = 2;
                     break;
             }
 
@@ -131,20 +133,16 @@ namespace CheckersGUI
                 case "Beginner":
                     //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
                     Bot2 = new BotPlayer1(Board, SquareValues.White);
-                    //CG2diff = 1;
                     break;
                 case "Intermediate":
                     // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
                     Bot2 = new BotPlayer3(Board, SquareValues.White);
-                    //CG2diff = 2;
                     break;
                 case "Advanced":
                     Bot2 = new BotPlayer5(Board, SquareValues.White);
-                    //CG2diff = 3;
                     break;
                 default:
                     Bot2 = new BotPlayer3(Board, SquareValues.White);
-                    //CG2diff = 2;
                     break;
             }
         }
