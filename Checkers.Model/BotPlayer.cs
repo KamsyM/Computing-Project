@@ -26,6 +26,7 @@ namespace Checkers.Model
             Board = board;
         }
 
+
         public abstract void Move();
 
         public static int PlayBots(GameBoard Board, BotPlayer Bot, BotPlayer Bot2)

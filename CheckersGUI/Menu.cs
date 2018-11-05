@@ -50,6 +50,18 @@ namespace CheckersGUI
             return botlist;
         }
 
+        static string GetDescription(Type type)
+        {
+            var descriptions = (DescriptionAttribute[])
+                type.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            if (descriptions.Length == 0)
+            {
+                return null;
+            }
+            return descriptions[0].Description;
+        }
+
         private void btnOK_Click(object sender, EventArgs e)
         {
             name1P = Name1p.Text;

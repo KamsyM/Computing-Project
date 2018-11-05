@@ -66,12 +66,12 @@ namespace CheckersGUI
             //var whitepieces = Pieces.JumpedBlack();
             Board = new GameBoard(8, blackpieces, whitepieces);
             menu = new Menu(Board);
-                    List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
-        Messages.Text = "WELCOME TO CHECKERS" +
+            List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+            Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
             foreach (var item in BotNames)
             {
-                Messages.Text = item.ToString();
+                Messages.Text = item.Name;
             }
         }
 
