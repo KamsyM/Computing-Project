@@ -12,7 +12,7 @@ namespace Checkers.Model
         {
             Board = board;
             Type = type;
-            BotName = "Level 1";          
+            BotName = "Level 1";
         }
 
         public override string ToString()

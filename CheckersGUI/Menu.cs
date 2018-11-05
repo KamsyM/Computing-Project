@@ -91,10 +91,9 @@ namespace CheckersGUI
 
             if (Difficulty.SelectedItem != null)
             {
-                Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
-                Bot.Type = BotType;
-                //Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem);
-                //Bot = (BotPlayer)Activator.CreateInstance("MyAssembly", "BotPlayer");
+               // Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
+                //Bot.Type = BotType;
+                Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem,Board,BotType);
             }
 
 
@@ -102,15 +101,17 @@ namespace CheckersGUI
             if (CG1Diff.SelectedItem != null)
             {
 
-                Bot1 = (BotPlayer)CG1Diff.SelectedItem;    //This is called casting
-                Bot1.Type = SquareValues.Black;
+                //Bot1 = (BotPlayer)CG1Diff.SelectedItem;    //This is called casting
+                //Bot1.Type = SquareValues.Black;
+                Bot1 = (BotPlayer)Activator.CreateInstance((Type)CG1Diff.SelectedItem, Board, SquareValues.Black);
 
             }
 
             if (CG2Diff.SelectedItem != null)
             {
-                Bot2 = (BotPlayer)CG2Diff.SelectedItem;    //This is called casting
-                Bot2.Type = SquareValues.White;
+                //Bot2 = (BotPlayer)CG2Diff.SelectedItem;    //This is called casting
+                //Bot2.Type = SquareValues.White;
+                Bot2 = (BotPlayer)Activator.CreateInstance((Type)CG2Diff.SelectedItem, Board, SquareValues.White);
             }
 
         }

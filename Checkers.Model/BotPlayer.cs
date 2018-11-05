@@ -24,7 +24,6 @@ namespace Checkers.Model
         {
             Type = type;
             Board = board;
-           // Difficuty = difficulty;
         }
 
         public abstract void Move();
@@ -315,6 +314,7 @@ namespace Checkers.Model
                     return;
             }
         }
+
 
         public KeyValuePair<int, int> RandomValues(Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>> dict)
         {

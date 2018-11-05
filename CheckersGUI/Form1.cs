@@ -62,12 +62,6 @@ namespace CheckersGUI
             Mode = Modality.BlackTurn;
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
-
-            //var BotNames =
-            //from assembly in AppDomain.CurrentDomain.GetAssemblies()
-            //from type in assembly.GetTypes()
-            //where type.IsSubclassOf(typeof(BotPlayer))
-            //select type;
             //var blackpieces = Pieces.JumpingWhite();
             //var whitepieces = Pieces.JumpedBlack();
             Board = new GameBoard(8, blackpieces, whitepieces);
