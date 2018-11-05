@@ -91,11 +91,26 @@ namespace CheckersGUI
 
             if (Difficulty.SelectedItem != null)
             {
-               // Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
+                // Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
                 //Bot.Type = BotType;
+                var BeginnerBot = new BotPlayer1(Board,BotType);
+                var b = BeginnerBot.GetType();
                 Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem,Board,BotType);
+                var c = Bot.GetType();
+                if (c == b)
+                {
+                    beginner = true;
+                }
+                if (c != b)
+                {
+                    beginner = false;
+                }
             }
 
+            if (Difficulty.SelectedItem == null)
+            {
+                Bot = new BotPlayer3(Board, BotType);
+            }
 
 
             if (CG1Diff.SelectedItem != null)
@@ -107,6 +122,11 @@ namespace CheckersGUI
 
             }
 
+            if (CG1Diff.SelectedItem == null)
+            {
+                Bot1 = new BotPlayer3(Board, SquareValues.Black);
+            }
+
             if (CG2Diff.SelectedItem != null)
             {
                 //Bot2 = (BotPlayer)CG2Diff.SelectedItem;    //This is called casting
@@ -114,6 +134,10 @@ namespace CheckersGUI
                 Bot2 = (BotPlayer)Activator.CreateInstance((Type)CG2Diff.SelectedItem, Board, SquareValues.White);
             }
 
+            if (CG2Diff.SelectedItem == null)
+            {
+                Bot2 = new BotPlayer3(Board, SquareValues.White);
+            }
         }
 
     }

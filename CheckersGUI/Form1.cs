@@ -66,8 +66,13 @@ namespace CheckersGUI
             //var whitepieces = Pieces.JumpedBlack();
             Board = new GameBoard(8, blackpieces, whitepieces);
             menu = new Menu(Board);
-            Messages.Text = "WELCOME TO CHECKERS" +
+                    List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+        Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
+            foreach (var item in BotNames)
+            {
+                Messages.Text = item.ToString();
+            }
         }
 
 
@@ -166,19 +171,7 @@ namespace CheckersGUI
                             }
                             else
                             {
-                                if (menu.highlight && gamemode == 1)
-                                {
-                                    BlackHighlight(OldColumn, OldRow, realtype,false);
-                                }
-                                if (menu.beginner && gamemode == 0)
-                                {
-                                    BlackHighlight(OldColumn, OldRow, realtype,false);
-                                }
-                                if (Highlight)
-                                {
-                                    BlackHighlight(OldColumn, OldRow, realtype,false);
-                                }
-                                Messages.Text = "Now select where you would like to move to";
+                                BlackHighlightConditions(OldColumn, OldRow, realtype);
                             }
                             break;
                         case Modality.WhiteTurn:
@@ -189,19 +182,7 @@ namespace CheckersGUI
                             }
                             else
                             {
-                                if (menu.highlight && gamemode == 1)
-                                {
-                                    WhiteHighlight(OldColumn, OldRow, realtype, false);
-                                }
-                                if (menu.beginner && gamemode == 0)
-                                {
-                                    WhiteHighlight(OldColumn, OldRow, realtype,false);
-                                }
-                                if (Highlight)
-                                {
-                                    WhiteHighlight(OldColumn, OldRow, realtype,false);
-                                }
-                                Messages.Text = "Now select where you would like to move to";
+                                WhiteHighlightConditions(OldColumn, OldRow, realtype);
                             }
                             break;
                     }
@@ -212,6 +193,9 @@ namespace CheckersGUI
 
             if (Positions.Count == 2)
             {
+                DrawBoard();
+                var newcol = Positions.Last().Key;
+                var newrow = Positions.Last().Value;
                 if (gamemode == 0)
                 {
                     if (PlayerBlack)
@@ -219,8 +203,15 @@ namespace CheckersGUI
                   
                         if (turn == 1)
                         {
-                            BlackTurn();
+                            if (Board.Squares[newcol,newrow] == SquareValues.Black)
+                            {
+                                Positions.Clear();
+                                Positions.Add(newcol, newrow);
+                                BlackHighlightConditions(newcol,newrow,SquareValues.Black);
+                                return;
+                            }
                             Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                            BlackTurn();                          
                         }
                         if (turn == 2)
                         {
@@ -239,12 +230,19 @@ namespace CheckersGUI
                     {
                         if (turn == 2)
                         {
+                            if (Board.Squares[newcol, newrow] == SquareValues.White)
+                            {
+                                Positions.Clear();
+                                Positions.Add(newcol, newrow);
+                                WhiteHighlightConditions(newcol, newrow, SquareValues.White);
+                                return;
+                            }
+                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                             WhiteTurn();
                             if (Board.GameIsWon())
                             {
                                 turn = -1;
                             }
-                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                         }
                         if (turn == 1)
                         {
@@ -279,6 +277,13 @@ namespace CheckersGUI
                 {
                     if (turn == 1)
                     {
+                        if (Board.Squares[newcol, newrow] == SquareValues.Black)
+                        {
+                            Positions.Clear();
+                            Positions.Add(newcol, newrow);
+                            BlackHighlightConditions(newcol, newrow, SquareValues.Black);
+                            return;
+                        }
                         BlackTurn();
                         if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                         {
@@ -289,6 +294,13 @@ namespace CheckersGUI
                     }
                     if (turn == 2)
                     {
+                        if (Board.Squares[newcol, newrow] == SquareValues.White)
+                        {
+                            Positions.Clear();
+                            Positions.Add(newcol, newrow);
+                            WhiteHighlightConditions(newcol, newrow, SquareValues.White);
+                            return;
+                        }
                         WhiteTurn();
                         if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                         {
@@ -313,6 +325,52 @@ namespace CheckersGUI
                 }
             }
            
+        }
+
+        /// <summary>
+        /// Checks to see if the White pieces should be Highlighted
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        private void WhiteHighlightConditions(int OldColumn, int OldRow, SquareValues realtype)
+        {
+            if (menu.highlight && gamemode == 1)
+            {
+                WhiteHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (menu.beginner && gamemode == 0)
+            {
+                WhiteHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (Highlight)
+            {
+                WhiteHighlight(OldColumn, OldRow, realtype, false);
+            }
+            Messages.Text = "Now select where you would like to move to";
+        }
+
+        /// <summary>
+        /// Checks to see if the Black pieces should be Highlighted
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        private void BlackHighlightConditions(int OldColumn, int OldRow, SquareValues realtype)
+        {
+            if (menu.highlight && gamemode == 1)
+            {
+                BlackHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (menu.beginner && gamemode == 0)
+            {
+                BlackHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (Highlight)
+            {
+                BlackHighlight(OldColumn, OldRow, realtype, false);
+            }
+            Messages.Text = "Now select where you would like to move to";
         }
 
         /// <summary>
@@ -1025,6 +1083,10 @@ namespace CheckersGUI
             return;
         }
 
+        /// <summary>
+        /// Set of Game Winning Procedures depending on input
+        /// </summary>
+        /// <param name="i"></param>
         private void GameWonProcedure(int i)
         {
             switch (i)
@@ -1072,6 +1134,9 @@ namespace CheckersGUI
 
         }
 
+        /// <summary>
+        /// Draws the Game Board
+        /// </summary>
         private void DrawBoard()
         {
             for (int row = 0; row < 8; row++)
@@ -1136,6 +1201,13 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Draws a Square
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawSquare(int col, int row, Pen pen, Brush fill)
         {
             g.DrawRectangle(pen, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -1145,6 +1217,13 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Draws a Circle
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawCircle(int col, int row, Pen pen, Brush fill)
         {
             g.DrawEllipse(pen, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -1154,7 +1233,13 @@ namespace CheckersGUI
             }
         }
 
-
+        /// <summary>
+        /// Draws a Star
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawStar(int col, int row, Pen pen, Brush fill)
         {
             g.DrawPolygon(pen,Starpoints(col * squareSize + 10, row * squareSize + 20));
@@ -1164,6 +1249,12 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Contains the Coordinates for DrawStar
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private Point[] Starpoints(int col, int row)
         {
             var p = new Point[8];
@@ -1268,6 +1359,7 @@ namespace CheckersGUI
             }
             return count;
         }
+
         private int WhiteCount()
         {
             int count = 0;
