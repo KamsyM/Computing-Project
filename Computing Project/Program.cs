@@ -9,18 +9,22 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using Computing_Project.Properties;
+using System.Reflection;
 
 namespace Checkers.UI
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             Console.WriteLine("-------- CHECKERS --------");
             Console.WriteLine();
             bool running = true;
             GameBoard Board = null;
-            Restart:
+
+
+        Restart:
             while (running == true)
             {
                 DisplayMenu();
@@ -99,10 +103,12 @@ namespace Checkers.UI
 
         private static void Start1PGame(GameBoard board)
         {
+            List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
             bool running = true;
             while (running)
             {
-                BotPlayerTempV Bot = null;
+                BotPlayer Bot = null;
+                
                 Console.WriteLine("Black or White");
                 string response = Console.ReadLine().ToUpper();
                 char PlayerType = response[0];
@@ -113,7 +119,8 @@ namespace Checkers.UI
                     Console.WriteLine();
                     Console.WriteLine("Select Player Difficulty (1 - 5)");
                     int difficulty = Convert.ToInt32(Console.ReadLine());
-                    Bot = new BotPlayerTempV(board, SquareValues.White, difficulty);
+                    Bot = (BotPlayer)Activator.CreateInstance(BotNames[difficulty-1], board, SquareValues.White);
+                    //Bot = new BotPlayerTempV(board, SquareValues.White, difficulty);
                     while (!GameWon)
                     {
                         board.PrintBoard();
@@ -149,7 +156,8 @@ namespace Checkers.UI
                     Console.WriteLine();
                     Console.WriteLine("Select Player Difficulty (1 - 5)");
                     int difficulty = Convert.ToInt32(Console.ReadLine());
-                    Bot = new BotPlayerTempV(board, SquareValues.Black, difficulty);
+                    Bot = (BotPlayer)Activator.CreateInstance(BotNames[difficulty - 1], board, SquareValues.Black);
+                    //Bot = new BotPlayerTempV(board, SquareValues.Black, difficulty);
                     while (!GameWon)
                     {
                         
