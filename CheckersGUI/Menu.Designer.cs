@@ -110,7 +110,7 @@
             // Difficulty
             // 
             this.Difficulty.FormattingEnabled = true;
-            this.Difficulty.Items.AddRange(BotNames.ToArray());
+            this.Difficulty.Items.AddRange(BotList().ToArray());
             this.Difficulty.Location = new System.Drawing.Point(205, 181);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.Size = new System.Drawing.Size(137, 21);
@@ -227,7 +227,7 @@
             // CG2Diff
             // 
             this.CG2Diff.FormattingEnabled = true;
-            this.CG2Diff.Items.AddRange(BotNames.ToArray());
+            this.CG2Diff.Items.AddRange(BotList().ToArray());
             this.CG2Diff.Location = new System.Drawing.Point(305, 170);
             this.CG2Diff.Name = "CG2Diff";
             this.CG2Diff.Size = new System.Drawing.Size(137, 21);
@@ -236,7 +236,7 @@
             // CG1Diff
             // 
             this.CG1Diff.FormattingEnabled = true;
-            this.CG1Diff.Items.AddRange(BotNames.ToArray());
+            this.CG1Diff.Items.AddRange(BotList().ToArray());
             this.CG1Diff.Location = new System.Drawing.Point(85, 170);
             this.CG1Diff.Name = "CG1Diff";
             this.CG1Diff.Size = new System.Drawing.Size(137, 21);

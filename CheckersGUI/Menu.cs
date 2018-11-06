@@ -30,7 +30,7 @@ namespace CheckersGUI
         public BotPlayer Bot1;
         public BotPlayer Bot2;
         public GameBoard Board;
-        public List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+        //public List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
         //public List<object> instances = BotNames.Select(t => Activator.CreateInstance(t) as t);
 
         public Menu(GameBoard board)
@@ -42,11 +42,11 @@ namespace CheckersGUI
         public List<BotPlayer> BotList()
         {
             List<BotPlayer> botlist = new List<BotPlayer>();
-            botlist.Add(new BotPlayer1(Board, BotType));
-            botlist.Add(new BotPlayer2(Board, BotType));
-            botlist.Add(new BotPlayer3(Board, BotType));
-            botlist.Add(new BotPlayer4(Board, BotType));
-            botlist.Add(new BotPlayer5(Board, BotType));
+            List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+            foreach (var item in BotNames)
+            {
+                botlist.Add((BotPlayer)Activator.CreateInstance(item, Board, BotType));
+            }
             return botlist;
         }
 
@@ -103,11 +103,11 @@ namespace CheckersGUI
 
             if (Difficulty.SelectedItem != null)
             {
-                // Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
-                //Bot.Type = BotType;
+                Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
+                Bot.Type = BotType;
                 var BeginnerBot = new BotPlayer1(Board,BotType);
                 var b = BeginnerBot.GetType();
-                Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem,Board,BotType);
+                //Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem,Board,BotType);
                 var c = Bot.GetType();
                 if (c == b)
                 {
@@ -128,9 +128,9 @@ namespace CheckersGUI
             if (CG1Diff.SelectedItem != null)
             {
 
-                //Bot1 = (BotPlayer)CG1Diff.SelectedItem;    //This is called casting
-                //Bot1.Type = SquareValues.Black;
-                Bot1 = (BotPlayer)Activator.CreateInstance((Type)CG1Diff.SelectedItem, Board, SquareValues.Black);
+                Bot1 = (BotPlayer)CG1Diff.SelectedItem;    //This is called casting
+                Bot1.Type = SquareValues.Black;
+                //Bot1 = (BotPlayer)Activator.CreateInstance((Type)CG1Diff.SelectedItem, Board, SquareValues.Black);
 
             }
 
@@ -141,9 +141,9 @@ namespace CheckersGUI
 
             if (CG2Diff.SelectedItem != null)
             {
-                //Bot2 = (BotPlayer)CG2Diff.SelectedItem;    //This is called casting
-                //Bot2.Type = SquareValues.White;
-                Bot2 = (BotPlayer)Activator.CreateInstance((Type)CG2Diff.SelectedItem, Board, SquareValues.White);
+                Bot2 = (BotPlayer)CG2Diff.SelectedItem;    //This is called casting
+                Bot2.Type = SquareValues.White;
+                //Bot2 = (BotPlayer)Activator.CreateInstance((Type)CG2Diff.SelectedItem, Board, SquareValues.White);
             }
 
             if (CG2Diff.SelectedItem == null)
