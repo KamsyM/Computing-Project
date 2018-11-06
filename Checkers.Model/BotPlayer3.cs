@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-    [Description("Level 3")]
+    [Description("Jumps over a Piece Whenever it can and can also double jump")]
     public class BotPlayer3 : BotPlayer
     {
         public BotPlayer3(GameBoard board, SquareValues type) : base(board, type)

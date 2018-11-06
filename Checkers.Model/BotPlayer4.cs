@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-    [Description("Level 4")]
+    [Description("Checks to see if a space is safe before jumping")]
     public class BotPlayer4 : BotPlayer
     {
         public BotPlayer4(GameBoard board, SquareValues type) : base(board, type)

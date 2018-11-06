@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-    [Description("Level 1")]
+    [Description("Picks a Random Place to move to")]
     public class BotPlayer1 : BotPlayer
     {
         public BotPlayer1(GameBoard board, SquareValues type) : base(board, type)
