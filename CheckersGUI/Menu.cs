@@ -20,6 +20,7 @@ namespace CheckersGUI
         public SquareValues BotType;
         public bool beginner = false;
         public int gamemode;
+        public int playspeed;
         public bool highlight;
         public string name1P;
         public string name2P1;
@@ -69,6 +70,16 @@ namespace CheckersGUI
             name2P2 = Name2P2.Text;
             nameCG1 = NameCG1.Text;
             nameCG2 = NameCG2.Text;
+            try
+            {
+                playspeed = Convert.ToInt32(Convert.ToDouble(PlaySpeed.Text) * 1000);
+            }
+            catch (Exception)
+            {
+
+                playspeed = 800;
+            }
+
 
             highlight = Highlight.Checked;
             if (Gamemode.SelectedTab == Tab1P)

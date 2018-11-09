@@ -30,6 +30,7 @@ namespace CheckersGUI
         private Brush blueBrush = new SolidBrush(Color.LightBlue);
         const int squareSize = 40;
         const int boardSize = 8;
+        private int BotSpeed;
         Graphics g;
         public GameBoard Board;
         private BotPlayer Bot;
@@ -375,6 +376,7 @@ namespace CheckersGUI
         {
             Bot = menu.Bot1;
             Bot2 = menu.Bot2;
+            BotSpeed = menu.playspeed;
             //Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
             //Bot2 = new BotPlayerTempV(Board, SquareValues.White, menu.CG2diff);
             Board.InitialiseEmptyBoard();
@@ -386,7 +388,7 @@ namespace CheckersGUI
             {            
                 if (turn == 1)
                 {
-                    await Task.Delay(800);
+                    await Task.Delay(BotSpeed);
                     BlackBotMove();
                     if (Board.GameIsWon())
                     {
@@ -409,7 +411,7 @@ namespace CheckersGUI
                 }
                 if (turn == 2)
                 {
-                    await Task.Delay(800);
+                    await Task.Delay(BotSpeed);
                     WhiteBotMove();
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                     {

@@ -267,6 +267,39 @@ namespace Checkers.Model
         }
 
         /// <summary>
+        /// Checks to see if a piece can become King on the next move
+        /// </summary>
+        /// <param name="newrow"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool CheckKing( int newrow, SquareValues type)
+        {
+            switch (type)
+            {
+                case SquareValues.Black:
+                    if (newrow == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case SquareValues.White:
+                    if (newrow == 7)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Makes the Bot Jump over other pieces on the Board
         /// </summary>
         /// <param name="oldcol"></param>

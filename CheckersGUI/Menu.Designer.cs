@@ -56,6 +56,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.PlaySpeed = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
@@ -208,6 +210,8 @@
             // 
             // TabCG
             // 
+            this.TabCG.Controls.Add(this.label10);
+            this.TabCG.Controls.Add(this.PlaySpeed);
             this.TabCG.Controls.Add(this.CG2Diff);
             this.TabCG.Controls.Add(this.CG1Diff);
             this.TabCG.Controls.Add(this.label9);
@@ -319,6 +323,23 @@
             // 
             this.pieceBindingSource.DataSource = typeof(Checkers.Model.Piece);
             // 
+            // PlaySpeed
+            // 
+            this.PlaySpeed.Location = new System.Drawing.Point(208, 241);
+            this.PlaySpeed.Name = "PlaySpeed";
+            this.PlaySpeed.Size = new System.Drawing.Size(144, 20);
+            this.PlaySpeed.TabIndex = 13;
+            this.PlaySpeed.Text = "0.8";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(215, 213);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(142, 13);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "Seconds Between Play";
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,5 +392,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.BindingSource pieceBindingSource;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox PlaySpeed;
     }
 }
