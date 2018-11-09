@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
+    [Description("Picks a Random Place to move to")]
     public class BotPlayer1 : BotPlayer
     {
         public BotPlayer1(GameBoard board, SquareValues type) : base(board, type)
         {
             Board = board;
             Type = type;
-            BotName = "Level 1";          
+            BotName = "Level 1";
         }
 
         public override string ToString()

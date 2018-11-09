@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
+    [Description("Checks to see if a space is safe before jumping")]
     public class BotPlayer4 : BotPlayer
     {
         public BotPlayer4(GameBoard board, SquareValues type) : base(board, type)
