@@ -232,6 +232,7 @@ namespace Checkers.Model
 
         }
 
+
         /// <summary>
         /// Checks if a move is safe
         /// </summary>
@@ -349,6 +350,17 @@ namespace Checkers.Model
             }
         }
 
+        public void ForcedJumper(int oldcol, int oldrow,int newcol, int newrow)
+        {
+            var realtype = Board.Squares[oldcol, oldrow];
+            Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+
+            if (Board.CanJump(realtype, newcol, newrow) != 0)
+            {
+                //Thread.Sleep(1000);
+                Jumper(newcol, newrow);
+            }
+        }
 
         public KeyValuePair<int, int> RandomValues(Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>> dict)
         {

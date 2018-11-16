@@ -61,10 +61,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.JumpingWhite();
-            //var whitepieces = Pieces.JumpedBlack();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.TestingComp3();
+            var whitepieces = Pieces.Empty();
             Board = new GameBoard(8, blackpieces, whitepieces);
             menu = new Menu(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
@@ -1188,13 +1188,13 @@ namespace CheckersGUI
             }
             if (PlayerBlack)
             {
-                P1remain.Text = Convert.ToString(BlackCount());
-                P2remain.Text = Convert.ToString(WhiteCount());
+                P1remain.Text = Convert.ToString(Board.Count(SquareValues.Black));
+                P2remain.Text = Convert.ToString(Board.Count(SquareValues.White));
             }
             if (!PlayerBlack)
             {
-                P1remain.Text = Convert.ToString(WhiteCount());
-                P2remain.Text = Convert.ToString(BlackCount());
+                P1remain.Text = Convert.ToString(Board.Count(SquareValues.White));
+                P2remain.Text = Convert.ToString(Board.Count(SquareValues.Black));
             }
         }
 
@@ -1340,39 +1340,39 @@ namespace CheckersGUI
 
         }
 
-        private int BlackCount()
-        {
-            int count = 0;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    var square = Board.ReadSquare(col, row);
-                    if (square == SquareValues.Black || square == SquareValues.BlackKing)
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
+        //private int BlackCount()
+        //{
+        //    int count = 0;
+        //    for (int row = 0; row < 8; row++)
+        //    {
+        //        for (int col = 0; col < 8; col++)
+        //        {
+        //            var square = Board.ReadSquare(col, row);
+        //            if (square == SquareValues.Black || square == SquareValues.BlackKing)
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
 
-        private int WhiteCount()
-        {
-            int count = 0;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    var square = Board.ReadSquare(col, row);
-                    if (square == SquareValues.White || square == SquareValues.WhiteKing )
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
+        //private int WhiteCount()
+        //{
+        //    int count = 0;
+        //    for (int row = 0; row < 8; row++)
+        //    {
+        //        for (int col = 0; col < 8; col++)
+        //        {
+        //            var square = Board.ReadSquare(col, row);
+        //            if (square == SquareValues.White || square == SquareValues.WhiteKing )
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
 
         private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
         {

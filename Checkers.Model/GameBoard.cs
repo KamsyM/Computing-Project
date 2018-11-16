@@ -41,7 +41,94 @@ namespace Checkers.Model
 
         }
 
+        public int Count(SquareValues type)
+        {
+            int count = 0;
+            if (type == SquareValues.Black || type == SquareValues.BlackKing)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    for (int col = 0; col < 8; col++)
+                    {
+                        var square = ReadSquare(col, row);
+                        if (square == SquareValues.Black || square == SquareValues.BlackKing)
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
 
+            if (type == SquareValues.White || type == SquareValues.WhiteKing)
+            {
+                for (int row = 0; row < 8; row++)
+                {
+                    for (int col = 0; col < 8; col++)
+                    {
+                        var square = ReadSquare(col, row);
+                        if (square == SquareValues.White || square == SquareValues.WhiteKing)
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+
+        public SquareValues OpponentType(SquareValues type)
+        {
+            switch (type)
+            {
+                case SquareValues.Black:
+                    return SquareValues.White;
+
+                case SquareValues.White:
+                    return SquareValues.Black;
+
+                case SquareValues.BlackKing:
+                    return SquareValues.WhiteKing;
+
+                case SquareValues.WhiteKing:
+                    return SquareValues.BlackKing;
+
+                default:
+                    return SquareValues.Empty;
+            }
+        }
+        //public int BlackCount()
+        //{
+        //    int count = 0;
+        //    for (int row = 0; row < 8; row++)
+        //    {
+        //        for (int col = 0; col < 8; col++)
+        //        {
+        //            var square = ReadSquare(col, row);
+        //            if (square == SquareValues.Black || square == SquareValues.BlackKing)
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
+
+        //public int WhiteCount()
+        //{
+        //    int count = 0;
+        //    for (int row = 0; row < 8; row++)
+        //    {
+        //        for (int col = 0; col < 8; col++)
+        //        {
+        //            var square = ReadSquare(col, row);
+        //            if (square == SquareValues.White || square == SquareValues.WhiteKing)
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
 
         string[] ColALphabet = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" };
 
@@ -650,6 +737,133 @@ namespace Checkers.Model
                 return 0;
             }
             return 0;
+        }
+
+        public List<int> ListJumps(SquareValues type, int currentCol, int currentRow)
+        {
+            var B = SquareValues.Black;
+            var Bk = SquareValues.BlackKing;
+            var W = SquareValues.White;
+            var Wk = SquareValues.WhiteKing;
+            var E = SquareValues.Empty;
+            var jumplist = new List<int>();
+            if (type == B || type == Bk)
+            {
+                if (IsInvalidEntry(currentRow - 2) == null)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow - 1] == W || Squares[currentCol + 1, currentRow - 1] == Wk)
+                        {
+                            if (Squares[currentCol + 2, currentRow - 2] == E)
+                            {
+                                jumplist.Add(1);
+                            }
+                        }
+                    }
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow - 1] == W || Squares[currentCol - 1, currentRow - 1] == Wk)
+                        {
+                            if (Squares[currentCol - 2, currentRow - 2] == E)
+                            {
+                                jumplist.Add(2);
+                            }
+                        }
+                    }
+                }
+                //--------------------------------------------------------------------
+                if (IsInvalidEntry(currentRow + 2) == null && type == Bk)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow + 1] == W || Squares[currentCol + 1, currentRow + 1] == Wk)
+                        {
+                            if (Squares[currentCol + 2, currentRow + 2] == E)
+                            {
+                                jumplist.Add(3);
+                            }
+                        }
+                    }
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow + 1] == W || Squares[currentCol - 1, currentRow + 1] == Wk)
+                        {
+                            if (Squares[currentCol - 2, currentRow + 2] == E)
+                            {
+                                jumplist.Add(4);
+                            }
+                        }
+                    }
+                }
+                //-----------------------------------------------------------------------
+                jumplist.Add(0);
+            }
+
+            if (type == W || type == Wk)
+            {
+                if (IsInvalidEntry(currentRow + 2) == null)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow + 1] == B || Squares[currentCol + 1, currentRow + 1] == Bk)
+                        {
+                            if (Squares[currentCol + 2, currentRow + 2] == E)
+                            {
+                                jumplist.Add(3);
+                            }
+                        }
+                    }
+
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow + 1] == B || Squares[currentCol - 1, currentRow + 1] == Bk)
+                        {
+                            if (Squares[currentCol - 2, currentRow + 2] == E)
+                            {
+                                jumplist.Add(4);
+                            }
+                        }
+                    }
+                }
+                //-----------------------------------------------------------
+                if (IsInvalidEntry(currentRow - 2) == null && type == Wk)
+                {
+                    if (IsInvalidEntry(currentCol + 2) == null)
+                    {
+
+                        if (Squares[currentCol + 1, currentRow - 1] == B || Squares[currentCol + 1, currentRow - 1] == Bk)
+                        {
+                            if (Squares[currentCol + 2, currentRow - 2] == E)
+                            {
+                                jumplist.Add(1);
+                            }
+                        }
+                    }
+
+                    if (IsInvalidEntry(currentCol - 2) == null)
+                    {
+
+                        if (Squares[currentCol - 1, currentRow - 1] == B || Squares[currentCol - 1, currentRow - 1] == Bk)
+                        {
+                            if (Squares[currentCol - 2, currentRow - 2] == E)
+                            {
+                                jumplist.Add(2);
+                            }
+                        }
+                    }
+                }
+                //---------------------------------------------------------------
+                jumplist.Add(0);
+            }
+            jumplist.Add(0);
+            return jumplist;
         }
 
         /// <summary>

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-    [Description("Checks to see if a move will result in a King")]
-    public class BotPlayer6 : BotPlayer
+    [Description("Trades pieces when it has an advantage and checks multiple jumps for a single piece")]
+    public class BotPlayer7 : BotPlayer
     {
-        public BotPlayer6(GameBoard board, SquareValues type) : base(board, type)
+        public BotPlayer7(GameBoard board, SquareValues type) : base(board, type)
         {
             Board = board;
             Type = type;
-            BotName = "Level 6";
+            BotName = "Level 7";
         }
 
         public override string ToString()
@@ -45,22 +45,54 @@ namespace Checkers.Model
                                 case 0:
                                     break;
                                 case 1:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp);
+                                    if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
+                                    {
+                                        Jumper(oldcol, oldrow);
+                                    }
+                                    else
+                                    {
+                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp);
+                                    }
                                     break;
                                 case 2:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp);
+                                    if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
+                                    {
+                                        Jumper(oldcol, oldrow);
+                                    }
+                                    else
+                                    {
+                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp);
+                                    }
                                     break;
                                 case 3:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown);
+                                    if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
+                                    {
+                                        Jumper(oldcol, oldrow);
+                                    }
+                                    else
+                                    {
+                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown);
+                                    }
                                     break;
                                 case 4:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown);
+                                    if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
+                                    {
+                                        Jumper(oldcol, oldrow);
+                                    }
+                                    else
+                                    {
+                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown);
+                                    }
                                     break;
                                 default:
                                     break;
                             }
+                            //if (Board.IsEmptySquare(oldcol, oldrow))
+                            //{
+                            //    return;
+                            //}
                         }
-                        
+
                         //Jumper(oldcol, oldrow);
                         if (Board.IsEmptySquare(oldcol, oldrow))
                         {
@@ -91,7 +123,7 @@ namespace Checkers.Model
                                         if (CheckingSpaces(oldcol, oldrow, newcol, newrow))
                                         {
                                             if (CheckKing(newrow, realtype))
-                                            {                                           
+                                            {
                                                 try
                                                 {
                                                     pos.Add(oldcol, oldrow);
