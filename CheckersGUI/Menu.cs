@@ -10,33 +10,58 @@ using System.Windows.Forms;
 using Checkers.DataFixture;
 using Checkers.Model;
 using CheckersGUI;
+using System.Reflection;
 
 namespace CheckersGUI
 {
     public partial class Menu : Form
     {
-       //private Form1 IniForm;
         public SquareValues PType;
-        public int difficulty;
-        public int CG1diff;
-        public int CG2diff;
+        public SquareValues BotType;
+        public bool beginner = false;
         public int gamemode;
+        public int playspeed;
         public bool highlight;
         public string name1P;
         public string name2P1;
         public string name2P2;
         public string nameCG1;
         public string nameCG2;
-        //public List<BotPlayer> Bots = new List<BotPlayer>();
-        //private SquareValues BotType;
+        public BotPlayer Bot;
+        public BotPlayer Bot1;
+        public BotPlayer Bot2;
+        public GameBoard Board;
+        //public List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+        //public List<object> instances = BotNames.Select(t => Activator.CreateInstance(t) as t);
 
-
-        public Menu()
+        public Menu(GameBoard board)
         {
-            InitializeComponent();
-            
+            Board = board;
+            InitializeComponent();        
         }
 
+        public List<BotPlayer> BotList()
+        {
+            List<BotPlayer> botlist = new List<BotPlayer>();
+            List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
+            foreach (var item in BotNames)
+            {
+                botlist.Add((BotPlayer)Activator.CreateInstance(item, Board, BotType));
+            }
+            return botlist;
+        }
+
+        static string GetDescription(Type type)
+        {
+            var descriptions = (DescriptionAttribute[])
+                type.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            if (descriptions.Length == 0)
+            {
+                return null;
+            }
+            return descriptions[0].Description;
+        }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -45,6 +70,16 @@ namespace CheckersGUI
             name2P2 = Name2P2.Text;
             nameCG1 = NameCG1.Text;
             nameCG2 = NameCG2.Text;
+            try
+            {
+                playspeed = Convert.ToInt32(Convert.ToDouble(PlaySpeed.Text) * 1000);
+            }
+            catch (Exception)
+            {
+
+                playspeed = 800;
+            }
+
 
             highlight = Highlight.Checked;
             if (Gamemode.SelectedTab == Tab1P)
@@ -63,68 +98,68 @@ namespace CheckersGUI
             {
                 case "Black":
                     PType = SquareValues.Black;
+                    BotType = SquareValues.White;
                     break;
                 case "White":
                     PType = SquareValues.White;
+                    BotType = SquareValues.Black;
                     break;
                 default:
                     PType = SquareValues.Black;
+                    BotType = SquareValues.White;
                     break;
             }
 
 
-            switch ((string)Difficulty.SelectedItem)
+
+            if (Difficulty.SelectedItem != null)
             {
-                case "Beginner":
-                    //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-                    difficulty = 1;
-                    break;
-                case "Intermediate":
-                   // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-                    difficulty = 2;
-                    break;
-                case "Advanced":
-                    difficulty = 3;
-                    break;
-                default:
-                    difficulty = 2;
-                    break;
+                Bot = (BotPlayer)Difficulty.SelectedItem;    //This is called casting
+                Bot.Type = BotType;
+                var BeginnerBot = new BotPlayer1(Board,BotType);
+                var b = BeginnerBot.GetType();
+                //Bot = (BotPlayer)Activator.CreateInstance((Type)Difficulty.SelectedItem,Board,BotType);
+                var c = Bot.GetType();
+                if (c == b)
+                {
+                    beginner = true;
+                }
+                if (c != b)
+                {
+                    beginner = false;
+                }
             }
 
-            switch ((string)CG1Diff.SelectedItem)
+            if (Difficulty.SelectedItem == null)
             {
-                case "Beginner":
-                    //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-                    CG1diff = 1;
-                    break;
-                case "Intermediate":
-                    // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-                    CG1diff = 2;
-                    break;
-                case "Advanced":
-                    CG1diff = 3;
-                    break;
-                default:
-                    CG1diff = 2;
-                    break;
+                Bot = new BotPlayer3(Board, BotType);
             }
 
-            switch ((string)CG2Diff.SelectedItem)
+
+            if (CG1Diff.SelectedItem != null)
             {
-                case "Beginner":
-                    //Bots.Add(new BotPlayer1(IniForm.Board,BotType));
-                    CG2diff = 1;
-                    break;
-                case "Intermediate":
-                    // Bots.Add(new BotPlayer2(IniForm.Board,BotType));
-                    CG2diff = 2;
-                    break;
-                case "Advanced":
-                    CG2diff = 3;
-                    break;
-                default:
-                    CG2diff = 2;
-                    break;
+
+                Bot1 = (BotPlayer)CG1Diff.SelectedItem;    //This is called casting
+                Bot1.Type = SquareValues.Black;
+                //Bot1 = (BotPlayer)Activator.CreateInstance((Type)CG1Diff.SelectedItem, Board, SquareValues.Black);
+
+            }
+
+            if (CG1Diff.SelectedItem == null)
+            {
+                Bot1 = new BotPlayer3(Board, SquareValues.Black);
+            }
+
+            if (CG2Diff.SelectedItem != null)
+            {
+                Bot2 = (BotPlayer)CG2Diff.SelectedItem;    //This is called casting
+                Bot2.Type = SquareValues.White;
+                //Bot2 = (BotPlayer)Activator.CreateInstance((Type)CG2Diff.SelectedItem, Board, SquareValues.White);
+            }
+
+            if (CG2Diff.SelectedItem == null)
+            {
+                Bot2 = new BotPlayer3(Board, SquareValues.White);
             }
         }
 

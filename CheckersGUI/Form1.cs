@@ -30,16 +30,17 @@ namespace CheckersGUI
         private Brush blueBrush = new SolidBrush(Color.LightBlue);
         const int squareSize = 40;
         const int boardSize = 8;
+        private int BotSpeed;
         Graphics g;
         public GameBoard Board;
-        private BotPlayers Bot;
-        private BotPlayers Bot2;
+        private BotPlayer Bot;
+        private BotPlayer Bot2;
         private Modality Mode;
         private int gamemode = 0;
         private Dictionary<int,int> Positions = new Dictionary<int, int>();
         private int turn = 1;
         private bool PlayerBlack = true;
-        private Menu menu = new Menu();
+        private Menu menu;
         private PopUp popUp;
         private SquareValues PType = SquareValues.Empty;
         private Point Player1Pic = new Point(518, 87);
@@ -47,7 +48,7 @@ namespace CheckersGUI
         private bool MultiJump = false;
         private bool Highlight = false;
         bool cont = true;
-        private SquareValues BotType = SquareValues.Empty;
+        //private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
@@ -60,26 +61,16 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.JumpingWhite();
-            //var whitepieces = Pieces.JumpedBlack();
+            //var blackpieces = Pieces.BlackPlacements();
+            //var whitepieces = Pieces.WhitePlacements();
+            var blackpieces = Pieces.TestingComp3();
+            var whitepieces = Pieces.Empty();
             Board = new GameBoard(8, blackpieces, whitepieces);
+            menu = new Menu(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
         }
 
-        private static void delay(int Time_delay)
-        {
-            int i = 0;
-            //  ameTir = new System.Timers.Timer();
-            var _delayTimer = new System.Timers.Timer();
-            _delayTimer.Interval = Time_delay;
-            _delayTimer.AutoReset = false; //so that it only calls the method once
-            _delayTimer.Elapsed += (s, args) => i = 1;
-            _delayTimer.Start();
-            while (i == 0) { };
-        }
 
         private async void Grid_MouseClick(object sender, MouseEventArgs e)
         {
@@ -176,19 +167,7 @@ namespace CheckersGUI
                             }
                             else
                             {
-                                if (menu.highlight && gamemode == 1)
-                                {
-                                    BlackHighlight(OldColumn, OldRow, realtype);
-                                }
-                                if (menu.difficulty == 1 && gamemode == 0)
-                                {
-                                    BlackHighlight(OldColumn, OldRow, realtype);
-                                }
-                                if (Highlight)
-                                {
-                                    BlackHighlight(OldColumn, OldRow, realtype);
-                                }
-                                Messages.Text = "Now select where you would like to move to";
+                                BlackHighlightConditions(OldColumn, OldRow, realtype);
                             }
                             break;
                         case Modality.WhiteTurn:
@@ -199,19 +178,7 @@ namespace CheckersGUI
                             }
                             else
                             {
-                                if (menu.highlight && gamemode == 1)
-                                {
-                                    WhiteHighlight(OldColumn, OldRow, realtype);
-                                }
-                                if (menu.difficulty == 1 && gamemode == 0)
-                                {
-                                    WhiteHighlight(OldColumn, OldRow, realtype);
-                                }
-                                if (Highlight)
-                                {
-                                    WhiteHighlight(OldColumn, OldRow, realtype);
-                                }
-                                Messages.Text = "Now select where you would like to move to";
+                                WhiteHighlightConditions(OldColumn, OldRow, realtype);
                             }
                             break;
                     }
@@ -222,6 +189,9 @@ namespace CheckersGUI
 
             if (Positions.Count == 2)
             {
+                DrawBoard();
+                var newcol = Positions.Last().Key;
+                var newrow = Positions.Last().Value;
                 if (gamemode == 0)
                 {
                     if (PlayerBlack)
@@ -229,8 +199,15 @@ namespace CheckersGUI
                   
                         if (turn == 1)
                         {
-                            BlackTurn();
+                            if (Board.Squares[newcol,newrow] == SquareValues.Black)
+                            {
+                                Positions.Clear();
+                                Positions.Add(newcol, newrow);
+                                BlackHighlightConditions(newcol,newrow,SquareValues.Black);
+                                return;
+                            }
                             Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                            BlackTurn();                          
                         }
                         if (turn == 2)
                         {
@@ -249,12 +226,19 @@ namespace CheckersGUI
                     {
                         if (turn == 2)
                         {
+                            if (Board.Squares[newcol, newrow] == SquareValues.White)
+                            {
+                                Positions.Clear();
+                                Positions.Add(newcol, newrow);
+                                WhiteHighlightConditions(newcol, newrow, SquareValues.White);
+                                return;
+                            }
+                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                             WhiteTurn();
                             if (Board.GameIsWon())
                             {
                                 turn = -1;
                             }
-                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                         }
                         if (turn == 1)
                         {
@@ -289,6 +273,13 @@ namespace CheckersGUI
                 {
                     if (turn == 1)
                     {
+                        if (Board.Squares[newcol, newrow] == SquareValues.Black)
+                        {
+                            Positions.Clear();
+                            Positions.Add(newcol, newrow);
+                            BlackHighlightConditions(newcol, newrow, SquareValues.Black);
+                            return;
+                        }
                         BlackTurn();
                         if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                         {
@@ -299,6 +290,13 @@ namespace CheckersGUI
                     }
                     if (turn == 2)
                     {
+                        if (Board.Squares[newcol, newrow] == SquareValues.White)
+                        {
+                            Positions.Clear();
+                            Positions.Add(newcol, newrow);
+                            WhiteHighlightConditions(newcol, newrow, SquareValues.White);
+                            return;
+                        }
                         WhiteTurn();
                         if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                         {
@@ -325,10 +323,62 @@ namespace CheckersGUI
            
         }
 
+        /// <summary>
+        /// Checks to see if the White pieces should be Highlighted
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        private void WhiteHighlightConditions(int OldColumn, int OldRow, SquareValues realtype)
+        {
+            if (menu.highlight && gamemode == 1)
+            {
+                WhiteHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (menu.beginner && gamemode == 0)
+            {
+                WhiteHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (Highlight)
+            {
+                WhiteHighlight(OldColumn, OldRow, realtype, false);
+            }
+            Messages.Text = "Now select where you would like to move to";
+        }
+
+        /// <summary>
+        /// Checks to see if the Black pieces should be Highlighted
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        private void BlackHighlightConditions(int OldColumn, int OldRow, SquareValues realtype)
+        {
+            if (menu.highlight && gamemode == 1)
+            {
+                BlackHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (menu.beginner && gamemode == 0)
+            {
+                BlackHighlight(OldColumn, OldRow, realtype, false);
+            }
+            if (Highlight)
+            {
+                BlackHighlight(OldColumn, OldRow, realtype, false);
+            }
+            Messages.Text = "Now select where you would like to move to";
+        }
+
+        /// <summary>
+        /// Plays a match against bots
+        /// </summary>
         private async void BotMatch()
         {
-            Bot = new BotPlayers(Board, SquareValues.Black, menu.CG1diff);
-            Bot2 = new BotPlayers(Board, SquareValues.White, menu.CG2diff);
+            Bot = menu.Bot1;
+            Bot2 = menu.Bot2;
+            BotSpeed = menu.playspeed;
+            //Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
+            //Bot2 = new BotPlayerTempV(Board, SquareValues.White, menu.CG2diff);
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
             DrawBoard();
@@ -338,7 +388,7 @@ namespace CheckersGUI
             {            
                 if (turn == 1)
                 {
-                    await Task.Delay(800);
+                    await Task.Delay(BotSpeed);
                     BlackBotMove();
                     if (Board.GameIsWon())
                     {
@@ -361,7 +411,7 @@ namespace CheckersGUI
                 }
                 if (turn == 2)
                 {
-                    await Task.Delay(800);
+                    await Task.Delay(BotSpeed);
                     WhiteBotMove();
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                     {
@@ -378,9 +428,14 @@ namespace CheckersGUI
             return;
         }
 
-
-
-        private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype)
+        /// <summary>
+        /// Highlights White Users possible moves
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        /// <param name="DoubleJump"></param>
+        private void WhiteHighlight(int OldColumn, int OldRow, SquareValues realtype, bool DoubleJump)
         {
             switch (realtype)
             {
@@ -402,18 +457,34 @@ namespace CheckersGUI
             {
                 for (int newcol = 0; newcol < Board.Size; newcol++)
                 {
-                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
-                    {
-                        DrawSquare(newcol, newrow, blackPen, blueBrush);
+                    if (!DoubleJump)
+                    {                    
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
 
+                        }
                     }
-
+                    if (DoubleJump)
+                    {
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow) && Math.Abs(newrow-OldRow) > 1)
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
+                        }
+                    }
                 }
 
             }
         }
 
-        private void BlackHighlight(int OldColumn, int OldRow, SquareValues realtype)
+        /// <summary>
+        /// Highlights Black Users possible moves
+        /// </summary>
+        /// <param name="OldColumn"></param>
+        /// <param name="OldRow"></param>
+        /// <param name="realtype"></param>
+        /// <param name="DoubleJump"></param>
+        private void BlackHighlight(int OldColumn, int OldRow, SquareValues realtype, bool DoubleJump)
         {
             switch (realtype)
             {
@@ -434,17 +505,30 @@ namespace CheckersGUI
             {
                 for (int newcol = 0; newcol < Board.Size; newcol++)
                 {
-                    if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
-                    {
-                        DrawSquare(newcol, newrow, blackPen, blueBrush);
+                    if (!DoubleJump)
+                    {                 
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow))
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
 
+                        }
                     }
+                    if (DoubleJump)
+                    {
+                        if (Board.IsEmptySquare(newcol, newrow) && Board.IsValidMove(realtype, OldColumn, OldRow, newcol, newrow) && Math.Abs(newrow - OldRow) > 1)
+                        {
+                            DrawSquare(newcol, newrow, blackPen, blueBrush);
 
+                        }
+                    }
                 }
 
             }
         }
 
+        /// <summary>
+        /// Moves the Black bot piece
+        /// </summary>
         private void BlackBotMove()
         {
             if (gamemode == 2)
@@ -483,6 +567,9 @@ namespace CheckersGUI
             Mode = Modality.WhiteTurn;
         }
 
+        /// <summary>
+        /// Moves the white bot piece
+        /// </summary>
         private void WhiteBotMove()
         {
             if (!Board.CanMove(SquareValues.White))
@@ -739,6 +826,9 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Starts a One Player Game
+        /// </summary>
         private void StartGame1P()
         {
             if (PType == SquareValues.Black)
@@ -776,7 +866,9 @@ namespace CheckersGUI
 
         }
 
-
+        /// <summary>
+        /// Starts a two player game
+        /// </summary>
         private void StartGame2P()
         {
             Board.InitialiseEmptyBoard();
@@ -789,7 +881,9 @@ namespace CheckersGUI
             DrawSquare(3, 3, blackPen, greyBrush);
         }
 
-
+        /// <summary>
+        /// Performs the Black Players move
+        /// </summary>
         private void BlackTurn()
         {
             Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
@@ -840,6 +934,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            BlackHighlight(NewColumn,NewRow, Board.ReadSquare(NewColumn,NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -856,6 +951,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            BlackHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn, NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -881,8 +977,9 @@ namespace CheckersGUI
             return;
         }
 
-
-
+        /// <summary>
+        /// Performs the White players move
+        /// </summary>
         private void WhiteTurn()
         {
             Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
@@ -933,6 +1030,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            WhiteHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn, NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -948,6 +1046,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Jump Again";
                             Positions.Add(NewColumn, NewRow);
+                            WhiteHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn,NewRow),true);
                             MultiJump = true;
                             return;
                         }
@@ -981,6 +1080,10 @@ namespace CheckersGUI
             return;
         }
 
+        /// <summary>
+        /// Set of Game Winning Procedures depending on input
+        /// </summary>
+        /// <param name="i"></param>
         private void GameWonProcedure(int i)
         {
             switch (i)
@@ -1028,6 +1131,9 @@ namespace CheckersGUI
 
         }
 
+        /// <summary>
+        /// Draws the Game Board
+        /// </summary>
         private void DrawBoard()
         {
             for (int row = 0; row < 8; row++)
@@ -1082,16 +1188,23 @@ namespace CheckersGUI
             }
             if (PlayerBlack)
             {
-                P1remain.Text = Convert.ToString(BlackCount());
-                P2remain.Text = Convert.ToString(WhiteCount());
+                P1remain.Text = Convert.ToString(Board.Count(SquareValues.Black));
+                P2remain.Text = Convert.ToString(Board.Count(SquareValues.White));
             }
             if (!PlayerBlack)
             {
-                P1remain.Text = Convert.ToString(WhiteCount());
-                P2remain.Text = Convert.ToString(BlackCount());
+                P1remain.Text = Convert.ToString(Board.Count(SquareValues.White));
+                P2remain.Text = Convert.ToString(Board.Count(SquareValues.Black));
             }
         }
 
+        /// <summary>
+        /// Draws a Square
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawSquare(int col, int row, Pen pen, Brush fill)
         {
             g.DrawRectangle(pen, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -1101,6 +1214,13 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Draws a Circle
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawCircle(int col, int row, Pen pen, Brush fill)
         {
             g.DrawEllipse(pen, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -1110,7 +1230,13 @@ namespace CheckersGUI
             }
         }
 
-
+        /// <summary>
+        /// Draws a Star
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawStar(int col, int row, Pen pen, Brush fill)
         {
             g.DrawPolygon(pen,Starpoints(col * squareSize + 10, row * squareSize + 20));
@@ -1120,6 +1246,12 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Contains the Coordinates for DrawStar
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private Point[] Starpoints(int col, int row)
         {
             var p = new Point[8];
@@ -1160,6 +1292,7 @@ namespace CheckersGUI
         private void StartNewGame()
         {
             //CancellationToken token = source.Token;
+
             menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
@@ -1173,19 +1306,20 @@ namespace CheckersGUI
                 BotMatch();
                 return;
             }
-            switch (PType)
-            {
-                case SquareValues.Black:
-                    BotType = SquareValues.White;
-                    break;
-                case SquareValues.White:
-                    BotType = SquareValues.Black;
-                    break;
-                default:
-                    break;
-            }
+            //switch (PType)
+            //{
+            //    case SquareValues.Black:
+            //        BotType = SquareValues.White;
+            //        break;
+            //    case SquareValues.White:
+            //        BotType = SquareValues.Black;
+            //        break;
+            //    default:
+            //        break;
+            //}
             //Bots.Add(new BotPlayer1(Board, BotType));
-            Bot = new BotPlayers(Board, BotType, menu.difficulty);
+            Bot = menu.Bot;
+            //Bot = new BotPlayerTempV(Board, BotType, menu.difficulty);
             //Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
             switch (gamemode)
             {
@@ -1206,38 +1340,39 @@ namespace CheckersGUI
 
         }
 
-        private int BlackCount()
-        {
-            int count = 0;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    var square = Board.ReadSquare(col, row);
-                    if (square == SquareValues.Black || square == SquareValues.BlackKing)
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
-        private int WhiteCount()
-        {
-            int count = 0;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    var square = Board.ReadSquare(col, row);
-                    if (square == SquareValues.White || square == SquareValues.WhiteKing )
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
+        //private int BlackCount()
+        //{
+        //    int count = 0;
+        //    for (int row = 0; row < 8; row++)
+        //    {
+        //        for (int col = 0; col < 8; col++)
+        //        {
+        //            var square = Board.ReadSquare(col, row);
+        //            if (square == SquareValues.Black || square == SquareValues.BlackKing)
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
+
+        //private int WhiteCount()
+        //{
+        //    int count = 0;
+        //    for (int row = 0; row < 8; row++)
+        //    {
+        //        for (int col = 0; col < 8; col++)
+        //        {
+        //            var square = Board.ReadSquare(col, row);
+        //            if (square == SquareValues.White || square == SquareValues.WhiteKing )
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
 
         private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
         {

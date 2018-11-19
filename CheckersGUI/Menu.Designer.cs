@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.Gamemode = new System.Windows.Forms.TabControl();
             this.Tab1P = new System.Windows.Forms.TabPage();
@@ -54,10 +55,14 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.PlaySpeed = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
             this.TabCG.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pieceBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // Gamemode
@@ -107,10 +112,7 @@
             // Difficulty
             // 
             this.Difficulty.FormattingEnabled = true;
-            this.Difficulty.Items.AddRange(new object[] {
-            "Beginner",
-            "Intermediate",
-            "Advanced"});
+            this.Difficulty.Items.AddRange(BotList().ToArray());
             this.Difficulty.Location = new System.Drawing.Point(205, 181);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.Size = new System.Drawing.Size(137, 21);
@@ -208,6 +210,8 @@
             // 
             // TabCG
             // 
+            this.TabCG.Controls.Add(this.label10);
+            this.TabCG.Controls.Add(this.PlaySpeed);
             this.TabCG.Controls.Add(this.CG2Diff);
             this.TabCG.Controls.Add(this.CG1Diff);
             this.TabCG.Controls.Add(this.label9);
@@ -227,10 +231,7 @@
             // CG2Diff
             // 
             this.CG2Diff.FormattingEnabled = true;
-            this.CG2Diff.Items.AddRange(new object[] {
-            "Beginner",
-            "Intermediate",
-            "Advanced"});
+            this.CG2Diff.Items.AddRange(BotList().ToArray());
             this.CG2Diff.Location = new System.Drawing.Point(305, 170);
             this.CG2Diff.Name = "CG2Diff";
             this.CG2Diff.Size = new System.Drawing.Size(137, 21);
@@ -239,10 +240,7 @@
             // CG1Diff
             // 
             this.CG1Diff.FormattingEnabled = true;
-            this.CG1Diff.Items.AddRange(new object[] {
-            "Beginner",
-            "Intermediate",
-            "Advanced"});
+            this.CG1Diff.Items.AddRange(BotList().ToArray());
             this.CG1Diff.Location = new System.Drawing.Point(85, 170);
             this.CG1Diff.Name = "CG1Diff";
             this.CG1Diff.Size = new System.Drawing.Size(137, 21);
@@ -321,6 +319,27 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "&Cancel";
             // 
+            // pieceBindingSource
+            // 
+            this.pieceBindingSource.DataSource = typeof(Checkers.Model.Piece);
+            // 
+            // PlaySpeed
+            // 
+            this.PlaySpeed.Location = new System.Drawing.Point(208, 241);
+            this.PlaySpeed.Name = "PlaySpeed";
+            this.PlaySpeed.Size = new System.Drawing.Size(144, 20);
+            this.PlaySpeed.TabIndex = 13;
+            this.PlaySpeed.Text = "0.8";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(215, 213);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(142, 13);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "Seconds Between Play";
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,6 +359,7 @@
             this.Tab2P.PerformLayout();
             this.TabCG.ResumeLayout(false);
             this.TabCG.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pieceBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -371,5 +391,8 @@
         private System.Windows.Forms.ComboBox CG1Diff;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.BindingSource pieceBindingSource;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox PlaySpeed;
     }
 }

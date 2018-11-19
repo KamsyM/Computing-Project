@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Checkers.Model
 {
-    public class BotPlayers
+    public class BotPlayerTempV
     {
         public SquareValues Type;
         public GameBoard Board;
@@ -20,12 +20,67 @@ namespace Checkers.Model
         private KeyValuePair<int, int> NewPosition = new KeyValuePair<int, int>();
         private Dictionary<int, int> pos = new Dictionary<int, int>();
         private Dictionary<KeyValuePair<int,int>, KeyValuePair<int, int>> BotPositions = new Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>>();
-        public BotPlayers(GameBoard board, SquareValues type, int difficulty)
+        public BotPlayerTempV(GameBoard board, SquareValues type, int difficulty)
         {
             Type = type;
             Board = board;
             Difficuty = difficulty;
             
+        }
+
+        /// <summary>
+        /// Simulates a game with 2 given Bots and returns the winner in terms of the player number
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="Bot"></param>
+        /// <param name="Bot2"></param>
+        /// <returns></returns>
+        public static int PlayBots(GameBoard board, BotPlayer Bot, BotPlayer Bot2)
+        {
+            int turn = 1;
+            board.InitialiseEmptyBoard();
+            board.InitializePieces();
+            bool cont = true;
+            while (!board.GameIsWon() && cont == true)
+            {
+                if (turn == 1)
+                {
+                    Bot.Move();
+                    if (board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 1;
+                    }
+                    if (!board.CanMove(SquareValues.White) && !board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 1;
+                    }
+                    turn = 2;
+                }
+                if (turn == 2)
+                {
+                    Bot2.Move();
+                    if (board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 2;
+                    }
+                    if (!board.CanMove(SquareValues.Black) && !board.GameIsWon())
+                    {
+                        cont = false;
+                        turn = 1;
+                        return 2;
+                    }
+                    turn = 1;
+
+                }
+            }
+            turn = 1;
+            return 0;
         }
 
         public void Move()
