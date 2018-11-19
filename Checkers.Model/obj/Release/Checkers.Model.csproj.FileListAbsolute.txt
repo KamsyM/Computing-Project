@@ -1,0 +1,6 @@
+C:\Users\Kamsi\Source\Repos\Computing-Project\Checkers.Model\bin\Release\Checkers.Model.dll.config
+C:\Users\Kamsi\Source\Repos\Computing-Project\Checkers.Model\bin\Release\Checkers.Model.dll
+C:\Users\Kamsi\Source\Repos\Computing-Project\Checkers.Model\bin\Release\Checkers.Model.pdb
+C:\Users\Kamsi\Source\Repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.csproj.CoreCompileInputs.cache
+C:\Users\Kamsi\Source\Repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.dll
+C:\Users\Kamsi\Source\Repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.pdb
