@@ -37,24 +37,44 @@ namespace Checkers.Model
                     if (!Board.IsEmptySquare(oldcol, oldrow) && !Board.NotYourPiece(Type, oldcol, oldrow))
                     {
                         var realtype = Board.Squares[oldcol, oldrow];
-                        switch (Board.CanJump(realtype, oldcol, oldrow))
+                        var jumplist = Board.ListJumps(realtype, oldcol, oldrow);
+                        foreach (var item in jumplist)
                         {
-                            case 0:
-                                break;
-                            case 1:
-                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp);
-                                break;
-                            case 2:
-                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp);
-                                break;
-                            case 3:
-                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown);
-                                break;
-                            case 4:
-                                CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown);
-                                break;
-                            default:
-                                break;
+                            switch (item)
+                            {
+                                case 0:
+                                    break;
+                                case 1:
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol + 2, oldrow - 2);
+                                        return;
+                                    }
+                                    break;
+                                case 2:
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol - 2, oldrow - 2);
+                                        return;
+                                    }
+                                    break;
+                                case 3:
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol + 2, oldrow + 2);
+                                        return;
+                                    }
+                                    break;
+                                case 4:
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol - 2, oldrow + 2);
+                                        return;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         //Jumper(oldcol, oldrow);
                         if (Board.IsEmptySquare(oldcol, oldrow))

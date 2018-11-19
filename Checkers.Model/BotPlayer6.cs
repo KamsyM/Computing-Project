@@ -45,16 +45,32 @@ namespace Checkers.Model
                                 case 0:
                                     break;
                                 case 1:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp);
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol + 2, oldrow - 2);
+                                        return;
+                                    }                                                                      
                                     break;
                                 case 2:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp);
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol - 2, oldrow - 2);
+                                        return;
+                                    }                                  
                                     break;
                                 case 3:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown);
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol + 2, oldrow + 2);
+                                        return;
+                                    }
                                     break;
                                 case 4:
-                                    CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown);
+                                    if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown))
+                                    {
+                                        ForcedJumper(oldcol, oldrow, oldcol - 2, oldrow + 2);
+                                        return;
+                                    }
                                     break;
                                 default:
                                     break;

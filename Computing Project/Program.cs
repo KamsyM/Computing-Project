@@ -24,7 +24,7 @@ namespace Checkers.UI
             GameBoard Board = null;
 
 
-        Restart:
+        //Restart:
             while (running == true)
             {
                 DisplayMenu();

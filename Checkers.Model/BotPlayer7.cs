@@ -47,41 +47,70 @@ namespace Checkers.Model
                                 case 1:
                                     if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
                                     {
-                                        Jumper(oldcol, oldrow);
+                                        if (!Board.CanBeJumped(oldcol + 2, oldrow - 2) )
+                                        {
+                                            Jumper(oldcol, oldrow);
+                                        }
+                                        
                                     }
                                     else
                                     {
-                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp);
+                                        if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightUp))
+                                        {
+                                            ForcedJumper(oldcol, oldrow, oldcol + 2, oldrow - 2);
+                                            return;
+                                        }
                                     }
                                     break;
                                 case 2:
                                     if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
                                     {
-                                        Jumper(oldcol, oldrow);
+                                        if (!Board.CanBeJumped(oldcol - 2, oldrow - 2))
+                                        {
+                                            Jumper(oldcol, oldrow);
+                                        }
                                     }
                                     else
                                     {
-                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp);
+                                        if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftUp))
+                                        {
+                                            ForcedJumper(oldcol, oldrow, oldcol - 2, oldrow - 2);
+                                            return;
+                                        }
                                     }
                                     break;
                                 case 3:
                                     if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
                                     {
-                                        Jumper(oldcol, oldrow);
+                                        if (!Board.CanBeJumped(oldcol + 2, oldrow + 2))
+                                        {
+                                            Jumper(oldcol, oldrow);
+                                        }
                                     }
                                     else
                                     {
-                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown);
+                                        if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.RightDown))
+                                        {
+                                            ForcedJumper(oldcol, oldrow, oldcol + 2, oldrow + 2);
+                                            return;
+                                        }
                                     }
                                     break;
                                 case 4:
                                     if (Board.Count(realtype) > Board.Count(Board.OpponentType(realtype)))
                                     {
-                                        Jumper(oldcol, oldrow);
+                                        if (!Board.CanBeJumped(oldcol - 2, oldrow + 2))
+                                        {
+                                            Jumper(oldcol, oldrow);
+                                        }
                                     }
                                     else
                                     {
-                                        CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown);
+                                        if (CheckingJumps(oldcol, oldrow, realtype, CheckNo.LeftDown))
+                                        {
+                                            ForcedJumper(oldcol, oldrow, oldcol - 2, oldrow + 2);
+                                            return;
+                                        }
                                     }
                                     break;
                                 default:
