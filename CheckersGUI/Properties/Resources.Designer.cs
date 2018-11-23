@@ -127,6 +127,7 @@ namespace CheckersGUI.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+
         public static byte[] GetComputingProject()
         {
             return Computing_Project;
