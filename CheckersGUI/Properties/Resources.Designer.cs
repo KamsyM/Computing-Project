@@ -111,13 +111,22 @@ namespace CheckersGUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PlayPause {
+            get {
+                object obj = ResourceManager.GetObject("PlayPause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap White_Checker_Piece {
             get {
                 object obj = ResourceManager.GetObject("White_Checker_Piece", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
         public static byte[] GetComputingProject()
         {
             return Computing_Project;

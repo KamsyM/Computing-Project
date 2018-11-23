@@ -56,12 +56,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.BlackPiecePic = new System.Windows.Forms.PictureBox();
             this.WhitePiecePic = new System.Windows.Forms.PictureBox();
-            this.PlayPause = new System.Windows.Forms.PictureBox();
+            this.PlayPause = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WhitePiecePic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PlayPause)).BeginInit();
             this.SuspendLayout();
             // 
             // Grid
@@ -296,12 +295,13 @@
             // 
             // PlayPause
             // 
-            this.PlayPause.Image = global::CheckersGUI.Properties.Resources.Black_Checker_Piece;
-            this.PlayPause.Location = new System.Drawing.Point(492, 383);
+            this.PlayPause.Image = global::CheckersGUI.Properties.Resources.PlayPause;
+            this.PlayPause.Location = new System.Drawing.Point(488, 390);
             this.PlayPause.Name = "PlayPause";
-            this.PlayPause.Size = new System.Drawing.Size(35, 25);
-            this.PlayPause.TabIndex = 20;
-            this.PlayPause.TabStop = false;
+            this.PlayPause.Size = new System.Drawing.Size(39, 31);
+            this.PlayPause.TabIndex = 21;
+            this.PlayPause.UseVisualStyleBackColor = true;
+            this.PlayPause.Visible = false;
             this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
             // 
             // Form1
@@ -333,7 +333,6 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WhitePiecePic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PlayPause)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -368,7 +367,7 @@
         private System.Windows.Forms.ToolStripMenuItem OffTextBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem CLIversion;
-        private System.Windows.Forms.PictureBox PlayPause;
+        private System.Windows.Forms.Button PlayPause;
     }
 }
 

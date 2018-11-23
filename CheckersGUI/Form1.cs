@@ -376,6 +376,7 @@ namespace CheckersGUI
         /// </summary>
         private async void BotMatch()
         {
+            PlayPause.Visible = true;
             Bot = menu.Bot1;
             Bot2 = menu.Bot2;
             BotSpeed = menu.playspeed;
@@ -440,7 +441,6 @@ namespace CheckersGUI
             turn = 1;
             return;
         }
-
 
         /// <summary>
         /// Highlights White Users possible moves
