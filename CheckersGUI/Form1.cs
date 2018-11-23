@@ -61,10 +61,10 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            //var blackpieces = Pieces.BlackPlacements();
-            //var whitepieces = Pieces.WhitePlacements();
-            var blackpieces = Pieces.TestingComp3();
-            var whitepieces = Pieces.Empty();
+            var blackpieces = Pieces.BlackPlacements();
+            var whitepieces = Pieces.WhitePlacements();
+            //var blackpieces = Pieces.TestingComp3();
+            //var whitepieces = Pieces.Empty();
             Board = new GameBoard(8, blackpieces, whitepieces);
             menu = new Menu(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
