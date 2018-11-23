@@ -146,5 +146,11 @@
   <ItemGroup>
     <None Include="Resources\noun_rewind button_589600.png.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rewind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FastForward.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

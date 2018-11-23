@@ -380,6 +380,7 @@ namespace CheckersGUI
         {
             PlayPause.Visible = true;
             Reverse.Visible = true;
+            FastForward.Visible = true;
             running = true;
             Bot = menu.Bot1;
             Bot2 = menu.Bot2;
@@ -1495,7 +1496,7 @@ namespace CheckersGUI
                     {
                         PlacementNo = Placements.Count();
                     }
-                        for (int i = (Placements.Count - PlacementNo); i < Placements.Count; i++)
+                        for (int i = PlacementNo; i < (Placements.Count - PlacementNo); i++)
                         {
                             var a = Placements[i];
                             for (int col = 0; col < 8; col++)
@@ -1606,6 +1607,56 @@ namespace CheckersGUI
                     return;
                 }
                 
+            }
+        }
+
+        private void FastForward_Click(object sender, EventArgs e)
+        {
+            if (FastForward.Visible == true)
+            {
+                if (past)
+                {
+                    if (PlacementNo == 0)
+                    {
+                        PlacementNo = Placements.Count();
+                    }
+                        var a = Placements[PlacementNo + 1];
+                        for (int col = 0; col < 8; col++)
+                        {
+                            for (int row = 0; row < 8; row++)
+                            {
+                                switch (a[col, row])
+                                {
+                                    case 0:
+                                        Board.Squares[col, row] = SquareValues.Empty;
+                                        break;
+                                    case 1:
+                                        Board.Squares[col, row] = SquareValues.Black;
+                                        break;
+                                    case 2:
+                                        Board.Squares[col, row] = SquareValues.BlackKing;
+                                        break;
+                                    case 3:
+                                        Board.Squares[col, row] = SquareValues.White;
+                                        break;
+                                    case 4:
+                                        Board.Squares[col, row] = SquareValues.WhiteKing;
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        }
+                        DrawBoard();                    
+
+                    return;
+                }
+
+                else
+                {
+                    running = true;
+                }
             }
         }
     }
