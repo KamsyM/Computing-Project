@@ -48,12 +48,13 @@ namespace CheckersGUI
         private bool MultiJump = false;
         private bool Highlight = false;
         bool cont = true;
+        bool running = true;
         //private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
         private System.Media.SoundPlayer StartSound = new System.Media.SoundPlayer(Properties.Resources.GameStart);
-        CancellationTokenSource source = new CancellationTokenSource();
+
 
 
         public Form1()
@@ -61,6 +62,7 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
+
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             //var blackpieces = Pieces.TestingComp3();
@@ -384,34 +386,44 @@ namespace CheckersGUI
             DrawBoard();
             cont = true;
             Messages.Text = "Simulating Game...";
+
             while (!Board.GameIsWon() && cont == true)
-            {            
+            {
+                await Task.Delay(BotSpeed);
+                //check for paused
+                while (!running)
+                {
+                    await Task.Delay(500);
+                }
                 if (turn == 1)
                 {
-                    await Task.Delay(BotSpeed);
-                    BlackBotMove();
-                    if (Board.GameIsWon())
-                    {
-                        cont = false;
-                        turn = 1;
-                        return;
-                    }
-                    if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
-                    {
-                        GameWonProcedure(1);
-                        cont = false;
-                        turn = 1;
-                        return;
-                    }
-                    if (cont == false)
-                    {
-                        return;
-                    }
-                    turn = 2;
+                        BlackBotMove();
+                        if (Board.GameIsWon())
+                        {
+                            cont = false;
+                            turn = 1;
+                            return;
+                        }
+                        if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
+                        {
+                            GameWonProcedure(1);
+                            cont = false;
+                            turn = 1;
+                            return;
+                        }
+                        if (cont == false)
+                        {
+                            return;
+                        }
+                        turn = 2;
                 }
-                if (turn == 2)
+                await Task.Delay(BotSpeed);
+                while (!running)
                 {
-                    await Task.Delay(BotSpeed);
+                    await Task.Delay(500);
+                }
+                if (turn == 2 && running)
+                {
                     WhiteBotMove();
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                     {
@@ -423,10 +435,12 @@ namespace CheckersGUI
                     turn = 1;
                     
                 }
+
             }
             turn = 1;
             return;
         }
+
 
         /// <summary>
         /// Highlights White Users possible moves
@@ -1440,6 +1454,21 @@ namespace CheckersGUI
                 }
             }
             Application.Exit();
+        }
+
+        private void PlayPause_Click(object sender, EventArgs e)
+        {
+            if (running)
+            {
+                running = false;
+                return;
+            }
+
+            if (!running)
+            {
+                running = true;
+                return;
+            }
         }
     }
 }

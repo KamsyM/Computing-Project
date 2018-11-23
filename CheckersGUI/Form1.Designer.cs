@@ -56,10 +56,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.BlackPiecePic = new System.Windows.Forms.PictureBox();
             this.WhitePiecePic = new System.Windows.Forms.PictureBox();
+            this.PlayPause = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WhitePiecePic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlayPause)).BeginInit();
             this.SuspendLayout();
             // 
             // Grid
@@ -292,11 +294,22 @@
             this.WhitePiecePic.TabIndex = 19;
             this.WhitePiecePic.TabStop = false;
             // 
+            // PlayPause
+            // 
+            this.PlayPause.Image = global::CheckersGUI.Properties.Resources.Black_Checker_Piece;
+            this.PlayPause.Location = new System.Drawing.Point(492, 383);
+            this.PlayPause.Name = "PlayPause";
+            this.PlayPause.Size = new System.Drawing.Size(35, 25);
+            this.PlayPause.TabIndex = 20;
+            this.PlayPause.TabStop = false;
+            this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.PlayPause);
             this.Controls.Add(this.WhitePiecePic);
             this.Controls.Add(this.BlackPiecePic);
             this.Controls.Add(this.label4);
@@ -320,6 +333,7 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WhitePiecePic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlayPause)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -354,6 +368,7 @@
         private System.Windows.Forms.ToolStripMenuItem OffTextBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem CLIversion;
+        private System.Windows.Forms.PictureBox PlayPause;
     }
 }
 
