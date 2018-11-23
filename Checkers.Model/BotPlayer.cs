@@ -82,8 +82,10 @@ namespace Checkers.Model
         /// </summary>
         /// <param name="oldcol"></param>
         /// <param name="oldrow"></param>
+        /// <param name="type"></param>
         /// <param name="mode"></param>
-        public void CheckingJumps(int oldcol, int oldrow, SquareValues type, CheckNo mode)
+        /// <returns></returns>
+        public bool CheckingJumps(int oldcol, int oldrow, SquareValues type, CheckNo mode)
         {
             switch (mode)
             {
@@ -98,12 +100,13 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol + 2, oldrow - 2] = a;
                             Board.Squares[oldcol + 1, oldrow - 1] = b;
-                            Jumper(oldcol, oldrow);
+                            return true;
                         }
                         else
                         {
                             Board.Squares[oldcol + 2, oldrow - 2] = a;
                             Board.Squares[oldcol + 1, oldrow - 1] = b;
+                            return false;
                         }
 
 
@@ -114,16 +117,15 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol + 2, oldrow - 2] = a;
                             Board.Squares[oldcol + 1, oldrow - 1] = b;
+                            return false;
                         }
                         catch (Exception)
                         {
 
-                            return;
+                            return false;
                         }
-                        return;
+                        
                     }
-
-                    break;
                 case CheckNo.LeftUp:
                     try
                     {
@@ -135,12 +137,13 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol - 2, oldrow - 2] = a;
                             Board.Squares[oldcol - 1, oldrow - 1] = b;
-                            Jumper(oldcol, oldrow);
+                            return true;
                         }
                         else
                         {
                             Board.Squares[oldcol - 2, oldrow - 2] = a;
                             Board.Squares[oldcol - 1, oldrow - 1] = b;
+                            return false;
                         }
                     }
                     catch (Exception)
@@ -149,16 +152,16 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol - 2, oldrow - 2] = a;
                             Board.Squares[oldcol - 1, oldrow - 1] = b;
+                            return false;
                         }
                         catch (Exception)
                         {
 
-                            return;
+                            return false;
                         }
-                        return;
+                       
                     }
-
-                    break;
+                  
                 case CheckNo.RightDown:
                     try
                     {
@@ -170,12 +173,13 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol + 2, oldrow + 2] = a;
                             Board.Squares[oldcol + 1, oldrow + 1] = b;
-                            Jumper(oldcol, oldrow);
+                            return true;
                         }
                         else
                         {
                             Board.Squares[oldcol + 2, oldrow + 2] = a;
                             Board.Squares[oldcol + 1, oldrow + 1] = b;
+                            return false;
                         }
                     }
                     catch (Exception)
@@ -184,16 +188,15 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol + 2, oldrow + 2] = a;
                             Board.Squares[oldcol + 1, oldrow + 1] = b;
+                            return false;
                         }
                         catch (Exception)
                         {
 
-                            return;
+                            return false;
                         }
-                        return;
                     }
 
-                    break;
                 case CheckNo.LeftDown:
                     try
                     {
@@ -205,12 +208,13 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol - 2, oldrow + 2] = a;
                             Board.Squares[oldcol - 1, oldrow + 1] = b;
-                            Jumper(oldcol, oldrow);
+                            return true; ;
                         }
                         else
                         {
                             Board.Squares[oldcol - 2, oldrow + 2] = a;
                             Board.Squares[oldcol - 1, oldrow + 1] = b;
+                            return false;
                         }
                     }
                     catch (Exception)
@@ -219,15 +223,16 @@ namespace Checkers.Model
                         {
                             Board.Squares[oldcol - 2, oldrow + 2] = a;
                             Board.Squares[oldcol - 1, oldrow + 1] = b;
+                            return false;
                         }
                         catch (Exception)
                         {
 
-                            return;
+                            return false;
                         }
-                        return;
                     }
-                    break;
+                default:
+                    return false;
             }
 
         }
@@ -264,6 +269,39 @@ namespace Checkers.Model
                 return false;
             }
 
+        }
+
+        /// <summary>
+        /// Checks to see if a piece can become King on the next move
+        /// </summary>
+        /// <param name="newrow"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool CheckKing( int newrow, SquareValues type)
+        {
+            switch (type)
+            {
+                case SquareValues.Black:
+                    if (newrow == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case SquareValues.White:
+                    if (newrow == 7)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
@@ -316,6 +354,17 @@ namespace Checkers.Model
             }
         }
 
+        public void ForcedJumper(int oldcol, int oldrow,int newcol, int newrow)
+        {
+            var realtype = Board.Squares[oldcol, oldrow];
+            Board.MovePiece(realtype, oldcol, oldrow, newcol, newrow);
+
+            if (Board.CanJump(realtype, newcol, newrow) != 0)
+            {
+                //Thread.Sleep(1000);
+                Jumper(newcol, newrow);
+            }
+        }
 
         public KeyValuePair<int, int> RandomValues(Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>> dict)
         {

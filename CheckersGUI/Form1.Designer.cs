@@ -56,6 +56,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.BlackPiecePic = new System.Windows.Forms.PictureBox();
             this.WhitePiecePic = new System.Windows.Forms.PictureBox();
+            this.PlayPause = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).BeginInit();
@@ -292,11 +293,23 @@
             this.WhitePiecePic.TabIndex = 19;
             this.WhitePiecePic.TabStop = false;
             // 
+            // PlayPause
+            // 
+            this.PlayPause.Image = global::CheckersGUI.Properties.Resources.PlayPause;
+            this.PlayPause.Location = new System.Drawing.Point(488, 390);
+            this.PlayPause.Name = "PlayPause";
+            this.PlayPause.Size = new System.Drawing.Size(39, 31);
+            this.PlayPause.TabIndex = 21;
+            this.PlayPause.UseVisualStyleBackColor = true;
+            this.PlayPause.Visible = false;
+            this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.PlayPause);
             this.Controls.Add(this.WhitePiecePic);
             this.Controls.Add(this.BlackPiecePic);
             this.Controls.Add(this.label4);
@@ -354,6 +367,7 @@
         private System.Windows.Forms.ToolStripMenuItem OffTextBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem CLIversion;
+        private System.Windows.Forms.Button PlayPause;
     }
 }
 

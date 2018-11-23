@@ -124,6 +124,19 @@ namespace Checkers.DataFixture
             return pieces;
         }
 
+        public static Piece[] TestingComp3()
+        {
+            var pieces = new Piece[6];
+            pieces[0] = new Piece(2, 3, SquareValues.White);
+            pieces[1] = new Piece(4, 3, SquareValues.White);
+            pieces[2] = new Piece(6, 1, SquareValues.White);
+            pieces[3] = new Piece(7, 0, SquareValues.White);
+            pieces[4] = new Piece(3, 4, SquareValues.Black);
+            pieces[5] = new Piece(4, 7, SquareValues.Black);
+            //pieces[2] = new Piece(4, 3, SquareValues.Black);
+            return pieces;
+        }
+
         public static Piece[] Empty()
         {
             var pieces = new Piece[0];
