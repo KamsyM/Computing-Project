@@ -47,10 +47,13 @@ namespace CheckersGUI
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
         private bool Highlight = false;
+        private bool past = false;
         bool cont = true;
         bool running = true;
         //private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
+        private Dictionary<int, int[,]> Placements = new Dictionary<int, int[,]>();
+        private int PlacementNo = 0;
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
         private System.Media.SoundPlayer StartSound = new System.Media.SoundPlayer(Properties.Resources.GameStart);
@@ -62,7 +65,6 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-
             var blackpieces = Pieces.BlackPlacements();
             var whitepieces = Pieces.WhitePlacements();
             //var blackpieces = Pieces.TestingComp3();
@@ -377,6 +379,9 @@ namespace CheckersGUI
         private async void BotMatch()
         {
             PlayPause.Visible = true;
+            Reverse.Visible = true;
+            FastForward.Visible = true;
+            running = true;
             Bot = menu.Bot1;
             Bot2 = menu.Bot2;
             BotSpeed = menu.playspeed;
@@ -390,6 +395,17 @@ namespace CheckersGUI
 
             while (!Board.GameIsWon() && cont == true)
             {
+                try
+                {
+                    Placements.Add(PlacementNo, Board.RecordPieces());
+                }
+                catch (Exception)
+                {
+
+                    Placements.Remove(PlacementNo);
+                    Placements.Add(PlacementNo, Board.RecordPieces());
+                }
+                PlacementNo++;
                 await Task.Delay(BotSpeed);
                 //check for paused
                 while (!running)
@@ -418,12 +434,24 @@ namespace CheckersGUI
                         }
                         turn = 2;
                 }
+                try
+                {
+                    Placements.Add(PlacementNo, Board.RecordPieces());
+                }
+                catch (Exception)
+                {
+
+                    Placements.Remove(PlacementNo);
+                    Placements.Add(PlacementNo, Board.RecordPieces());
+                }
+
+                PlacementNo++;
                 await Task.Delay(BotSpeed);
                 while (!running)
                 {
                     await Task.Delay(500);
                 }
-                if (turn == 2 && running)
+                if (turn == 2)
                 {
                     WhiteBotMove();
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
@@ -438,6 +466,8 @@ namespace CheckersGUI
                 }
 
             }
+            Placements.Clear();
+            PlacementNo = 0;
             turn = 1;
             return;
         }
@@ -1456,18 +1486,177 @@ namespace CheckersGUI
             Application.Exit();
         }
 
-        private void PlayPause_Click(object sender, EventArgs e)
+        private async void PlayPause_Click(object sender, EventArgs e)
         {
-            if (running)
+            if (PlayPause.Visible == true)
+            {
+                if (past)
+                {
+                    if (PlacementNo == 0)
+                    {
+                        PlacementNo = Placements.Count();
+                    }
+                        for (int i = PlacementNo; i < (Placements.Count - PlacementNo); i++)
+                        {
+                            var a = Placements[i];
+                            for (int col = 0; col < 8; col++)
+                            {
+                                for (int row = 0; row < 8; row++)
+                                {
+                                    switch (a[col, row])
+                                    {
+                                        case 0:
+                                            Board.Squares[col, row] = SquareValues.Empty;
+                                            break;
+                                        case 1:
+                                            Board.Squares[col, row] = SquareValues.Black;
+                                            break;
+                                        case 2:
+                                            Board.Squares[col, row] = SquareValues.BlackKing;
+                                            break;
+                                        case 3:
+                                            Board.Squares[col, row] = SquareValues.White;
+                                            break;
+                                        case 4:
+                                            Board.Squares[col, row] = SquareValues.WhiteKing;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                }
+                            }
+                            DrawBoard();
+                            await Task.Delay(1000);
+                        }
+                    
+                    past = false;
+                    running = true;
+                    PlacementNo = Placements.Count();
+
+                    return;
+                }
+                Messages.Text = "Simulating Game...";
+                if (running)
+                {
+                    running = false;
+                    return;
+                }
+
+                if (!running)
+                {
+                    running = true;
+                    return;
+                }
+            }
+        }
+
+        private void Reverse_Click(object sender, EventArgs e)
+        {
+            if (Reverse.Visible == true)
             {
                 running = false;
-                return;
+                past = true;
+                try
+                {
+                    var a = Placements[PlacementNo - 2];
+                    PlacementNo = PlacementNo - 1;
+                    for (int col = 0; col < 8; col++)
+                    {
+                        for (int row = 0; row < 8; row++)
+                        {
+                            switch (a[col, row])
+                            {
+                                case 0:
+                                    Board.Squares[col, row] = SquareValues.Empty;
+                                    break;
+                                case 1:
+                                    Board.Squares[col, row] = SquareValues.Black;
+                                    break;
+                                case 2:
+                                    Board.Squares[col, row] = SquareValues.BlackKing;
+                                    break;
+                                case 3:
+                                    Board.Squares[col, row] = SquareValues.White;
+                                    break;
+                                case 4:
+                                    Board.Squares[col, row] = SquareValues.WhiteKing;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    DrawBoard();
+                    if (turn == 2)
+                    {
+                        turn = 1;
+                        return;
+                    }
+                    if (turn == 1)
+                    {
+                        turn = 2;
+                        return;
+                    }
+                }
+                catch (Exception)
+                {
+                    Messages.Text = "Can't Reverse Anymore";
+                    PlacementNo = 0;
+                    //Placements.Clear();
+                    return;
+                }
+                
             }
+        }
 
-            if (!running)
+        private void FastForward_Click(object sender, EventArgs e)
+        {
+            if (FastForward.Visible == true)
             {
-                running = true;
-                return;
+                if (past)
+                {
+                    if (PlacementNo == 0)
+                    {
+                        PlacementNo = Placements.Count();
+                    }
+                        var a = Placements[PlacementNo + 1];
+                        for (int col = 0; col < 8; col++)
+                        {
+                            for (int row = 0; row < 8; row++)
+                            {
+                                switch (a[col, row])
+                                {
+                                    case 0:
+                                        Board.Squares[col, row] = SquareValues.Empty;
+                                        break;
+                                    case 1:
+                                        Board.Squares[col, row] = SquareValues.Black;
+                                        break;
+                                    case 2:
+                                        Board.Squares[col, row] = SquareValues.BlackKing;
+                                        break;
+                                    case 3:
+                                        Board.Squares[col, row] = SquareValues.White;
+                                        break;
+                                    case 4:
+                                        Board.Squares[col, row] = SquareValues.WhiteKing;
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        }
+                        DrawBoard();                    
+
+                    return;
+                }
+
+                else
+                {
+                    running = true;
+                }
             }
         }
     }
