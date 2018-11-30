@@ -1318,6 +1318,13 @@ namespace CheckersGUI
             return p;
         }
 
+        /// <summary>
+        /// Draws smaller square to fit inside pieces
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawInnerSquare(int col, int row, Pen pen, Brush fill)
         {
             g.DrawRectangle(pen, col * squareSize+10, row * squareSize+10, squareSize - 20, squareSize - 20);
@@ -1336,7 +1343,9 @@ namespace CheckersGUI
         private void StartNewGame()
         {
             //CancellationToken token = source.Token;
-
+            PlayPause.Visible = false;
+            Reverse.Visible = false;
+            FastForward.Visible = false;
             menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
