@@ -1511,7 +1511,7 @@ namespace CheckersGUI
                     
                     past = false;
                     running = true;
-                    PlacementNo = Placements.Count();
+                    PlacementNo = j;
 
                     return;
                 }
