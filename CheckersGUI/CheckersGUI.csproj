@@ -138,9 +138,6 @@
     <None Include="Resources\GameStart.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Computing Project.exe" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\PlayPause.png" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FastForward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Computing Project.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

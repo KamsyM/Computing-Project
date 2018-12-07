@@ -378,6 +378,7 @@ namespace CheckersGUI
         /// </summary>
         private async void BotMatch()
         {
+            Placements.Clear();
             PlayPause.Visible = true;
             Reverse.Visible = true;
             FastForward.Visible = true;
@@ -1318,6 +1319,13 @@ namespace CheckersGUI
             return p;
         }
 
+        /// <summary>
+        /// Draws smaller square to fit inside pieces
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <param name="pen"></param>
+        /// <param name="fill"></param>
         private void DrawInnerSquare(int col, int row, Pen pen, Brush fill)
         {
             g.DrawRectangle(pen, col * squareSize+10, row * squareSize+10, squareSize - 20, squareSize - 20);
@@ -1327,22 +1335,30 @@ namespace CheckersGUI
             }
         }
 
+        /// <summary>
+        /// Instructions for when the New Game button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuNewGame_Click(object sender, EventArgs e)
         {
             cont = false;
             StartNewGame();
         }
 
+        /// <summary>
+        /// Starts a game of the required mode
+        /// </summary>
         private void StartNewGame()
         {
-            //CancellationToken token = source.Token;
-
+            PlayPause.Visible = false;
+            Reverse.Visible = false;
+            FastForward.Visible = false;
             menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
             PType = menu.PType;
             gamemode = menu.gamemode;
-            //Bots = menu.Bots;
             if (gamemode == 2)
             {
                 lblNameP1.Text = menu.nameCG1;
@@ -1350,21 +1366,7 @@ namespace CheckersGUI
                 BotMatch();
                 return;
             }
-            //switch (PType)
-            //{
-            //    case SquareValues.Black:
-            //        BotType = SquareValues.White;
-            //        break;
-            //    case SquareValues.White:
-            //        BotType = SquareValues.Black;
-            //        break;
-            //    default:
-            //        break;
-            //}
-            //Bots.Add(new BotPlayer1(Board, BotType));
             Bot = menu.Bot;
-            //Bot = new BotPlayerTempV(Board, BotType, menu.difficulty);
-            //Bot2 = new BotPlayers(Board, SquareValues.Black, menu.difficulty);
             switch (gamemode)
             {
                 case 0:
@@ -1384,40 +1386,11 @@ namespace CheckersGUI
 
         }
 
-        //private int BlackCount()
-        //{
-        //    int count = 0;
-        //    for (int row = 0; row < 8; row++)
-        //    {
-        //        for (int col = 0; col < 8; col++)
-        //        {
-        //            var square = Board.ReadSquare(col, row);
-        //            if (square == SquareValues.Black || square == SquareValues.BlackKing)
-        //            {
-        //                count++;
-        //            }
-        //        }
-        //    }
-        //    return count;
-        //}
-
-        //private int WhiteCount()
-        //{
-        //    int count = 0;
-        //    for (int row = 0; row < 8; row++)
-        //    {
-        //        for (int col = 0; col < 8; col++)
-        //        {
-        //            var square = Board.ReadSquare(col, row);
-        //            if (square == SquareValues.White || square == SquareValues.WhiteKing )
-        //            {
-        //                count++;
-        //            }
-        //        }
-        //    }
-        //    return count;
-        //}
-
+        /// <summary>
+        /// Instructions for when the End Game button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cont = false;
@@ -1426,6 +1399,11 @@ namespace CheckersGUI
             Messages.Text = "Click on New Game to Start Again";
         }
 
+        /// <summary>
+        /// Instructions for when the Exit button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -1492,11 +1470,12 @@ namespace CheckersGUI
             {
                 if (past)
                 {
-                    if (PlacementNo == 0)
-                    {
-                        PlacementNo = Placements.Count();
-                    }
-                        for (int i = PlacementNo; i < (Placements.Count - PlacementNo); i++)
+                    var j = (Placements.Count) - PlacementNo;
+                    //if (PlacementNo == 0)
+                    //{
+                    //    PlacementNo = Placements.Count();
+                    //}
+                        for (int i = PlacementNo; i < j + 1; i++)
                         {
                             var a = Placements[i];
                             for (int col = 0; col < 8; col++)
@@ -1527,7 +1506,7 @@ namespace CheckersGUI
                                 }
                             }
                             DrawBoard();
-                            await Task.Delay(1000);
+                            await Task.Delay(menu.playspeed);
                         }
                     
                     past = false;
@@ -1540,6 +1519,7 @@ namespace CheckersGUI
                 if (running)
                 {
                     running = false;
+                    Messages.Text = "Game is Paused";
                     return;
                 }
 
@@ -1602,7 +1582,7 @@ namespace CheckersGUI
                 catch (Exception)
                 {
                     Messages.Text = "Can't Reverse Anymore";
-                    PlacementNo = 0;
+                    PlacementNo = 1;
                     //Placements.Clear();
                     return;
                 }

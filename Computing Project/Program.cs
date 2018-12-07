@@ -15,12 +15,12 @@ namespace Checkers.UI
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             Console.WriteLine("-------- CHECKERS --------");
             Console.WriteLine();
             bool running = true;
+
             GameBoard Board = null;
 
 
@@ -91,8 +91,8 @@ namespace Checkers.UI
             Console.WriteLine();
             Console.WriteLine("--- Menu ---");
             Console.WriteLine();
-            //Console.WriteLine("Enter ` in order to return back to menu at any time");
-           // Console.WriteLine();
+            Console.WriteLine("Enter 'exit' in order to return back to menu at any time");
+            Console.WriteLine();
             Console.WriteLine("1. Single Player");
             Console.WriteLine("2. Two Players");
             Console.WriteLine("3. GUI Version");
@@ -103,6 +103,7 @@ namespace Checkers.UI
 
         private static void Start1PGame(GameBoard board)
         {
+
             List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
             bool running = true;
             while (running)
@@ -111,14 +112,17 @@ namespace Checkers.UI
                 
                 Console.WriteLine("Black or White");
                 string response = Console.ReadLine().ToUpper();
+                if (response == "EXIT"){return;}
                 char PlayerType = response[0];
                 bool GameWon = false;
                 board.InitializePieces();
                 if (PlayerType == 'B')
                 {
                     Console.WriteLine();
-                    Console.WriteLine("Select Player Difficulty (1 - 5)");
-                    int difficulty = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Select Player Difficulty (1 - " + BotNames.Count + ")");
+                    string reply = Console.ReadLine();
+                    if (reply.ToUpper() == "EXIT") { return; }
+                    int difficulty = Convert.ToInt32(reply);
                     Bot = (BotPlayer)Activator.CreateInstance(BotNames[difficulty-1], board, SquareValues.White);
                     //Bot = new BotPlayerTempV(board, SquareValues.White, difficulty);
                     while (!GameWon)
@@ -126,7 +130,7 @@ namespace Checkers.UI
                         board.PrintBoard();
                         Console.WriteLine("You are the Black Piece");
                         Console.WriteLine();
-                        Move(board, SquareValues.Black);
+                        if (!Move(board, SquareValues.Black)) { return; }
                         if (board.GameIsWon())
                         {
                             Console.WriteLine();
@@ -154,8 +158,10 @@ namespace Checkers.UI
                 if (PlayerType == 'W')
                 {
                     Console.WriteLine();
-                    Console.WriteLine("Select Player Difficulty (1 - 5)");
-                    int difficulty = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Select Player Difficulty (1 - " + BotNames.Count + ")");
+                    string reply = Console.ReadLine();
+                    if (reply.ToUpper() == "EXIT") { return; }
+                    int difficulty = Convert.ToInt32(reply);
                     Bot = (BotPlayer)Activator.CreateInstance(BotNames[difficulty - 1], board, SquareValues.Black);
                     //Bot = new BotPlayerTempV(board, SquareValues.Black, difficulty);
                     while (!GameWon)
@@ -175,7 +181,7 @@ namespace Checkers.UI
                             running = false;
                             return;
                         }
-                        Move(board, SquareValues.White);
+                        if (!Move(board, SquareValues.White)) { return; }
                         if (board.GameIsWon())
                         {
                             Console.WriteLine();
@@ -209,7 +215,8 @@ namespace Checkers.UI
                 Console.WriteLine();
                 Console.WriteLine("You are the Black Piece");
                 Console.WriteLine();
-                Move(board, SquareValues.Black);               
+
+                if (!Move(board, SquareValues.Black)) { return; }
                 if (board.GameIsWon())
                 {
                     Console.WriteLine();
@@ -220,7 +227,8 @@ namespace Checkers.UI
                 board.PrintBoard();
                 Console.WriteLine();
                 Console.WriteLine("You are the White Piece");
-                Move(board, SquareValues.White);
+                
+                if (!Move(board, SquareValues.White)) { return; }
                 if (board.GameIsWon())
                 {
                     Console.WriteLine();
@@ -231,7 +239,7 @@ namespace Checkers.UI
             }
         }
 
-        private static void Move(GameBoard board, SquareValues type)
+        private static bool Move(GameBoard board, SquareValues type)
         {
             string[] ColAlphabet = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" };
             Console.WriteLine("Select the Piece you would like to move");
@@ -240,8 +248,10 @@ namespace Checkers.UI
             while (Problem)
             {
 
-                Console.Write("Put in its column and row: ");
-                var OldSquare = Console.ReadLine().ToUpper();
+                Console.Write("Put in the column and row of the piece you would like to move: ");
+                string reply = Console.ReadLine();
+                if (reply.ToUpper() == "EXIT") { Problem = false; return false; }
+                var OldSquare = reply.ToUpper();
                 if (OldSquare.Length != 2)
                 {
                     Console.WriteLine();
@@ -250,7 +260,19 @@ namespace Checkers.UI
                     continue;
                 }
                
+
                 int OldColumn = Array.IndexOf(ColAlphabet, Convert.ToString(OldSquare[0]));
+                try
+                {
+                    var a = Convert.ToInt32(Convert.ToString(OldSquare[1]));
+                }
+                catch (Exception)
+                {
+
+                    Console.WriteLine("Incorrect value, Input letter and then number");
+                    Console.WriteLine();
+                    continue;
+                }
                 int OldRow = Convert.ToInt32(Convert.ToString(OldSquare[1]));
 
 
@@ -290,7 +312,9 @@ namespace Checkers.UI
                 {
                     var realtype = board.Squares[OldColumn, OldRow];
                     Console.Write("Put in the new Column and Row: ");
-                    var NewSquare = Console.ReadLine().ToUpper();
+                    string reply2 = Console.ReadLine();
+                    if (reply2.ToUpper() == "EXIT") { Problem = false; return false; }
+                    var NewSquare = reply2.ToUpper();
                     if (NewSquare.Length != 2)
                     {
                         Console.WriteLine("Incorrect number of values, only two is required");
@@ -298,6 +322,17 @@ namespace Checkers.UI
                     }
 
                     int NewColumn = Array.IndexOf(ColAlphabet, Convert.ToString(NewSquare[0]));
+                    try
+                    {
+                        var a = Convert.ToInt32(Convert.ToString(NewSquare[1]));
+                    }
+                    catch (Exception)
+                    {
+
+                        Console.WriteLine("Incorrect value, Input letter and then number");
+                        Console.WriteLine();
+                        continue;
+                    }
                     int NewRow = Convert.ToInt32(Convert.ToString(NewSquare[1]));
 
                     msg = board.IsInvalidEntry(NewColumn);
@@ -328,7 +363,9 @@ namespace Checkers.UI
                             {
                                 board.PrintBoard();
                                 Console.WriteLine("Would you like to jump again: Yes/No");
-                                string ans = Console.ReadLine().ToUpper();
+                                string reply3 = Console.ReadLine();
+                                if (reply3.ToUpper() == "EXIT") { Problem = false; return false; }
+                                string ans = reply3.ToUpper();
                                 char realans = ans[0];
                                 if (realans == 'Y')
                                 {
@@ -345,7 +382,9 @@ namespace Checkers.UI
                                             if (board.CanJump(type,NewColumn,OldRow - 2) != 0)
                                             {
                                                 Console.WriteLine("Would you like to jump again: Yes/No");
-                                                string ans2 = Console.ReadLine().ToUpper();
+                                                string reply4 = Console.ReadLine();
+                                                if (reply4.ToUpper() == "EXIT") { Problem = false; return false; }
+                                                string ans2 = reply4.ToUpper();
                                                 char realans2 = ans2[0];
                                                 if (realans2 == 'Y')
                                                 {
@@ -356,19 +395,19 @@ namespace Checkers.UI
                                                 {
                                                     MultiJump = false;
                                                     Problem = false;
-                                                    return;
+                                                    return true;
                                                 }
                                             }
                                             MultiJump = false;
                                             Problem = false;
-                                            return;
+                                            return true;
                                         }
                                         if (board.ReadSquare(OldColumn, OldRow) != SquareValues.Empty && MultiJump)
                                         {
                                             continue;
                                         }
                                     }
-                                    return;
+                                    return true;
                                 }
                                 
                             }
@@ -377,7 +416,9 @@ namespace Checkers.UI
                             {
                                 board.PrintBoard();
                                 Console.WriteLine("Would you like to jump again: Yes/No");
-                                string ans = Console.ReadLine().ToUpper();
+                                string reply3 = Console.ReadLine();
+                                if (reply3.ToUpper() == "EXIT") { Problem = false; return false; }
+                                string ans = reply3.ToUpper();
                                 char realans = ans[0];
                                 if (realans == 'Y')
                                 {
@@ -394,7 +435,9 @@ namespace Checkers.UI
                                             if (board.CanJump(type, NewColumn, OldRow + 2) != 0)
                                             {
                                                 Console.WriteLine("Would you like to jump again: Yes/No");
-                                                string ans2 = Console.ReadLine().ToUpper();
+                                                string reply4 = Console.ReadLine();
+                                                if (reply4.ToUpper() == "EXIT") { Problem = false; return false; }
+                                                string ans2 = reply4.ToUpper();
                                                 char realans2 = ans2[0];
                                                 if (realans2 == 'Y')
                                                 {
@@ -405,19 +448,19 @@ namespace Checkers.UI
                                                 {
                                                     MultiJump = false;
                                                     Problem = false;
-                                                    return;
+                                                    return true;
                                                 }
                                             }
                                             MultiJump = false;
                                             Problem = false;
-                                            return;
+                                            return true;
                                         }
                                         if (board.ReadSquare(OldColumn, OldRow) != SquareValues.Empty && MultiJump)
                                         {
                                             continue;
                                         }
                                     }
-                                    return;
+                                    return true;
                                 }
                             }
                         }
@@ -433,6 +476,7 @@ namespace Checkers.UI
 
                 }
             }
+            return true;
         }
 
         private static int Jumping(GameBoard board, int OldColumn, int OldRow)
