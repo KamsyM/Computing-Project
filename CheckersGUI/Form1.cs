@@ -33,6 +33,7 @@ namespace CheckersGUI
         private int BotSpeed;
         Graphics g;
         public GameBoard Board;
+        public History Log;
         private BotPlayer Bot;
         private BotPlayer Bot2;
         private Modality Mode;
@@ -57,6 +58,11 @@ namespace CheckersGUI
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
         private System.Media.SoundPlayer StartSound = new System.Media.SoundPlayer(Properties.Resources.GameStart);
+        private SquareValues CurrentType;
+        private int CurrCol;
+        private int CurrRow;
+        private int NxtCol;
+        private int NxtRow;
 
 
 
@@ -71,6 +77,7 @@ namespace CheckersGUI
             //var whitepieces = Pieces.Empty();
             Board = new GameBoard(8, blackpieces, whitepieces);
             menu = new Menu(Board);
+            Log = new History(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
         }
@@ -211,12 +218,14 @@ namespace CheckersGUI
                                 return;
                             }
                             Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
-                            BlackTurn();                          
+                            BlackTurn();
+                            Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                         }
                         if (turn == 2)
                         {
                             await Task.Delay(1000);
                             WhiteBotMove();
+                            Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                             if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(2);
@@ -239,6 +248,7 @@ namespace CheckersGUI
                             }
                             Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                             WhiteTurn();
+                            Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                             if (Board.GameIsWon())
                             {
                                 turn = -1;
@@ -248,6 +258,7 @@ namespace CheckersGUI
                         {
                             await Task.Delay(1000);
                             BlackBotMove();
+                            Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                             if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(4);
@@ -285,6 +296,7 @@ namespace CheckersGUI
                             return;
                         }
                         BlackTurn();
+                        Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                         if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                         {
                             GameWonProcedure(1);
@@ -302,6 +314,7 @@ namespace CheckersGUI
                             return;
                         }
                         WhiteTurn();
+                        Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                         if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                         {
                             GameWonProcedure(2);
@@ -416,6 +429,7 @@ namespace CheckersGUI
                 if (turn == 1)
                 {
                         BlackBotMove();
+                        Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                         if (Board.GameIsWon())
                         {
                             cont = false;
@@ -455,6 +469,7 @@ namespace CheckersGUI
                 if (turn == 2)
                 {
                     WhiteBotMove();
+                    Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                     if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                     {
                         GameWonProcedure(2);
@@ -666,6 +681,9 @@ namespace CheckersGUI
                     if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) != E)
                     {
                         realtype = Board.ReadSquare(col,row);
+                        CurrentType = realtype;
+                        NxtCol = col;
+                        NxtRow = row;
                         row1 = row;
                     }
                 }
@@ -676,6 +694,8 @@ namespace CheckersGUI
                 {
                     if (a[col, row] != b[col, row] && Board.ReadSquare(col, row) == E)
                     {
+                        CurrCol = col;
+                        CurrRow = row;
                         if (realtype == W || realtype == Wk)
                         {
                             if (a[col,row] == 3 || a[col,row] == 4)
@@ -944,6 +964,11 @@ namespace CheckersGUI
             var NewColumn = NewPosition.Key;
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
+            CurrentType = realtype;
+            CurrCol = OldColumn;
+            CurrRow = OldRow;
+            NxtCol = NewColumn;
+            NxtRow = NewRow;
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
@@ -1040,7 +1065,11 @@ namespace CheckersGUI
             var NewColumn = NewPosition.Key;
             var NewRow = NewPosition.Value;
             var realtype = Board.Squares[OldColumn, OldRow];
-
+            CurrentType = realtype;
+            CurrCol = OldColumn;
+            CurrRow = OldRow;
+            NxtCol = NewColumn;
+            NxtRow = NewRow;
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
@@ -1138,7 +1167,9 @@ namespace CheckersGUI
                     popUp = new PopUp(lblNameP1.Text + " Wins!!!!", BlackWins);
                     popUp.ShowDialog();
                     MultiJump = false;
-                    Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    //Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    Messages.Text = Log.ToString();
+                    Log.Clear();
                     DrawBoard();
                     turn = -1;
                     return;
@@ -1147,7 +1178,9 @@ namespace CheckersGUI
                     popUp = new PopUp(lblNameP2.Text + " Wins!!!!", WhiteWins);
                     popUp.ShowDialog();
                     MultiJump = false;
-                    Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    //Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    Messages.Text = Log.ToString();
+                    Log.Clear();
                     DrawBoard();
                     turn = -2;
                     break;
@@ -1156,7 +1189,9 @@ namespace CheckersGUI
                     popUp = new PopUp(lblNameP1.Text + " Wins!!!!", WhiteWins);
                     popUp.ShowDialog();
                     MultiJump = false;
-                    Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    //Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    Messages.Text = Log.ToString();
+                    Log.Clear();
                     DrawBoard();
                     turn = -1;
                     break;
@@ -1165,7 +1200,9 @@ namespace CheckersGUI
                     popUp = new PopUp(lblNameP2.Text + " Wins!!!!", BlackWins);
                     popUp.ShowDialog();
                     MultiJump = false;
-                    Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    //Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    Messages.Text = Log.ToString();
+                    Log.Clear();
                     DrawBoard();
                     turn = -2;
                     break;
@@ -1351,6 +1388,14 @@ namespace CheckersGUI
         /// </summary>
         private void StartNewGame()
         {
+            try
+            {
+                Log.Clear();
+            }
+            catch (Exception)
+            {
+
+            }
             PlayPause.Visible = false;
             Reverse.Visible = false;
             FastForward.Visible = false;
