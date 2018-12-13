@@ -80,6 +80,7 @@ namespace CheckersGUI
             Log = new History(Board);
             Messages.Text = "WELCOME TO CHECKERS" +
                 " \nClick the Game tab on the top left to begin";
+            
         }
 
 
@@ -217,15 +218,20 @@ namespace CheckersGUI
                                 BlackHighlightConditions(newcol,newrow,SquareValues.Black);
                                 return;
                             }
-                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+
                             BlackTurn();
-                            Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+
                         }
                         if (turn == 2)
                         {
                             await Task.Delay(1000);
                             WhiteBotMove();
                             Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                            var sb = new StringBuilder();
+                            sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                            sb.AppendLine();
+                            sb.AppendLine(Log.ToString());
+                            Messages.Text = sb.ToString();
                             if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(2);
@@ -246,9 +252,9 @@ namespace CheckersGUI
                                 WhiteHighlightConditions(newcol, newrow, SquareValues.White);
                                 return;
                             }
-                            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
                             WhiteTurn();
-                            Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+
+
                             if (Board.GameIsWon())
                             {
                                 turn = -1;
@@ -256,9 +262,15 @@ namespace CheckersGUI
                         }
                         if (turn == 1)
                         {
+                            Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
                             await Task.Delay(1000);
                             BlackBotMove();
                             Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                            var sb = new StringBuilder();
+                            sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                            sb.AppendLine();
+                            sb.AppendLine(Log.ToString());
+                            Messages.Text = sb.ToString();
                             if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(4);
@@ -296,7 +308,6 @@ namespace CheckersGUI
                             return;
                         }
                         BlackTurn();
-                        Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                         if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                         {
                             GameWonProcedure(1);
@@ -314,7 +325,6 @@ namespace CheckersGUI
                             return;
                         }
                         WhiteTurn();
-                        Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                         if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                         {
                             GameWonProcedure(2);
@@ -914,13 +924,19 @@ namespace CheckersGUI
                 PlayerBlack = false;
                 BlackPiecePic.Location = Player2Pic;
                 WhitePiecePic.Location = Player1Pic;
-                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
                 turn = 1;
                 Mode = Modality.BlackTurn;
                 Board.InitialiseEmptyBoard();
                 Board.InitializePieces();
                 DrawBoard();
                 BlackBotMove();
+                Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                var sb = new StringBuilder();
+                sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                sb.AppendLine();
+                sb.AppendLine(Log.ToString());
+                Messages.Text = sb.ToString();
                 turn = 2;
             }
 
@@ -990,7 +1006,7 @@ namespace CheckersGUI
             if (Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
-
+                Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                 if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
                 {
                     if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow - 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow - 2))
@@ -1091,6 +1107,7 @@ namespace CheckersGUI
             if (Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
+                Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                 if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
                 {
                     if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow + 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow + 2))
@@ -1684,5 +1701,81 @@ namespace CheckersGUI
                 }
             }
         }
+
+        private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string filename = "";
+            string filepath = "";
+            SaveFileDialog sfd = new SaveFileDialog();
+            DialogResult dr = sfd.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                filename = sfd.FileName;
+                filepath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+            }
+            try
+            {
+                using (TextWriter Writer = new StreamWriter(new FileStream(filename + ".chk", FileMode.Create)))
+                {
+                    for (int row = 0; row < 8; row++)
+                    {
+                        for (int col = 0; col < 8; col++)
+                        {
+                            var square = Board.ReadSquare(col, row);
+
+                            switch (square)
+                            {
+                                case SquareValues.Empty:
+                                    Writer.Write(col);
+                                    Writer.Write(row);
+                                    Writer.Write(square);
+                                    break;
+                                case SquareValues.Black:
+                                    Writer.Write(col);
+                                    Writer.Write(row);
+                                    Writer.Write(square);
+                                    break;
+                                case SquareValues.BlackKing:
+                                    Writer.Write(col);
+                                    Writer.Write(row);
+                                    Writer.Write(square);
+                                    break;
+                                case SquareValues.White:
+                                    Writer.Write(col);
+                                    Writer.Write(row);
+                                    Writer.Write(square);
+                                    break;
+                                case SquareValues.WhiteKing:
+                                    Writer.Write(col);
+                                    Writer.Write(row);
+                                    Writer.Write(square);
+                                    break;
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void loadGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string filename = "";
+            string filepath = "";
+            OpenFileDialog ofd = new OpenFileDialog();
+            DialogResult dr = ofd.ShowDialog();
+
+            if (dr == DialogResult.OK)
+            {
+                filename = ofd.FileName;
+                filepath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+            }
+        }
     }
+
 }
