@@ -1768,6 +1768,7 @@ namespace CheckersGUI
             string filename = "";
             string filepath = "";
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Checkers File|*.CHK|All Files(*.*)|*.*" ;
             DialogResult dr = ofd.ShowDialog();
 
             if (dr == DialogResult.OK)
