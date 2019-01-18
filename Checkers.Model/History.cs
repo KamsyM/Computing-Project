@@ -10,6 +10,7 @@ namespace Checkers.Model
     {
         public GameBoard Board;
         public List<Move> Plays = new List<Move>();
+        public StringBuilder sb = new StringBuilder();
 
         public History(GameBoard board)
         {
@@ -21,14 +22,19 @@ namespace Checkers.Model
             Plays.Add(play);
         }
 
+        public void AddString(string play)
+        {
+            sb.AppendLine(play);
+        }
+
         public void Clear()
         {
             Plays.Clear();
+            sb.Clear();
         }
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
             foreach (var item in Plays)
             {
                 sb.AppendLine(item.ToString());

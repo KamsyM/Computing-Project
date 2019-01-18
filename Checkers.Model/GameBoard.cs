@@ -32,9 +32,6 @@ namespace Checkers.Model
             Size = size;
             Squares = new SquareValues[Size, Size];
             InitialiseEmptyBoard();
-
-
-
             Pieces1 = pieces1;
             Pieces2 = pieces2;
 
