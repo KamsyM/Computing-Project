@@ -409,12 +409,12 @@ namespace CheckersGUI
             Reverse.Visible = false;
             FastForward.Visible = false;
             running = true;
-
-            BotSpeed = menu.playspeed;
+            //BotSpeed = menu.playspeed;
             //Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
             //Bot2 = new BotPlayerTempV(Board, SquareValues.White, menu.CG2diff);
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
+
             DrawBoard();
             cont = true;
             Messages.Text = "Simulating Game...";
@@ -1450,6 +1450,7 @@ namespace CheckersGUI
             gamemode = menu.gamemode;
             if (gamemode == 2)
             {
+                BotSpeed = menu.playspeed;
                 Bot = menu.Bot1;
                 Bot2 = menu.Bot2;
                 lblNameP1.Text = menu.nameCG1;
@@ -1487,9 +1488,8 @@ namespace CheckersGUI
             StartSound.Play();
             if (gamemode == 2)
             {
-
-               // lblNameP1.Text = menu.nameCG1;
-               // lblNameP2.Text = menu.nameCG2;
+                // lblNameP1.Text = menu.nameCG1;
+                // lblNameP2.Text = menu.nameCG2;
                 BotMatch();
                 return;
             }
@@ -1844,6 +1844,8 @@ namespace CheckersGUI
                         Writer.Write(Bot);
                         Writer.Write(Environment.NewLine);
                         Writer.Write(Bot2);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(BotSpeed);
                     }
                     //To-Do
                     foreach (var item in Log.Plays)
@@ -1959,13 +1961,16 @@ namespace CheckersGUI
                     {
                         var BotType = SquareValues.Black;
                         List<BotPlayer> botlist = new List<BotPlayer>();
+                        List<BotPlayer> botlist2 = new List<BotPlayer>();
                         List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
                         foreach (var item in BotNames)
                         {
                             botlist.Add((BotPlayer)Activator.CreateInstance(item, Board, BotType));
+                            botlist2.Add((BotPlayer)Activator.CreateInstance(item, Board, BotType));
                         }
                         var BotName1 = Reader.ReadLine();
                         var BotName2 = Reader.ReadLine();
+                        BotSpeed = Convert.ToInt32(Reader.ReadLine());
                         foreach (var item in botlist)
                         {
                             if (item.ToString() == BotName1)
@@ -1974,7 +1979,7 @@ namespace CheckersGUI
                                 Bot.Type = SquareValues.Black;
                             }
                         }
-                        foreach (var item in botlist)
+                        foreach (var item in botlist2)
                         {
                             if (item.ToString() == BotName2)
                             {
