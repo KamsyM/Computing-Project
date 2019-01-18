@@ -63,6 +63,11 @@ namespace CheckersGUI
         private int CurrRow;
         private int NxtCol;
         private int NxtRow;
+        //private static Piece[] blackplacements = Pieces.TestingComp3();
+        //private static Piece[] whiteplacements = Pieces.Empty();
+        private static Piece[] blackplacements = Pieces.BlackPlacements();
+        private static Piece[] whiteplacements = Pieces.WhitePlacements();
+        private GameBoard board = new GameBoard(8, blackplacements, whiteplacements);
 
 
 
@@ -71,11 +76,7 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-            var blackpieces = Pieces.BlackPlacements();
-            var whitepieces = Pieces.WhitePlacements();
-            //var blackpieces = Pieces.TestingComp3();
-            //var whitepieces = Pieces.Empty();
-            var board = new GameBoard(8, blackpieces, whitepieces);
+
             Board = board;
             menu = new Menu(Board);
             Log = new History(Board);
@@ -405,8 +406,8 @@ namespace CheckersGUI
         {
             Placements.Clear();
             PlayPause.Visible = true;
-            Reverse.Visible = true;
-            FastForward.Visible = true;
+            Reverse.Visible = false;
+            FastForward.Visible = false;
             running = true;
 
             BotSpeed = menu.playspeed;
@@ -1418,6 +1419,7 @@ namespace CheckersGUI
         private void MenuNewGame_Click(object sender, EventArgs e)
         {
             cont = false;
+            Board = board;
             StartNewGame();
         }
 
@@ -1486,8 +1488,8 @@ namespace CheckersGUI
             if (gamemode == 2)
             {
 
-                lblNameP1.Text = menu.nameCG1;
-                lblNameP2.Text = menu.nameCG2;
+               // lblNameP1.Text = menu.nameCG1;
+               // lblNameP2.Text = menu.nameCG2;
                 BotMatch();
                 return;
             }
@@ -1495,16 +1497,16 @@ namespace CheckersGUI
             switch (gamemode)
             {
                 case 0:
-                    lblNameP1.Text = menu.name1P;
+                    //lblNameP1.Text = menu.name1P;
                     StartGame1P();
                     break;
                 case 1:
-                    lblNameP1.Text = menu.name2P1;
-                    lblNameP2.Text = menu.name2P2;
+                    //lblNameP1.Text = menu.name2P1;
+                    //lblNameP2.Text = menu.name2P2;
                     StartGame2P();
                     break;
                 default:
-                    lblNameP1.Text = menu.name1P;
+                    //lblNameP1.Text = menu.name1P;
                     StartGame1P();
                     break;
             }
@@ -1710,7 +1712,7 @@ namespace CheckersGUI
                     //Placements.Clear();
                     return;
                 }
-                
+
             }
         }
 
@@ -1779,6 +1781,7 @@ namespace CheckersGUI
             {
                 using (TextWriter Writer = new StreamWriter(new FileStream(filename + ".chk", FileMode.Create)))
                 {
+
                     for (int row = 0; row < 8; row++)
                     {
                         for (int col = 0; col < 8; col++)
@@ -1821,6 +1824,10 @@ namespace CheckersGUI
                             }
                         }
                     }
+                    Writer.Write(lblNameP1.Text);
+                    Writer.Write(Environment.NewLine);
+                    Writer.Write(lblNameP2.Text);
+                    Writer.Write(Environment.NewLine);
                     Writer.Write(gamemode);
                     Writer.Write(Environment.NewLine);
                     Writer.Write(turn);
@@ -1866,6 +1873,7 @@ namespace CheckersGUI
             string filename = "";
             string filepath = "";
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Checker Files (*.chk)|*.CHK|All Files (*.*)|*.*";
             DialogResult dr = ofd.ShowDialog();
 
             if (dr == DialogResult.OK)
@@ -1878,11 +1886,14 @@ namespace CheckersGUI
             {
                 using (TextReader Reader = new StreamReader(File.Open(filename, FileMode.Open)))
                 {
-                    var blackpieces = new Piece[12];
-                    var whitepieces = new Piece[12];
+                    List<Piece> blacks = new List<Piece>();
+                    List<Piece> whites = new List<Piece>();
+                   //var blackpieces = new Piece[12];
+                    //var whitepieces = new Piece[12];
                     var blackcount = 0;
                     var whitecount = 0;
                     var empty = Pieces.Empty();
+
                     for (int i = 0; i < 64; i++)
                     {
                         string line = Reader.ReadLine();
@@ -1895,16 +1906,30 @@ namespace CheckersGUI
                         }
                         if (type == SquareValues.Black || type == SquareValues.BlackKing)
                         {
-                            blackpieces[blackcount] = new Piece(col, row, type);
+                            //blackpieces[blackcount] = new Piece(col, row, type);
+                            blacks.Add(new Piece(col, row, type));
                             blackcount++;
                         }
                         if (type == SquareValues.White || type == SquareValues.WhiteKing)
                         {
-                            whitepieces[whitecount] = new Piece(col, row, type);
+                            //whitepieces[whitecount] = new Piece(col, row, type);
+                            whites.Add(new Piece(col, row, type));
                             whitecount++;
                         }
                        // pieces[i] = new Piece(col, row, type);
                     }
+                    var blackpieces = new Piece[blacks.Count];
+                    var whitepieces = new Piece[whites.Count];
+                    for (int i = 0; i < blacks.Count; i++)
+                    {
+                        blackpieces[i] = blacks[i];
+                    }
+                    for (int i = 0; i < whites.Count; i++)
+                    {
+                        whitepieces[i] = whites[i];
+                    }
+                    lblNameP1.Text = Reader.ReadLine();
+                    lblNameP2.Text = Reader.ReadLine();
                     gamemode = Convert.ToInt32(Reader.ReadLine());
                     turn = Convert.ToInt32(Reader.ReadLine());
                     Board = new GameBoard(8, blackpieces, whitepieces);
@@ -1946,13 +1971,15 @@ namespace CheckersGUI
                             if (item.ToString() == BotName1)
                             {
                                 Bot = item;
+                                Bot.Type = SquareValues.Black;
                             }
                         }
                         foreach (var item in botlist)
                         {
                             if (item.ToString() == BotName2)
                             {
-                                Bot2 = menu.Bot2;
+                                //Bot2 = menu.Bot2;
+                                Bot2 = item;
                                 Bot2.Type = SquareValues.White;
                             }
                         }

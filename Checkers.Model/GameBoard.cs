@@ -211,6 +211,7 @@ namespace Checkers.Model
         /// </summary>
         public void InitializePieces()
         {
+
             foreach (var piece in Pieces1)
             {
                 Squares[piece.startCol, piece.startRow] = piece.PieceType;
@@ -1048,7 +1049,7 @@ namespace Checkers.Model
 
             else
             {
-                return -1;
+                return 7;
             }
         }
 
