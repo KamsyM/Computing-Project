@@ -1726,29 +1726,29 @@ namespace CheckersGUI
                             switch (square)
                             {
                                 case SquareValues.Empty:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
+                                    Writer.WriteLine(col);
+                                    Writer.WriteLine(row);
+                                    Writer.WriteLine(square);
                                     break;
                                 case SquareValues.Black:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
+                                    Writer.WriteLine(col);
+                                    Writer.WriteLine(row);
+                                    Writer.WriteLine(square);
                                     break;
                                 case SquareValues.BlackKing:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
+                                    Writer.WriteLine(col);
+                                    Writer.WriteLine(row);
+                                    Writer.WriteLine(square);
                                     break;
                                 case SquareValues.White:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
+                                    Writer.WriteLine(col);
+                                    Writer.WriteLine(row);
+                                    Writer.WriteLine(square);
                                     break;
                                 case SquareValues.WhiteKing:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
+                                    Writer.WriteLine(col);
+                                    Writer.WriteLine(row);
+                                    Writer.WriteLine(square);
                                     break;
 
                             }
