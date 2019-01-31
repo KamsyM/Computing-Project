@@ -53,8 +53,6 @@ namespace CheckersGUI
         bool running = true;
         //private SquareValues BotType = SquareValues.Empty;
         private List<BotPlayer> Bots = new List<BotPlayer>();
-        private Dictionary<int, int[,]> Placements = new Dictionary<int, int[,]>();
-        private int PlacementNo = 0;
         private Bitmap BlackWins = Properties.Resources.Black_Checker_Piece;
         private Bitmap WhiteWins = Properties.Resources.White_Checker_Piece;
         private System.Media.SoundPlayer StartSound = new System.Media.SoundPlayer(Properties.Resources.GameStart);
@@ -404,10 +402,7 @@ namespace CheckersGUI
         /// </summary>
         private async void BotMatch()
         {
-            Placements.Clear();
             PlayPause.Visible = true;
-            Reverse.Visible = false;
-            FastForward.Visible = false;
             running = true;
             //BotSpeed = menu.playspeed;
             //Bot = new BotPlayerTempV(Board, SquareValues.Black, menu.CG1diff);
@@ -421,17 +416,7 @@ namespace CheckersGUI
 
             while (!Board.GameIsWon() && cont == true)
             {
-                try
-                {
-                    Placements.Add(PlacementNo, Board.RecordPieces());
-                }
-                catch (Exception)
-                {
 
-                    Placements.Remove(PlacementNo);
-                    Placements.Add(PlacementNo, Board.RecordPieces());
-                }
-                PlacementNo++;
                 await Task.Delay(BotSpeed);
                 //check for paused
                 while (!running)
@@ -461,18 +446,7 @@ namespace CheckersGUI
                         }
                         turn = 2;
                 }
-                try
-                {
-                    Placements.Add(PlacementNo, Board.RecordPieces());
-                }
-                catch (Exception)
-                {
 
-                    Placements.Remove(PlacementNo);
-                    Placements.Add(PlacementNo, Board.RecordPieces());
-                }
-
-                PlacementNo++;
                 await Task.Delay(BotSpeed);
                 while (!running)
                 {
@@ -494,8 +468,6 @@ namespace CheckersGUI
                 }
 
             }
-            Placements.Clear();
-            PlacementNo = 0;
             turn = 1;
             return;
         }
@@ -1441,8 +1413,6 @@ namespace CheckersGUI
 
             }
             PlayPause.Visible = false;
-            Reverse.Visible = false;
-            FastForward.Visible = false;
             menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
@@ -1482,8 +1452,6 @@ namespace CheckersGUI
         {
 
             PlayPause.Visible = false;
-            Reverse.Visible = false;
-            FastForward.Visible = false;
             StartSound.Load();
             StartSound.Play();
             if (gamemode == 2)
@@ -1590,57 +1558,10 @@ namespace CheckersGUI
             Application.Exit();
         }
 
-        private async void PlayPause_Click(object sender, EventArgs e)
+        private void PlayPause_Click(object sender, EventArgs e)
         {
             if (PlayPause.Visible == true)
             {
-                if (past)
-                {
-                    var j = (Placements.Count) - PlacementNo;
-                    //if (PlacementNo == 0)
-                    //{
-                    //    PlacementNo = Placements.Count();
-                    //}
-                        for (int i = PlacementNo; i < j + 1; i++)
-                        {
-                            var a = Placements[i];
-                            for (int col = 0; col < 8; col++)
-                            {
-                                for (int row = 0; row < 8; row++)
-                                {
-                                    switch (a[col, row])
-                                    {
-                                        case 0:
-                                            Board.Squares[col, row] = SquareValues.Empty;
-                                            break;
-                                        case 1:
-                                            Board.Squares[col, row] = SquareValues.Black;
-                                            break;
-                                        case 2:
-                                            Board.Squares[col, row] = SquareValues.BlackKing;
-                                            break;
-                                        case 3:
-                                            Board.Squares[col, row] = SquareValues.White;
-                                            break;
-                                        case 4:
-                                            Board.Squares[col, row] = SquareValues.WhiteKing;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-
-                                }
-                            }
-                            DrawBoard();
-                            await Task.Delay(menu.playspeed);
-                        }
-                    
-                    past = false;
-                    running = true;
-                    PlacementNo = j;
-
-                    return;
-                }
                 Messages.Text = "Simulating Game...";
                 if (running)
                 {
@@ -1653,115 +1574,6 @@ namespace CheckersGUI
                 {
                     running = true;
                     return;
-                }
-            }
-        }
-
-        private void Reverse_Click(object sender, EventArgs e)
-        {
-            if (Reverse.Visible == true)
-            {
-                running = false;
-                past = true;
-                try
-                {
-                    var a = Placements[PlacementNo - 2];
-                    PlacementNo = PlacementNo - 1;
-                    for (int col = 0; col < 8; col++)
-                    {
-                        for (int row = 0; row < 8; row++)
-                        {
-                            switch (a[col, row])
-                            {
-                                case 0:
-                                    Board.Squares[col, row] = SquareValues.Empty;
-                                    break;
-                                case 1:
-                                    Board.Squares[col, row] = SquareValues.Black;
-                                    break;
-                                case 2:
-                                    Board.Squares[col, row] = SquareValues.BlackKing;
-                                    break;
-                                case 3:
-                                    Board.Squares[col, row] = SquareValues.White;
-                                    break;
-                                case 4:
-                                    Board.Squares[col, row] = SquareValues.WhiteKing;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    DrawBoard();
-                    if (turn == 2)
-                    {
-                        turn = 1;
-                        return;
-                    }
-                    if (turn == 1)
-                    {
-                        turn = 2;
-                        return;
-                    }
-                }
-                catch (Exception)
-                {
-                    Messages.Text = "Can't Reverse Anymore";
-                    PlacementNo = 1;
-                    //Placements.Clear();
-                    return;
-                }
-
-            }
-        }
-
-        private void FastForward_Click(object sender, EventArgs e)
-        {
-            if (FastForward.Visible == true)
-            {
-                if (past)
-                {
-                    if (PlacementNo == 0)
-                    {
-                        PlacementNo = Placements.Count();
-                    }
-                        var a = Placements[PlacementNo + 1];
-                        for (int col = 0; col < 8; col++)
-                        {
-                            for (int row = 0; row < 8; row++)
-                            {
-                                switch (a[col, row])
-                                {
-                                    case 0:
-                                        Board.Squares[col, row] = SquareValues.Empty;
-                                        break;
-                                    case 1:
-                                        Board.Squares[col, row] = SquareValues.Black;
-                                        break;
-                                    case 2:
-                                        Board.Squares[col, row] = SquareValues.BlackKing;
-                                        break;
-                                    case 3:
-                                        Board.Squares[col, row] = SquareValues.White;
-                                        break;
-                                    case 4:
-                                        Board.Squares[col, row] = SquareValues.WhiteKing;
-                                        break;
-                                    default:
-                                        break;
-                                }
-
-                            }
-                        }
-                        DrawBoard();                    
-
-                    return;
-                }
-
-                else
-                {
-                    running = true;
                 }
             }
         }
@@ -2019,6 +1831,8 @@ namespace CheckersGUI
                     return SquareValues.Empty;
             }
         }
+
+
     }
 
 }
