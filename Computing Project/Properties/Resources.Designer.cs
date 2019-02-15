@@ -75,4 +75,5 @@ namespace Computing_Project.Properties {
             return CheckersGUI;
         }
     }
+
 }

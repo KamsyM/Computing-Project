@@ -100,11 +100,41 @@ namespace CheckersGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FastForward {
+            get {
+                object obj = ResourceManager.GetObject("FastForward", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream GameStart {
             get {
                 return ResourceManager.GetStream("GameStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlayPause {
+            get {
+                object obj = ResourceManager.GetObject("PlayPause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Rewind {
+            get {
+                object obj = ResourceManager.GetObject("Rewind", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

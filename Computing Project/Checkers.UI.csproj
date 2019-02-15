@@ -72,6 +72,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\noun_rewind button_589600.png.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\CheckersGUI.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

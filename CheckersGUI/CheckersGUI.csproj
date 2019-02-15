@@ -138,6 +138,18 @@
     <None Include="Resources\GameStart.wav" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\PlayPause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\noun_rewind button_589600.png.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rewind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FastForward.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\Computing Project.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
