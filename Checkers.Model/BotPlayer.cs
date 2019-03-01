@@ -31,43 +31,55 @@ namespace Checkers.Model
 
         public static SquareValues PlayBots(GameBoard Board, BotPlayer Bot, BotPlayer Bot2)
         {
+            BotPlayer BlackBot = null;
+            BotPlayer WhiteBot = null;
             int turn = 1;
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
             bool cont = true;
+            if (Bot.Type == SquareValues.Black)
+            {
+                BlackBot = Bot;
+                WhiteBot = Bot2;
+            }
+            else
+            {
+                BlackBot = Bot2;
+                WhiteBot = Bot;
+            }
             while (!Board.GameIsWon() && cont == true)
             {
                 if (turn == 1)
                 {
-                    Bot.Move();
+                    BlackBot.Move();
                     if (Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return Bot.Type;
+                        return BlackBot.Type;
                     }
-                    if (!Board.CanMove(Board.OpponentType(Bot.Type)) && !Board.GameIsWon())
+                    if (!Board.CanMove(Board.OpponentType(BlackBot.Type)) && !Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return Bot.Type;
+                        return BlackBot.Type;
                     }
                     turn = 2;
                 }
                 if (turn == 2)
                 {
-                    Bot2.Move();
+                    WhiteBot.Move();
                     if (Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return Bot2.Type;
+                        return WhiteBot.Type;
                     }
-                    if (!Board.CanMove(Board.OpponentType(Bot2.Type)) && !Board.GameIsWon())
+                    if (!Board.CanMove(Board.OpponentType(WhiteBot.Type)) && !Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return Bot2.Type;
+                        return WhiteBot.Type;
                     }
                     turn = 1;
 
