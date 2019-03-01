@@ -29,7 +29,7 @@ namespace Checkers.Model
 
         public abstract void Move();
 
-        public static int PlayBots(GameBoard Board, BotPlayer Bot, BotPlayer Bot2)
+        public static SquareValues PlayBots(GameBoard Board, BotPlayer Bot, BotPlayer Bot2)
         {
             int turn = 1;
             Board.InitialiseEmptyBoard();
@@ -44,13 +44,13 @@ namespace Checkers.Model
                     {
                         cont = false;
                         turn = 1;
-                        return 1;
+                        return Bot.Type;
                     }
-                    if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
+                    if (!Board.CanMove(Board.OpponentType(Bot.Type)) && !Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return 1;
+                        return Bot.Type;
                     }
                     turn = 2;
                 }
@@ -61,20 +61,20 @@ namespace Checkers.Model
                     {
                         cont = false;
                         turn = 1;
-                        return 2;
+                        return Bot2.Type;
                     }
-                    if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
+                    if (!Board.CanMove(Board.OpponentType(Bot2.Type)) && !Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return 2;
+                        return Bot2.Type;
                     }
                     turn = 1;
 
                 }
             }
             turn = 1;
-            return 0;
+            return SquareValues.Empty;
         }
 
         /// <summary>
