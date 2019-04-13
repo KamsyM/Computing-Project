@@ -18,3 +18,4 @@ C:\Users\14ICT255\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checke
 C:\Users\14ICT255\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.csproj.CoreCompileInputs.cache
 C:\Users\14ICT255\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.dll
 C:\Users\14ICT255\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Debug\Checkers.Model.csprojAssemblyReference.cache

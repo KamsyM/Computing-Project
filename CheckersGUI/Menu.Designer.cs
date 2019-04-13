@@ -45,6 +45,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.TabCG = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.PlaySpeed = new System.Windows.Forms.TextBox();
             this.CG2Diff = new System.Windows.Forms.ComboBox();
             this.CG1Diff = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -56,8 +58,6 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.PlaySpeed = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
@@ -112,7 +112,6 @@
             // Difficulty
             // 
             this.Difficulty.FormattingEnabled = true;
-            this.Difficulty.Items.AddRange(BotList().ToArray());
             this.Difficulty.Location = new System.Drawing.Point(205, 181);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.Size = new System.Drawing.Size(137, 21);
@@ -228,10 +227,26 @@
             this.TabCG.Text = "Comp-Game";
             this.TabCG.UseVisualStyleBackColor = true;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(215, 213);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(117, 13);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "Seconds Between Play";
+            // 
+            // PlaySpeed
+            // 
+            this.PlaySpeed.Location = new System.Drawing.Point(208, 241);
+            this.PlaySpeed.Name = "PlaySpeed";
+            this.PlaySpeed.Size = new System.Drawing.Size(144, 20);
+            this.PlaySpeed.TabIndex = 13;
+            this.PlaySpeed.Text = "0.8";
+            // 
             // CG2Diff
             // 
             this.CG2Diff.FormattingEnabled = true;
-            this.CG2Diff.Items.AddRange(BotList().ToArray());
             this.CG2Diff.Location = new System.Drawing.Point(305, 170);
             this.CG2Diff.Name = "CG2Diff";
             this.CG2Diff.Size = new System.Drawing.Size(137, 21);
@@ -240,7 +255,6 @@
             // CG1Diff
             // 
             this.CG1Diff.FormattingEnabled = true;
-            this.CG1Diff.Items.AddRange(BotList().ToArray());
             this.CG1Diff.Location = new System.Drawing.Point(85, 170);
             this.CG1Diff.Name = "CG1Diff";
             this.CG1Diff.Size = new System.Drawing.Size(137, 21);
@@ -318,27 +332,11 @@
             this.btnCancel.Size = new System.Drawing.Size(88, 36);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "&Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // pieceBindingSource
             // 
             this.pieceBindingSource.DataSource = typeof(Checkers.Model.Piece);
-            // 
-            // PlaySpeed
-            // 
-            this.PlaySpeed.Location = new System.Drawing.Point(208, 241);
-            this.PlaySpeed.Name = "PlaySpeed";
-            this.PlaySpeed.Size = new System.Drawing.Size(144, 20);
-            this.PlaySpeed.TabIndex = 13;
-            this.PlaySpeed.Text = "0.8";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(215, 213);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(142, 13);
-            this.label10.TabIndex = 14;
-            this.label10.Text = "Seconds Between Play";
             // 
             // Menu
             // 

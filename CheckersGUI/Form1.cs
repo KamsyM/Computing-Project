@@ -1392,7 +1392,17 @@ namespace CheckersGUI
         {
             cont = false;
             Board = board;
-            StartNewGame();
+            menu.ShowDialog();
+            if (!menu.cancel)
+            {
+                StartNewGame();
+            }
+            if (menu.cancel)
+            {
+                menu.cancel = false;
+            }
+
+
         }
 
         /// <summary>
@@ -1413,7 +1423,7 @@ namespace CheckersGUI
 
             }
             PlayPause.Visible = false;
-            menu.ShowDialog();
+            //menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
             PType = menu.PType;
