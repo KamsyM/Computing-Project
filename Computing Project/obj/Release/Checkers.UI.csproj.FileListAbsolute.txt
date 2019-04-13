@@ -1,0 +1,16 @@
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Computing Project.exe.config
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Computing Project.exe
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Computing Project.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Checkers.DataFixture.dll
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Checkers.Model.dll
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Checkers.DataFixture.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Checkers.DataFixture.dll.config
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Checkers.Model.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\bin\Release\Checkers.Model.dll.config
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Checkers.UI.csprojAssemblyReference.cache
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Computing_Project.Properties.Resources.resources
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Checkers.UI.csproj.GenerateResource.cache
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Checkers.UI.csproj.CoreCompileInputs.cache
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Checkers.UI.csproj.CopyComplete
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Computing Project.exe
+C:\Users\Kamsi\source\repos\Computing-Project\Computing Project\obj\Release\Computing Project.pdb

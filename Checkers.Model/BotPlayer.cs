@@ -29,52 +29,64 @@ namespace Checkers.Model
 
         public abstract void Move();
 
-        public static int PlayBots(GameBoard Board, BotPlayer Bot, BotPlayer Bot2)
+        public static SquareValues PlayBots(GameBoard Board, BotPlayer Bot, BotPlayer Bot2)
         {
+            BotPlayer BlackBot = null;
+            BotPlayer WhiteBot = null;
             int turn = 1;
             Board.InitialiseEmptyBoard();
             Board.InitializePieces();
             bool cont = true;
+            if (Bot.Type == SquareValues.Black)
+            {
+                BlackBot = Bot;
+                WhiteBot = Bot2;
+            }
+            else
+            {
+                BlackBot = Bot2;
+                WhiteBot = Bot;
+            }
             while (!Board.GameIsWon() && cont == true)
             {
                 if (turn == 1)
                 {
-                    Bot.Move();
+                    BlackBot.Move();
                     if (Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return 1;
+                        return BlackBot.Type;
                     }
-                    if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
+                    if (!Board.CanMove(Board.OpponentType(BlackBot.Type)) && !Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return 1;
+                        return BlackBot.Type;
                     }
                     turn = 2;
                 }
                 if (turn == 2)
                 {
-                    Bot2.Move();
+                    WhiteBot.Move();
                     if (Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return 2;
+                        return WhiteBot.Type;
                     }
-                    if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
+                    if (!Board.CanMove(Board.OpponentType(WhiteBot.Type)) && !Board.GameIsWon())
                     {
                         cont = false;
                         turn = 1;
-                        return 2;
+                        return WhiteBot.Type;
                     }
                     turn = 1;
 
                 }
             }
             turn = 1;
-            return 0;
+            return SquareValues.Empty;
         }
 
         /// <summary>
