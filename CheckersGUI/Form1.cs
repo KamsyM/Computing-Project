@@ -48,7 +48,6 @@ namespace CheckersGUI
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
         private bool Highlight = false;
-        private bool past = false;
         bool cont = true;
         bool running = true;
         //private SquareValues BotType = SquareValues.Empty;
@@ -1392,7 +1391,15 @@ namespace CheckersGUI
         {
             cont = false;
             Board = board;
-            StartNewGame();
+            menu.ShowDialog();
+            if (!menu.cancel)
+            {
+                StartNewGame();
+            }
+            if (menu.cancel)
+            {
+                menu.cancel = false;
+            }
         }
 
         /// <summary>
@@ -1413,7 +1420,7 @@ namespace CheckersGUI
 
             }
             PlayPause.Visible = false;
-            menu.ShowDialog();
+            //menu.ShowDialog();
             StartSound.Load();
             StartSound.Play();
             PType = menu.PType;
