@@ -128,5 +128,10 @@ namespace CheckersGUI.Properties {
             }
         }
 
+        public static byte[] GetComputingProject()
+        {
+            return Computing_Project;
+        }
+
     }
 }

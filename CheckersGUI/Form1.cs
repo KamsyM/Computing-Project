@@ -1425,6 +1425,7 @@ namespace CheckersGUI
             StartSound.Play();
             PType = menu.PType;
             gamemode = menu.gamemode;
+            turn = 1;
             if (gamemode == 2)
             {
                 BotSpeed = menu.playspeed;
