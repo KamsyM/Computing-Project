@@ -20,13 +20,18 @@ namespace CheckersGUI
         public SquareValues BotType;
         public bool beginner = false;
         public int gamemode;
+        public int port;
         public int playspeed;
         public bool highlight;
+        public bool joingame;
+        public bool hostgame;
         public string name1P;
         public string name2P1;
         public string name2P2;
         public string nameCG1;
         public string nameCG2;
+        public string onlineid;
+        public string hostid;
         public BotPlayer Bot;
         public BotPlayer Bot1;
         public BotPlayer Bot2;
@@ -70,6 +75,9 @@ namespace CheckersGUI
             name2P2 = Name2P2.Text;
             nameCG1 = NameCG1.Text;
             nameCG2 = NameCG2.Text;
+            onlineid = OnlineID.Text;
+            hostid = HostID.Text;
+            port = Convert.ToInt32(PortNo.Text);
             try
             {
                 playspeed = Convert.ToInt32(Convert.ToDouble(PlaySpeed.Text) * 1000);
@@ -82,6 +90,8 @@ namespace CheckersGUI
 
 
             highlight = Highlight.Checked;
+            joingame = JoinGame.Checked;
+            hostgame = HostGame.Checked;
             if (Gamemode.SelectedTab == Tab1P)
             {
                 gamemode = 0;
@@ -93,6 +103,10 @@ namespace CheckersGUI
             if (Gamemode.SelectedTab == TabCG)
             {
                 gamemode = 2;
+            }
+            if (Gamemode.SelectedTab == TabOnline)
+            {
+                gamemode = 3;
             }
             switch ((string)PlayerPieceType.SelectedItem)
             {
@@ -110,7 +124,18 @@ namespace CheckersGUI
                     break;
             }
 
-
+            switch ((string)HostPiecetype.SelectedItem)
+            {
+                case "Black":
+                    PType = SquareValues.Black;
+                    break;
+                case "White":
+                    PType = SquareValues.White;
+                    break;
+                default:
+                    PType = SquareValues.Black;
+                    break;
+            }
 
             if (Difficulty.SelectedItem != null)
             {
@@ -163,5 +188,54 @@ namespace CheckersGUI
             }
         }
 
+
+        private void JoinGame_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (JoinGame.Checked)
+            {
+                HostGame.Checked = false;
+                HostLabel.Visible = true;
+                HostID.Visible = true;
+                HostPiecetypeLabel.Visible = false;
+                HostPiecetype.Visible = false;
+            }
+
+            else
+            {
+                HostGame.Checked = true;
+                HostLabel.Visible = false;
+                HostID.Visible = false;
+                HostPiecetypeLabel.Visible = true;
+                HostPiecetype.Visible = true;
+            }
+        }
+
+        private void HostGame_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (HostGame.Checked)
+            {
+                JoinGame.Checked = false;
+            }
+
+            else
+            {
+                JoinGame.Checked = true;
+            }
+        }
+
+        private void Advanced_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (Advanced.Checked)
+            {
+                PortLabel.Visible = true;
+                PortNo.Visible = true;
+            }
+
+            else
+            {
+                PortLabel.Visible = false;
+                PortNo.Visible = false;
+            }
+        }
     }
 }
