@@ -71,6 +71,7 @@ namespace CheckersGUI
         private GameBoard board = new GameBoard(8, blackplacements, whiteplacements);
         private string OnlineID;
         private string HostName;
+        private string ClientName;
 
 
         public Form1()
@@ -1393,6 +1394,21 @@ namespace CheckersGUI
         /// <param name="e"></param>
         private void MenuNewGame_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
             cont = false;
             Board = board;
             StartNewGame();
@@ -1457,10 +1473,27 @@ namespace CheckersGUI
                     if (menu.joingame)
                     {
                         Clientside(menu.hostid, menu.port);
+                        lblNameP1.Text = OnlineID;
+
+
                     }
                     else
                     {
                         Hostside(PType,menu.port);
+                        lblNameP1.Text = OnlineID;
+
+                        if (PType == SquareValues.Black)
+                        {
+                            PlayerBlack = true;
+                            BlackPiecePic.Location = Player1Pic;
+                            WhitePiecePic.Location = Player2Pic;
+                        }
+                        if (PType == SquareValues.White)
+                        {
+                            PlayerBlack = false;
+                            BlackPiecePic.Location = Player2Pic;
+                            WhitePiecePic.Location = Player1Pic;
+                        }
                     }
                     break;
                 default:
@@ -1471,7 +1504,22 @@ namespace CheckersGUI
 
         }
 
+        private void ClientPlay()
+        {
+            if (PType == SquareValues.Black)
+            {
+                PlayerBlack = true;
+                BlackPiecePic.Location = Player1Pic;
+                WhitePiecePic.Location = Player2Pic;
+            }
+            if (PType == SquareValues.White)
+            {
+                PlayerBlack = false;
+                BlackPiecePic.Location = Player2Pic;
+                WhitePiecePic.Location = Player1Pic;
 
+            }
+        }
 
         private void StartLoadGame()
         {
@@ -1512,6 +1560,23 @@ namespace CheckersGUI
         /// <param name="e"></param>
         private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
+            ChatMessage.Visible = false;
+            SendButton.Visible = false;
             cont = false;
             Board.InitialiseEmptyBoard();
             DrawBoard();
@@ -1547,6 +1612,22 @@ namespace CheckersGUI
             Messages.Visible = true;
             OffTextBox.Checked = false;
             OnTextBox.Checked = true;
+            if (gamemode == 3 && menu.joingame)
+            {
+                if (client.isConnected)
+                {
+                    ChatMessage.Visible = true;
+                    SendButton.Visible = true;
+                }
+            }
+            else if (gamemode == 3 && menu.hostgame)
+            {
+                if (Server.Listening)
+                {
+                    ChatMessage.Visible = true;
+                    SendButton.Visible = true;
+                }
+            }
         }
 
         private void OffTextBox_Click(object sender, EventArgs e)
@@ -1554,10 +1635,27 @@ namespace CheckersGUI
             Messages.Visible = false;
             OffTextBox.Checked = true;
             OnTextBox.Checked = false;
+            ChatMessage.Visible = false;
+            SendButton.Visible = false;
         }
 
         private void CLIversion_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
             cont = false;
             var retry = true;
             while (retry)
@@ -1605,102 +1703,124 @@ namespace CheckersGUI
 
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string filename = "";
-            string filepath = "";
-            SaveFileDialog sfd = new SaveFileDialog();
-            DialogResult dr = sfd.ShowDialog();
-            if (dr == DialogResult.OK)
+            if (gamemode == 3)
             {
-                filename = sfd.FileName;
-                filepath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+                MessageBox.Show("An Online Game Can't be saved", "CAUTION", MessageBoxButtons.OK);
             }
-            try
-            {
-                using (TextWriter Writer = new StreamWriter(new FileStream(filename + ".chk", FileMode.Create)))
+            else
+            {           
+                string filename = "";
+                string filepath = "";
+                SaveFileDialog sfd = new SaveFileDialog();
+                DialogResult dr = sfd.ShowDialog();
+                if (dr == DialogResult.OK)
                 {
-
-                    for (int row = 0; row < 8; row++)
+                    filename = sfd.FileName;
+                    filepath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+                }
+                try
+                {
+                    using (TextWriter Writer = new StreamWriter(new FileStream(filename + ".chk", FileMode.Create)))
                     {
-                        for (int col = 0; col < 8; col++)
+
+                        for (int row = 0; row < 8; row++)
                         {
-                            var square = Board.ReadSquare(col, row);
-
-                            switch (square)
+                            for (int col = 0; col < 8; col++)
                             {
-                                case SquareValues.Empty:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.Black:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.BlackKing:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.White:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.WhiteKing:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
+                                var square = Board.ReadSquare(col, row);
 
+                                switch (square)
+                                {
+                                    case SquareValues.Empty:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.Black:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.BlackKing:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.White:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.WhiteKing:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+
+                                }
                             }
                         }
+                        Writer.Write(lblNameP1.Text);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(lblNameP2.Text);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(gamemode);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(turn);
+                        if (gamemode == 0)
+                        {
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(PType);
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(Bot);
+                        }
+                        if (gamemode == 2)
+                        {
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(Bot);
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(Bot2);
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(BotSpeed);
+                        }
+                        //To-Do
+                        foreach (var item in Log.Plays)
+                        {
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(item.ToString());
+                        }
+                        Writer.Close();
                     }
-                    Writer.Write(lblNameP1.Text);
-                    Writer.Write(Environment.NewLine);
-                    Writer.Write(lblNameP2.Text);
-                    Writer.Write(Environment.NewLine);
-                    Writer.Write(gamemode);
-                    Writer.Write(Environment.NewLine);
-                    Writer.Write(turn);
-                    if (gamemode == 0)
-                    {
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(PType);
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(Bot);
-                    }
-                    if (gamemode == 2)
-                    {
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(Bot);
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(Bot2);
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(BotSpeed);
-                    }
-                    //To-Do
-                    foreach (var item in Log.Plays)
-                    {
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(item.ToString());
-                    }
-                    Writer.Close();
                 }
-            }
-            catch (Exception z)
-            {
-                Messages.Text = z.Message;
+                catch (Exception z)
+                {
+                    Messages.Text = z.Message;
+                }
             }
         }
 
         private void loadGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
             try
             {
                 Log.Clear();
@@ -1875,7 +1995,7 @@ namespace CheckersGUI
             string data = ConvertBytesToString(Data);
             switch (data[0])
             {
-                case 'T':
+                case '*':
                     Messages.AppendText(ID + ": " + data.Substring(1) + Environment.NewLine);
                     break;
                 default:
@@ -1892,8 +2012,10 @@ namespace CheckersGUI
 
         void Server_onConnection(string id)
         {
+            lblNameP2.Text = id;
             Messages.AppendText(id + " connected!" + Environment.NewLine); //Updates the log textbox when new user joined
-            Server.SendData(id, ConvertStringToBytes( "I" + OnlineID));
+            Server.SendData(id, ConvertStringToBytes( "`" + OnlineID));
+            Server.SendData(id, ConvertStringToBytes("!" + Convert.ToString(PType)));
         }
         #endregion
 
@@ -1916,11 +2038,16 @@ namespace CheckersGUI
             string data = ConvertBytesToString(Data);
             switch (data[0])
             {
-                case 'T':
+                case '*':
                     Messages.AppendText(ID + HostName + ": " + data.Substring(1) + Environment.NewLine);
                     break;
-                case 'I':
+                case '`':
                     HostName = data.Substring(1);
+                    lblNameP2.Text = HostName;
+                    break;
+                case '!':
+                    PType = Board.OpponentType(ConvertStringToSquareValues(data.Substring(1)));
+                    ClientPlay();
                     break;
                 default:
                     break;
@@ -1943,12 +2070,12 @@ namespace CheckersGUI
         {
             if (menu.joingame)
             {
-                client.SendData(ConvertStringToBytes("T" +ChatMessage.Text)); //Sends the message to the host
+                client.SendData(ConvertStringToBytes("*" +ChatMessage.Text)); //Sends the message to the host
             }
 
             else
             {                  
-              Server.Brodcast(ConvertStringToBytes("T" + ChatMessage.Text)); //Sends the message to the client
+              Server.Brodcast(ConvertStringToBytes("*" + ChatMessage.Text)); //Sends the message to the client
                             
             }
             Messages.AppendText(OnlineID + ": " + ChatMessage.Text + Environment.NewLine);
@@ -1979,6 +2106,23 @@ namespace CheckersGUI
 
         #endregion
 
+        SquareValues ConvertStringToSquareValues(string text)
+        {
+            switch (text)
+            {
+                case "Black":
+                    return SquareValues.Black;
+                case "White":
+                    return SquareValues.White;
+                case "BlackKing":
+                    return SquareValues.BlackKing;
+                case "WhiteKing":
+                    return SquareValues.WhiteKing;
+                default:
+                    return SquareValues.Empty;
+            }
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
@@ -1988,6 +2132,13 @@ namespace CheckersGUI
             catch (Exception)
             {
 
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
             }
         }
     }

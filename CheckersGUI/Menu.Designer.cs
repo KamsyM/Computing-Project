@@ -56,6 +56,11 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.TabOnline = new System.Windows.Forms.TabPage();
+            this.HostPiecetype = new System.Windows.Forms.ComboBox();
+            this.HostPiecetypeLabel = new System.Windows.Forms.Label();
+            this.PortNo = new System.Windows.Forms.TextBox();
+            this.PortLabel = new System.Windows.Forms.Label();
+            this.Advanced = new System.Windows.Forms.CheckBox();
             this.HostLabel = new System.Windows.Forms.Label();
             this.HostID = new System.Windows.Forms.TextBox();
             this.JoinGame = new System.Windows.Forms.CheckBox();
@@ -65,11 +70,6 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.Advanced = new System.Windows.Forms.CheckBox();
-            this.PortLabel = new System.Windows.Forms.Label();
-            this.PortNo = new System.Windows.Forms.TextBox();
-            this.HostPiecetypeLabel = new System.Windows.Forms.Label();
-            this.HostPiecetype = new System.Windows.Forms.ComboBox();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
@@ -347,6 +347,58 @@
             this.TabOnline.Text = "Online";
             this.TabOnline.UseVisualStyleBackColor = true;
             // 
+            // HostPiecetype
+            // 
+            this.HostPiecetype.FormattingEnabled = true;
+            this.HostPiecetype.Items.AddRange(new object[] {
+            "Black",
+            "White"});
+            this.HostPiecetype.Location = new System.Drawing.Point(262, 149);
+            this.HostPiecetype.Name = "HostPiecetype";
+            this.HostPiecetype.Size = new System.Drawing.Size(137, 21);
+            this.HostPiecetype.TabIndex = 17;
+            this.HostPiecetype.Visible = false;
+            // 
+            // HostPiecetypeLabel
+            // 
+            this.HostPiecetypeLabel.AutoSize = true;
+            this.HostPiecetypeLabel.Location = new System.Drawing.Point(163, 152);
+            this.HostPiecetypeLabel.Name = "HostPiecetypeLabel";
+            this.HostPiecetypeLabel.Size = new System.Drawing.Size(66, 13);
+            this.HostPiecetypeLabel.TabIndex = 16;
+            this.HostPiecetypeLabel.Text = "Player Piece";
+            this.HostPiecetypeLabel.Visible = false;
+            // 
+            // PortNo
+            // 
+            this.PortNo.Location = new System.Drawing.Point(262, 247);
+            this.PortNo.Name = "PortNo";
+            this.PortNo.Size = new System.Drawing.Size(152, 20);
+            this.PortNo.TabIndex = 15;
+            this.PortNo.Text = "2020";
+            this.PortNo.Visible = false;
+            // 
+            // PortLabel
+            // 
+            this.PortLabel.AutoSize = true;
+            this.PortLabel.Location = new System.Drawing.Point(163, 250);
+            this.PortLabel.Name = "PortLabel";
+            this.PortLabel.Size = new System.Drawing.Size(43, 13);
+            this.PortLabel.TabIndex = 14;
+            this.PortLabel.Text = "Port No";
+            this.PortLabel.Visible = false;
+            // 
+            // Advanced
+            // 
+            this.Advanced.AutoSize = true;
+            this.Advanced.Location = new System.Drawing.Point(480, 19);
+            this.Advanced.Name = "Advanced";
+            this.Advanced.Size = new System.Drawing.Size(75, 17);
+            this.Advanced.TabIndex = 13;
+            this.Advanced.Text = "Advanced";
+            this.Advanced.UseVisualStyleBackColor = true;
+            this.Advanced.CheckStateChanged += new System.EventHandler(this.Advanced_CheckStateChanged);
+            // 
             // HostLabel
             // 
             this.HostLabel.AutoSize = true;
@@ -428,58 +480,6 @@
             // pieceBindingSource
             // 
             this.pieceBindingSource.DataSource = typeof(Checkers.Model.Piece);
-            // 
-            // Advanced
-            // 
-            this.Advanced.AutoSize = true;
-            this.Advanced.Location = new System.Drawing.Point(480, 19);
-            this.Advanced.Name = "Advanced";
-            this.Advanced.Size = new System.Drawing.Size(75, 17);
-            this.Advanced.TabIndex = 13;
-            this.Advanced.Text = "Advanced";
-            this.Advanced.UseVisualStyleBackColor = true;
-            this.Advanced.CheckStateChanged += new System.EventHandler(this.Advanced_CheckStateChanged);
-            // 
-            // PortLabel
-            // 
-            this.PortLabel.AutoSize = true;
-            this.PortLabel.Location = new System.Drawing.Point(163, 250);
-            this.PortLabel.Name = "PortLabel";
-            this.PortLabel.Size = new System.Drawing.Size(43, 13);
-            this.PortLabel.TabIndex = 14;
-            this.PortLabel.Text = "Port No";
-            this.PortLabel.Visible = false;
-            // 
-            // PortNo
-            // 
-            this.PortNo.Location = new System.Drawing.Point(262, 247);
-            this.PortNo.Name = "PortNo";
-            this.PortNo.Size = new System.Drawing.Size(152, 20);
-            this.PortNo.TabIndex = 15;
-            this.PortNo.Text = "2020";
-            this.PortNo.Visible = false;
-            // 
-            // HostPiecetypeLabel
-            // 
-            this.HostPiecetypeLabel.AutoSize = true;
-            this.HostPiecetypeLabel.Location = new System.Drawing.Point(163, 152);
-            this.HostPiecetypeLabel.Name = "HostPiecetypeLabel";
-            this.HostPiecetypeLabel.Size = new System.Drawing.Size(66, 13);
-            this.HostPiecetypeLabel.TabIndex = 16;
-            this.HostPiecetypeLabel.Text = "Player Piece";
-            this.HostPiecetypeLabel.Visible = false;
-            // 
-            // HostPiecetype
-            // 
-            this.HostPiecetype.FormattingEnabled = true;
-            this.HostPiecetype.Items.AddRange(new object[] {
-            "Black",
-            "White"});
-            this.HostPiecetype.Location = new System.Drawing.Point(262, 149);
-            this.HostPiecetype.Name = "HostPiecetype";
-            this.HostPiecetype.Size = new System.Drawing.Size(137, 21);
-            this.HostPiecetype.TabIndex = 17;
-            this.HostPiecetype.Visible = false;
             // 
             // Menu
             // 

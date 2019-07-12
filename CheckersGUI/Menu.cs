@@ -123,19 +123,22 @@ namespace CheckersGUI
                     BotType = SquareValues.White;
                     break;
             }
-
-            switch ((string)HostPiecetype.SelectedItem)
+            if (gamemode == 3)
             {
-                case "Black":
-                    PType = SquareValues.Black;
-                    break;
-                case "White":
-                    PType = SquareValues.White;
-                    break;
-                default:
-                    PType = SquareValues.Black;
-                    break;
+                switch ((string)HostPiecetype.SelectedItem)
+                {
+                    case "Black":
+                        PType = SquareValues.Black;
+                        break;
+                    case "White":
+                        PType = SquareValues.White;
+                        break;
+                    default:
+                        PType = SquareValues.Black;
+                        break;
+                }
             }
+
 
             if (Difficulty.SelectedItem != null)
             {
