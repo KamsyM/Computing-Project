@@ -70,6 +70,7 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.HostIpInfo = new System.Windows.Forms.Label();
             this.Gamemode.SuspendLayout();
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
@@ -131,7 +132,6 @@
             this.Difficulty.Size = new System.Drawing.Size(137, 21);
             this.Difficulty.TabIndex = 3;
             this.Difficulty.Items.AddRange(BotList().ToArray());
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -331,6 +331,7 @@
             // 
             // TabOnline
             // 
+            this.TabOnline.Controls.Add(this.HostIpInfo);
             this.TabOnline.Controls.Add(this.HostPiecetype);
             this.TabOnline.Controls.Add(this.HostPiecetypeLabel);
             this.TabOnline.Controls.Add(this.PortNo);
@@ -484,6 +485,17 @@
             // 
             this.pieceBindingSource.DataSource = typeof(Checkers.Model.Piece);
             // 
+            // HostIpInfo
+            // 
+            this.HostIpInfo.AutoSize = true;
+            this.HostIpInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HostIpInfo.Location = new System.Drawing.Point(436, 194);
+            this.HostIpInfo.MaximumSize = new System.Drawing.Size(100, 0);
+            this.HostIpInfo.Name = "HostIpInfo";
+            this.HostIpInfo.Size = new System.Drawing.Size(100, 39);
+            this.HostIpInfo.TabIndex = 18;
+            this.HostIpInfo.Text = "*Enter \"localhost\" if both players are on the same network";
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -552,5 +564,6 @@
         private System.Windows.Forms.Label PortLabel;
         private System.Windows.Forms.ComboBox HostPiecetype;
         private System.Windows.Forms.Label HostPiecetypeLabel;
+        private System.Windows.Forms.Label HostIpInfo;
     }
 }

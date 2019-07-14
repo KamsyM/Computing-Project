@@ -199,6 +199,7 @@ namespace CheckersGUI
                 HostGame.Checked = false;
                 HostLabel.Visible = true;
                 HostID.Visible = true;
+                HostIpInfo.Visible = true;
                 HostPiecetypeLabel.Visible = false;
                 HostPiecetype.Visible = false;
             }
@@ -208,6 +209,7 @@ namespace CheckersGUI
                 HostGame.Checked = true;
                 HostLabel.Visible = false;
                 HostID.Visible = false;
+                HostIpInfo.Visible = false;
                 HostPiecetypeLabel.Visible = true;
                 HostPiecetype.Visible = true;
             }
