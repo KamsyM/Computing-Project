@@ -130,6 +130,7 @@
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.Size = new System.Drawing.Size(137, 21);
             this.Difficulty.TabIndex = 3;
+            this.Difficulty.Items.AddRange(BotList().ToArray());
             // 
             // label2
             // 
@@ -265,6 +266,7 @@
             this.CG2Diff.Name = "CG2Diff";
             this.CG2Diff.Size = new System.Drawing.Size(137, 21);
             this.CG2Diff.TabIndex = 12;
+            this.CG2Diff.Items.AddRange(BotList().ToArray());
             // 
             // CG1Diff
             // 
@@ -273,6 +275,7 @@
             this.CG1Diff.Name = "CG1Diff";
             this.CG1Diff.Size = new System.Drawing.Size(137, 21);
             this.CG1Diff.TabIndex = 11;
+            this.CG1Diff.Items.AddRange(BotList().ToArray());
             // 
             // label9
             // 
