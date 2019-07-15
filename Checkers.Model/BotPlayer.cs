@@ -317,7 +317,7 @@ namespace Checkers.Model
         }
 
         /// <summary>
-        /// Makes the Bot Jump over other pieces on the Board
+        /// Makes the Bot Jump over other pieces on the Board. This makes the first possible jump detected
         /// </summary>
         /// <param name="oldcol"></param>
         /// <param name="oldrow"></param>
@@ -366,6 +366,13 @@ namespace Checkers.Model
             }
         }
 
+        /// <summary>
+        /// This makes the piece jump a particular piece on the Board
+        /// </summary>
+        /// <param name="oldcol"></param>
+        /// <param name="oldrow"></param>
+        /// <param name="newcol"></param>
+        /// <param name="newrow"></param>
         public void ForcedJumper(int oldcol, int oldrow,int newcol, int newrow)
         {
             var realtype = Board.Squares[oldcol, oldrow];

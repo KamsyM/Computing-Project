@@ -342,6 +342,47 @@ namespace Checkers.Model
 
         }
 
+        public void MovePiece(Move movement)
+        {
+            SquareValues type = movement.Type;
+            int oldCol = movement.IniCol;
+            int oldRow = movement.IniRow;
+            int newCol = movement.FinCol;
+            int newRow = movement.FinRow;
+
+            Squares[oldCol, oldRow] = SquareValues.Empty;
+            Squares[newCol, newRow] = type;
+            if (type == SquareValues.Black && newRow == 0)
+            {
+                Squares[newCol, newRow] = SquareValues.BlackKing;
+            }
+
+            if (type == SquareValues.White && newRow == 7)
+            {
+                Squares[newCol, newRow] = SquareValues.WhiteKing;
+            }
+
+            if (newCol == oldCol + 2 && newRow == oldRow - 2)
+            {
+                Squares[oldCol + 1, oldRow - 1] = SquareValues.Empty;
+            }
+
+            if (newCol == oldCol + 2 && newRow == oldRow + 2)
+            {
+                Squares[oldCol + 1, oldRow + 1] = SquareValues.Empty;
+            }
+
+            if (newCol == oldCol - 2 && newRow == oldRow + 2)
+            {
+                Squares[oldCol - 1, oldRow + 1] = SquareValues.Empty;
+            }
+
+            if (newCol == oldCol - 2 && newRow == oldRow - 2)
+            {
+                Squares[oldCol - 1, oldRow - 1] = SquareValues.Empty;
+            }
+        }
+
         /// <summary>
         /// Asserts whether a move on the checkers Board by any piece is Valid
         /// </summary>
@@ -737,6 +778,13 @@ namespace Checkers.Model
             return 0;
         }
 
+        /// <summary>
+        /// Creates a list of possible jumps a selected piece can make
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="currentCol"></param>
+        /// <param name="currentRow"></param>
+        /// <returns></returns>
         public List<int> ListJumps(SquareValues type, int currentCol, int currentRow)
         {
             var B = SquareValues.Black;
