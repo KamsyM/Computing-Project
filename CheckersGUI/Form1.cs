@@ -137,12 +137,20 @@ namespace CheckersGUI
                                 {
                                     return;
                                 }
+                                if (gamemode == 3)
+                                {
+                                    Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                                }
                                 break;
                             case Modality.WhiteTurn:
                                 WhiteTurn();
                                 while (MultiJump)
                                 {
                                     return;
+                                }
+                                if (gamemode == 3)
+                                {
+                                    Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
                                 }
                                 break;
                             default:
@@ -385,6 +393,10 @@ namespace CheckersGUI
                             }
                             BlackTurn();
                             MyTurn = false;
+                            if (!MultiJump)
+                            {
+                                Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                            }
                             if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(5);
@@ -404,6 +416,10 @@ namespace CheckersGUI
                             }
                             WhiteTurn();
                             MyTurn = false;
+                            if (!MultiJump)
+                            {
+                                Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                            }
                             if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(6);
@@ -1675,7 +1691,6 @@ namespace CheckersGUI
                     {
                         Clientside(menu.hostid, menu.port);
                         lblNameP1.Text = OnlineID;
-                        StartGameOnline();
 
                     }
                     else
@@ -1689,7 +1704,6 @@ namespace CheckersGUI
                             BlackPiecePic.Location = Player1Pic;
                             WhitePiecePic.Location = Player2Pic;
                             MyTurn = true;
-                            StartGameOnline();
                         }
                         if (PType == SquareValues.White)
                         {
@@ -1697,7 +1711,6 @@ namespace CheckersGUI
                             BlackPiecePic.Location = Player2Pic;
                             WhitePiecePic.Location = Player1Pic;
                             MyTurn = false;
-                            StartGameOnline();
                         }
                     }
                     break;
@@ -1773,15 +1786,15 @@ namespace CheckersGUI
             if (MyTurn)
             {
                 Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move" + Environment.NewLine;
-                if (PType == SquareValues.Black)
-                {
-                    Mode = Modality.BlackTurn;
+                //if (PType == SquareValues.Black)
+                //{
+                //    Mode = Modality.BlackTurn;
                     
-                }
-                if (PType == SquareValues.White)
-                {
-                    Mode = Modality.WhiteTurn;
-                }
+                //}
+                //if (PType == SquareValues.White)
+                //{
+                //    Mode = Modality.WhiteTurn;
+                //}
             }
             else
             {
@@ -2243,6 +2256,14 @@ namespace CheckersGUI
                     break;
                 default:
                     var Movement = ConvertStringToMove(data);
+                    if (Movement.Mode == Modality.BlackTurn)
+                    {
+                        Mode = Modality.WhiteTurn;
+                    }
+                    if (Movement.Mode == Modality.WhiteTurn)
+                    {
+                        Mode = Modality.BlackTurn;
+                    }
                     Board.MovePiece(Movement);
                     FinBoardPlacements = Board.RecordPieces();
                     HighlightMoves(IniBoardPlacements, FinBoardPlacements);
@@ -2272,6 +2293,8 @@ namespace CheckersGUI
             Messages.AppendText(id + " connected!" + Environment.NewLine); //Updates the log textbox when new user joined
             Server.SendData(id, ConvertStringToBytes( "`" + OnlineID));
             Server.SendData(id, ConvertStringToBytes("!" + Convert.ToString(PType)));
+            Mode = Modality.BlackTurn;
+            StartGameOnline();
         }
         #endregion
 
@@ -2322,6 +2345,14 @@ namespace CheckersGUI
                     break;
                 default:
                     var Movement = ConvertStringToMove(data);
+                    if (Movement.Mode == Modality.BlackTurn)
+                    {
+                        Mode = Modality.WhiteTurn;
+                    }
+                    if (Movement.Mode == Modality.WhiteTurn)
+                    {
+                        Mode = Modality.BlackTurn;
+                    }
                     Board.MovePiece(Movement);
                     FinBoardPlacements = Board.RecordPieces();
                     HighlightMoves(IniBoardPlacements,FinBoardPlacements);
@@ -2347,6 +2378,8 @@ namespace CheckersGUI
         void client_Connected()
         {
             Messages.AppendText("Connected succesfully!" + Environment.NewLine); //Updates the log with the current connection state
+            Mode = Modality.BlackTurn;
+            StartGameOnline();
         }
         #endregion
 
@@ -2409,31 +2442,32 @@ namespace CheckersGUI
 
         Move ConvertStringToMove(string txt)
         {
-            string[] ColAlphabet = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" };
+            char[] ColAlphabet = new char[8] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+            char[] RowNumbers = new char[8] { '1', '2', '3', '4', '5', '6', '7', '8' };
             int BracketPosition = -1;
             foreach (var item in txt)
             {
                 if (item == '(')
                 {
-                    BracketPosition++;
+                    BracketPosition = BracketPosition + 1;
                     break;
                 }
                 else
                 {
-                    BracketPosition++;
+                    BracketPosition = BracketPosition + 1;
                 }
             }
-            int inicol = Array.IndexOf(ColAlphabet, txt[BracketPosition + 1]);
-            int inirow = txt[BracketPosition + 3];
-            int fincol = Array.IndexOf(ColAlphabet, txt[BracketPosition + 7]);
-            int finrow = txt[BracketPosition + 9];
+            int inicol = Array.IndexOf(ColAlphabet, txt[BracketPosition + 1], 0);
+            int inirow = Array.IndexOf(RowNumbers, txt[BracketPosition + 3], 0);
+            int fincol = Array.IndexOf(ColAlphabet, txt[BracketPosition + 9], 0);
+            int finrow = Array.IndexOf(RowNumbers, txt[BracketPosition + 11], 0);
             if (Mode == Modality.BlackTurn)
             {
-                return new Move(Modality.WhiteTurn, SquareValues.White, inicol, inirow, fincol, finrow);
+                return new Move(Modality.BlackTurn, SquareValues.Black, inicol, inirow, fincol, finrow);
             }
             else
             {
-                return new Move(Modality.BlackTurn,SquareValues.Black, inicol, inirow, fincol, finrow);
+                return new Move(Modality.WhiteTurn,SquareValues.White, inicol, inirow, fincol, finrow);
             }
         }
 
