@@ -469,11 +469,11 @@ namespace CheckersGUI
                                 return;
                             }
                             BlackTurn();
-                            MyTurn = false;
+                            //MyTurn = false;
                             if (!MultiJump)
                             {
                                 //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
-                                WhoTurn.Text = lblNameP2.Text + "'s turn" ;
+                               // WhoTurn.Text = lblNameP2.Text + "'s turn" ;
                             }
                             if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
@@ -493,11 +493,11 @@ namespace CheckersGUI
                                 return;
                             }
                             WhiteTurn();
-                            MyTurn = false;
+                            //MyTurn = false;
                             if (!MultiJump)
                             {
                                 //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
-                                WhoTurn.Text = lblNameP2.Text + "'s turn";
+                                //WhoTurn.Text = lblNameP2.Text + "'s turn";
                             }
                             if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
@@ -1157,11 +1157,11 @@ namespace CheckersGUI
         {
             Task MatchScroll = new Task(new Action(Matchscroll));
             Task MesssageScroll = new Task(new Action(Messagescroll));
-            if (gamemode != 3)
-            {
-                Messages.Text = lblNameP2.Text + " Select Piece to Move" + Environment.NewLine;
-            }
-            WhoTurn.Text = lblNameP2.Text + "'s Turn";
+            //if (gamemode != 3)
+            //{
+            //    Messages.Text = lblNameP2.Text + " Select Piece to Move" + Environment.NewLine;
+            //}
+            //WhoTurn.Text = lblNameP2.Text + "'s Turn";
             var type = SquareValues.Black;
             var OldPosition = Positions.First();
             var NewPosition = Positions.Last();
@@ -1221,6 +1221,11 @@ namespace CheckersGUI
                 Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                 MatchLog.Text = Log.ToString();
                 MatchScroll.Start();
+                if (gamemode != 3)
+                {
+                    Messages.Text = lblNameP2.Text + " Select Piece to Move" + Environment.NewLine;
+                }
+                WhoTurn.Text = lblNameP2.Text + "'s Turn";
                 if (gamemode == 3)
                 {
                     if (menu.joingame)
@@ -1327,6 +1332,7 @@ namespace CheckersGUI
             //    //Positions.Clear();
             //}
             MultiJump = false;
+            MyTurn = false;
             DrawBoard();
             turn = 2;
             Mode = Modality.WhiteTurn;
@@ -1340,15 +1346,15 @@ namespace CheckersGUI
         {
             Task MatchScroll = new Task(new Action(Matchscroll));
             Task MesssageScroll = new Task(new Action(Messagescroll));
-            if (gamemode != 3)
-            {
-                Messages.Text = lblNameP1.Text + "Select Piece to Move" + Environment.NewLine;
-                WhoTurn.Text = lblNameP1.Text + "'s Turn";
-            }
-            if (gamemode == 3)
-            {
-                WhoTurn.Text = lblNameP2.Text + "'s Turn"; ;
-            }
+            //if (gamemode != 3)
+            //{
+            //    Messages.Text = lblNameP1.Text + "Select Piece to Move" + Environment.NewLine;
+            //    WhoTurn.Text = lblNameP1.Text + "'s Turn";
+            //}
+            //if (gamemode == 3)
+            //{
+            //    WhoTurn.Text = lblNameP2.Text + "'s Turn"; ;
+            //}
             var type = SquareValues.White;
             var OldPosition = Positions.First();
             var NewPosition = Positions.Last();
@@ -1406,8 +1412,19 @@ namespace CheckersGUI
                 Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
                 MatchLog.Text = Log.ToString();
                 MatchScroll.Start();
+                if (gamemode == 1)
+                {
+                    Messages.Text = lblNameP1.Text + "Select Piece to Move" + Environment.NewLine;
+                    WhoTurn.Text = lblNameP1.Text + "'s Turn";
+                }
+                if (gamemode == 0)
+                {
+                    Messages.Text = lblNameP2.Text + "Select Piece to Move" + Environment.NewLine;
+                    WhoTurn.Text = lblNameP2.Text + "'s Turn";
+                }
                 if (gamemode == 3)
                 {
+                    WhoTurn.Text = lblNameP2.Text + "'s Turn";
                     if (menu.joingame)
                     {
                         client.SendData(ConvertStringToBytes(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow).ToString()));
@@ -1516,6 +1533,7 @@ namespace CheckersGUI
             //   // Positions.Clear();
             //}
             MultiJump = false;
+            MyTurn = false;
             DrawBoard();
             turn = 1;
             Mode = Modality.BlackTurn;
@@ -1826,10 +1844,13 @@ namespace CheckersGUI
         /// <param name="e"></param>
         private void MenuNewGame_Click(object sender, EventArgs e)
         {
-
+            menu.ShowDialog();
+            if (!menu.cancel)
+            {            
+            StartNewGame();
             cont = false;
             Board = board;
-            StartNewGame();
+            }
         }
 
         /// <summary>
@@ -1868,8 +1889,7 @@ namespace CheckersGUI
             Messages.Clear();
             MatchLog.Clear();
             GameWon = false;
-            PlayPause.Visible = false;
-            menu.ShowDialog();
+            PlayPause.Visible = false;            
             StartSound.Load();
             StartSound.Play();
             PType = menu.PType;
@@ -2533,13 +2553,13 @@ namespace CheckersGUI
             if (MyTurn)
             {
                 Messages.AppendText(Environment.NewLine + "Your Turn " + OnlineID + "\nSelect Piece to Move" + Environment.NewLine);
-                MessageScroll.Start();
+                ScrollDown();
                 WhoTurn.Text = "Your Turn " ;
             }
             if (!MyTurn)
             {
                 Messages.AppendText(Environment.NewLine + "It's " + id + "'s turn" + Environment.NewLine);
-                MessageScroll.Start();
+                ScrollDown();
                 WhoTurn.Text = id + "'s turn";
             }
             StartGameOnline();

@@ -244,5 +244,10 @@ namespace CheckersGUI
                 PortNo.Visible = false;
             }
         }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            cancel = true;
+        }
     }
 }
