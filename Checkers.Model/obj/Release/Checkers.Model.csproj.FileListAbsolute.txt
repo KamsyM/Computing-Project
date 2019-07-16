@@ -4,4 +4,3 @@ C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\bin\Release\Checker
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.csproj.CoreCompileInputs.cache
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.dll
 C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.pdb
-C:\Users\Kamsi\source\repos\Computing-Project\Checkers.Model\obj\Release\Checkers.Model.csprojAssemblyReference.cache

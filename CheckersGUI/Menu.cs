@@ -36,6 +36,7 @@ namespace CheckersGUI
         public BotPlayer Bot1;
         public BotPlayer Bot2;
         public GameBoard Board;
+        public bool cancel;
         //public List<Type> BotNames = typeof(BotPlayer).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(BotPlayer))).ToList();
         //public List<object> instances = BotNames.Select(t => Activator.CreateInstance(t) as t);
 
@@ -70,6 +71,7 @@ namespace CheckersGUI
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            cancel = false;
             name1P = Name1p.Text;
             name2P1 = Name2P1.Text;
             name2P2 = Name2P2.Text;

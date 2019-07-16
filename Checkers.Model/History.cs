@@ -19,6 +19,7 @@ namespace Checkers.Model
 
         public void Add(Move play)
         {
+         
             Plays.Add(play);
         }
 
@@ -35,6 +36,7 @@ namespace Checkers.Model
 
         public override string ToString()
         {
+            sb.Clear();
             foreach (var item in Plays)
             {
                 sb.AppendLine(item.ToString());
