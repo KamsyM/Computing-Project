@@ -36,3 +36,4 @@ C:\Users\14ICT255\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersG
 C:\Users\14ICT255\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.csproj.CopyComplete
 C:\Users\14ICT255\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.exe
 C:\Users\14ICT255\source\repos\Computing-Project\CheckersGUI\obj\Debug\CheckersGUI.pdb
+C:\Users\Kamsi\source\repos\Computing-Project\CheckersGUI\bin\Debug\NetComm.dll

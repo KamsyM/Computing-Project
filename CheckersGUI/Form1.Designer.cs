@@ -48,6 +48,9 @@
             this.textBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OnTextBox = new System.Windows.Forms.ToolStripMenuItem();
             this.OffTextBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.matchLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OnMatchLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.OffMatchLog = new System.Windows.Forms.ToolStripMenuItem();
             this.lblNameP1 = new System.Windows.Forms.Label();
             this.lblNameP2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -59,6 +62,10 @@
             this.BlackPiecePic = new System.Windows.Forms.PictureBox();
             this.WhitePiecePic = new System.Windows.Forms.PictureBox();
             this.PlayPause = new System.Windows.Forms.Button();
+            this.ChatMessage = new System.Windows.Forms.TextBox();
+            this.SendButton = new System.Windows.Forms.Button();
+            this.WhoTurn = new System.Windows.Forms.Label();
+            this.MatchLog = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BlackPiecePic)).BeginInit();
@@ -78,6 +85,7 @@
             // 
             this.Messages.Location = new System.Drawing.Point(12, 366);
             this.Messages.Name = "Messages";
+            this.Messages.ReadOnly = true;
             this.Messages.Size = new System.Drawing.Size(326, 83);
             this.Messages.TabIndex = 2;
             this.Messages.Text = "";
@@ -164,7 +172,8 @@
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.highlightPiecesToolStripMenuItem,
-            this.textBoxToolStripMenuItem});
+            this.textBoxToolStripMenuItem,
+            this.matchLogToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -218,6 +227,31 @@
             this.OffTextBox.Size = new System.Drawing.Size(91, 22);
             this.OffTextBox.Text = "&Off";
             this.OffTextBox.Click += new System.EventHandler(this.OffTextBox_Click);
+            // 
+            // matchLogToolStripMenuItem
+            // 
+            this.matchLogToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OnMatchLog,
+            this.OffMatchLog});
+            this.matchLogToolStripMenuItem.Name = "matchLogToolStripMenuItem";
+            this.matchLogToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.matchLogToolStripMenuItem.Text = "&Match Log";
+            // 
+            // OnMatchLog
+            // 
+            this.OnMatchLog.Checked = true;
+            this.OnMatchLog.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.OnMatchLog.Name = "OnMatchLog";
+            this.OnMatchLog.Size = new System.Drawing.Size(91, 22);
+            this.OnMatchLog.Text = "&On";
+            this.OnMatchLog.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
+            // 
+            // OffMatchLog
+            // 
+            this.OffMatchLog.Name = "OffMatchLog";
+            this.OffMatchLog.Size = new System.Drawing.Size(91, 22);
+            this.OffMatchLog.Text = "&Off";
+            this.OffMatchLog.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
             // 
             // lblNameP1
             // 
@@ -323,11 +357,54 @@
             this.PlayPause.Visible = false;
             this.PlayPause.Click += new System.EventHandler(this.PlayPause_Click);
             // 
+            // ChatMessage
+            // 
+            this.ChatMessage.Location = new System.Drawing.Point(12, 455);
+            this.ChatMessage.Name = "ChatMessage";
+            this.ChatMessage.Size = new System.Drawing.Size(326, 20);
+            this.ChatMessage.TabIndex = 22;
+            this.ChatMessage.Visible = false;
+            this.ChatMessage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatMessage_KeyDown);
+            // 
+            // SendButton
+            // 
+            this.SendButton.Location = new System.Drawing.Point(344, 452);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(75, 23);
+            this.SendButton.TabIndex = 23;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Visible = false;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click_1);
+            // 
+            // WhoTurn
+            // 
+            this.WhoTurn.AutoSize = true;
+            this.WhoTurn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
+            this.WhoTurn.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.WhoTurn.Location = new System.Drawing.Point(448, 37);
+            this.WhoTurn.Name = "WhoTurn";
+            this.WhoTurn.Size = new System.Drawing.Size(0, 18);
+            this.WhoTurn.TabIndex = 24;
+            // 
+            // MatchLog
+            // 
+            this.MatchLog.Location = new System.Drawing.Point(344, 366);
+            this.MatchLog.Name = "MatchLog";
+            this.MatchLog.ReadOnly = true;
+            this.MatchLog.Size = new System.Drawing.Size(138, 80);
+            this.MatchLog.TabIndex = 25;
+            this.MatchLog.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 461);
+            this.ClientSize = new System.Drawing.Size(684, 499);
+            this.Controls.Add(this.MatchLog);
+            this.Controls.Add(this.WhoTurn);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.ChatMessage);
             this.Controls.Add(this.PlayPause);
             this.Controls.Add(this.WhitePiecePic);
             this.Controls.Add(this.BlackPiecePic);
@@ -347,6 +424,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Checkers";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -389,6 +467,13 @@
         private System.Windows.Forms.Button PlayPause;
         private System.Windows.Forms.ToolStripMenuItem saveGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadGameToolStripMenuItem;
+        private System.Windows.Forms.TextBox ChatMessage;
+        private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.Label WhoTurn;
+        private System.Windows.Forms.ToolStripMenuItem matchLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OnMatchLog;
+        private System.Windows.Forms.ToolStripMenuItem OffMatchLog;
+        public System.Windows.Forms.RichTextBox MatchLog;
     }
 }
 

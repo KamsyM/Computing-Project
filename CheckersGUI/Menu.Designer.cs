@@ -55,6 +55,19 @@
             this.NameCG1 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.TabOnline = new System.Windows.Forms.TabPage();
+            this.HostIpInfo = new System.Windows.Forms.Label();
+            this.HostPiecetype = new System.Windows.Forms.ComboBox();
+            this.HostPiecetypeLabel = new System.Windows.Forms.Label();
+            this.PortNo = new System.Windows.Forms.TextBox();
+            this.PortLabel = new System.Windows.Forms.Label();
+            this.Advanced = new System.Windows.Forms.CheckBox();
+            this.HostLabel = new System.Windows.Forms.Label();
+            this.HostID = new System.Windows.Forms.TextBox();
+            this.JoinGame = new System.Windows.Forms.CheckBox();
+            this.HostGame = new System.Windows.Forms.CheckBox();
+            this.OnlineID = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.pieceBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -62,6 +75,7 @@
             this.Tab1P.SuspendLayout();
             this.Tab2P.SuspendLayout();
             this.TabCG.SuspendLayout();
+            this.TabOnline.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pieceBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,6 +84,7 @@
             this.Gamemode.Controls.Add(this.Tab1P);
             this.Gamemode.Controls.Add(this.Tab2P);
             this.Gamemode.Controls.Add(this.TabCG);
+            this.Gamemode.Controls.Add(this.TabOnline);
             this.Gamemode.Location = new System.Drawing.Point(4, 12);
             this.Gamemode.Name = "Gamemode";
             this.Gamemode.SelectedIndex = 0;
@@ -315,6 +330,148 @@
             this.label6.TabIndex = 5;
             this.label6.Text = "(Black) Computer Player 1 Name";
             // 
+            // TabOnline
+            // 
+            this.TabOnline.Controls.Add(this.HostIpInfo);
+            this.TabOnline.Controls.Add(this.HostPiecetype);
+            this.TabOnline.Controls.Add(this.HostPiecetypeLabel);
+            this.TabOnline.Controls.Add(this.PortNo);
+            this.TabOnline.Controls.Add(this.PortLabel);
+            this.TabOnline.Controls.Add(this.Advanced);
+            this.TabOnline.Controls.Add(this.HostLabel);
+            this.TabOnline.Controls.Add(this.HostID);
+            this.TabOnline.Controls.Add(this.JoinGame);
+            this.TabOnline.Controls.Add(this.HostGame);
+            this.TabOnline.Controls.Add(this.OnlineID);
+            this.TabOnline.Controls.Add(this.label11);
+            this.TabOnline.Location = new System.Drawing.Point(4, 22);
+            this.TabOnline.Name = "TabOnline";
+            this.TabOnline.Padding = new System.Windows.Forms.Padding(3);
+            this.TabOnline.Size = new System.Drawing.Size(592, 298);
+            this.TabOnline.TabIndex = 3;
+            this.TabOnline.Text = "Online";
+            this.TabOnline.UseVisualStyleBackColor = true;
+            // 
+            // HostIpInfo
+            // 
+            this.HostIpInfo.AutoSize = true;
+            this.HostIpInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HostIpInfo.Location = new System.Drawing.Point(436, 194);
+            this.HostIpInfo.MaximumSize = new System.Drawing.Size(100, 0);
+            this.HostIpInfo.Name = "HostIpInfo";
+            this.HostIpInfo.Size = new System.Drawing.Size(100, 39);
+            this.HostIpInfo.TabIndex = 18;
+            this.HostIpInfo.Text = "*Enter \"localhost\" if both players are on the same network";
+            // 
+            // HostPiecetype
+            // 
+            this.HostPiecetype.FormattingEnabled = true;
+            this.HostPiecetype.Items.AddRange(new object[] {
+            "Black",
+            "White"});
+            this.HostPiecetype.Location = new System.Drawing.Point(262, 149);
+            this.HostPiecetype.Name = "HostPiecetype";
+            this.HostPiecetype.Size = new System.Drawing.Size(137, 21);
+            this.HostPiecetype.TabIndex = 17;
+            this.HostPiecetype.Visible = false;
+            // 
+            // HostPiecetypeLabel
+            // 
+            this.HostPiecetypeLabel.AutoSize = true;
+            this.HostPiecetypeLabel.Location = new System.Drawing.Point(163, 152);
+            this.HostPiecetypeLabel.Name = "HostPiecetypeLabel";
+            this.HostPiecetypeLabel.Size = new System.Drawing.Size(66, 13);
+            this.HostPiecetypeLabel.TabIndex = 16;
+            this.HostPiecetypeLabel.Text = "Player Piece";
+            this.HostPiecetypeLabel.Visible = false;
+            // 
+            // PortNo
+            // 
+            this.PortNo.Location = new System.Drawing.Point(262, 247);
+            this.PortNo.Name = "PortNo";
+            this.PortNo.Size = new System.Drawing.Size(152, 20);
+            this.PortNo.TabIndex = 15;
+            this.PortNo.Text = "2020";
+            this.PortNo.Visible = false;
+            // 
+            // PortLabel
+            // 
+            this.PortLabel.AutoSize = true;
+            this.PortLabel.Location = new System.Drawing.Point(163, 250);
+            this.PortLabel.Name = "PortLabel";
+            this.PortLabel.Size = new System.Drawing.Size(43, 13);
+            this.PortLabel.TabIndex = 14;
+            this.PortLabel.Text = "Port No";
+            this.PortLabel.Visible = false;
+            // 
+            // Advanced
+            // 
+            this.Advanced.AutoSize = true;
+            this.Advanced.Location = new System.Drawing.Point(480, 19);
+            this.Advanced.Name = "Advanced";
+            this.Advanced.Size = new System.Drawing.Size(75, 17);
+            this.Advanced.TabIndex = 13;
+            this.Advanced.Text = "Advanced";
+            this.Advanced.UseVisualStyleBackColor = true;
+            this.Advanced.CheckStateChanged += new System.EventHandler(this.Advanced_CheckStateChanged);
+            // 
+            // HostLabel
+            // 
+            this.HostLabel.AutoSize = true;
+            this.HostLabel.Location = new System.Drawing.Point(163, 197);
+            this.HostLabel.Name = "HostLabel";
+            this.HostLabel.Size = new System.Drawing.Size(83, 13);
+            this.HostLabel.TabIndex = 12;
+            this.HostLabel.Text = "Host IP Address";
+            // 
+            // HostID
+            // 
+            this.HostID.Location = new System.Drawing.Point(262, 194);
+            this.HostID.Name = "HostID";
+            this.HostID.Size = new System.Drawing.Size(152, 20);
+            this.HostID.TabIndex = 11;
+            // 
+            // JoinGame
+            // 
+            this.JoinGame.AutoSize = true;
+            this.JoinGame.Checked = true;
+            this.JoinGame.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.JoinGame.Location = new System.Drawing.Point(91, 110);
+            this.JoinGame.Name = "JoinGame";
+            this.JoinGame.Size = new System.Drawing.Size(76, 17);
+            this.JoinGame.TabIndex = 10;
+            this.JoinGame.Text = "Join Game";
+            this.JoinGame.UseVisualStyleBackColor = true;
+            this.JoinGame.CheckStateChanged += new System.EventHandler(this.JoinGame_CheckStateChanged);
+            // 
+            // HostGame
+            // 
+            this.HostGame.AutoSize = true;
+            this.HostGame.Location = new System.Drawing.Point(413, 110);
+            this.HostGame.Name = "HostGame";
+            this.HostGame.Size = new System.Drawing.Size(79, 17);
+            this.HostGame.TabIndex = 9;
+            this.HostGame.Text = "Host Game";
+            this.HostGame.UseVisualStyleBackColor = true;
+            this.HostGame.CheckStateChanged += new System.EventHandler(this.HostGame_CheckStateChanged);
+            // 
+            // OnlineID
+            // 
+            this.OnlineID.Location = new System.Drawing.Point(262, 42);
+            this.OnlineID.Name = "OnlineID";
+            this.OnlineID.Size = new System.Drawing.Size(152, 20);
+            this.OnlineID.TabIndex = 6;
+            this.OnlineID.Text = "Player";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(163, 45);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "Player Name";
+            // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -360,6 +517,8 @@
             this.Tab2P.PerformLayout();
             this.TabCG.ResumeLayout(false);
             this.TabCG.PerformLayout();
+            this.TabOnline.ResumeLayout(false);
+            this.TabOnline.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pieceBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -395,5 +554,18 @@
         private System.Windows.Forms.BindingSource pieceBindingSource;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox PlaySpeed;
+        private System.Windows.Forms.TabPage TabOnline;
+        private System.Windows.Forms.Label HostLabel;
+        private System.Windows.Forms.TextBox HostID;
+        private System.Windows.Forms.CheckBox JoinGame;
+        private System.Windows.Forms.CheckBox HostGame;
+        private System.Windows.Forms.TextBox OnlineID;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox Advanced;
+        private System.Windows.Forms.TextBox PortNo;
+        private System.Windows.Forms.Label PortLabel;
+        private System.Windows.Forms.ComboBox HostPiecetype;
+        private System.Windows.Forms.Label HostPiecetypeLabel;
+        private System.Windows.Forms.Label HostIpInfo;
     }
 }

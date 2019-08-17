@@ -1,6 +1,7 @@
 ﻿using Checkers.DataFixture;
 using Checkers.Model;
 using CheckersGUI.Properties;
+using NetComm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,8 @@ namespace CheckersGUI
 {
     public partial class Form1 : Form
     {
+        NetComm.Host Server;
+        NetComm.Client client;
         private Pen blackPen = new Pen(Color.Black);
         private Pen yellowPen = new Pen(Color.Yellow);
         private Brush whiteBrush = new SolidBrush(Color.White);
@@ -48,6 +51,7 @@ namespace CheckersGUI
         private Point Player2Pic = new Point(518, 250);
         private bool MultiJump = false;
         private bool Highlight = false;
+        private bool past = false;
         bool cont = true;
         bool running = true;
         //private SquareValues BotType = SquareValues.Empty;
@@ -65,6 +69,13 @@ namespace CheckersGUI
         private static Piece[] blackplacements = Pieces.BlackPlacements();
         private static Piece[] whiteplacements = Pieces.WhitePlacements();
         private GameBoard board = new GameBoard(8, blackplacements, whiteplacements);
+        private string OnlineID;
+        private string HostName;
+        private string ClientName;
+        private bool MyTurn = false;
+        private bool GameWon;
+        private int[,] IniBoardPlacements;
+        private int[,] FinBoardPlacements;
 
 
 
@@ -73,19 +84,40 @@ namespace CheckersGUI
             InitializeComponent();
             g = Grid.CreateGraphics();
             Mode = Modality.BlackTurn;
-
             Board = board;
             menu = new Menu(Board);
             Log = new History(Board);
             //Log.AddString("oh lolers");
             Messages.Text = "WELCOME TO CHECKERS" +
-                " \nClick the Game tab on the top left to begin";
+                " \nClick the Game tab on the top left to begin" + Environment.NewLine;
             
         }
 
+        /// <summary>
+        /// Scrolls to the bottom of the Match Log
+        /// </summary>
+        void Matchscroll()
+        {
+            this.Invoke(new MethodInvoker(delegate ()
+            {
+                MatchLog.SelectionStart = MatchLog.Text.Length;
+                MatchLog.ScrollToCaret();
+            }));
+        }
+
+        void Messagescroll()
+        {
+            this.Invoke(new MethodInvoker(delegate ()
+            {
+                Messages.SelectionStart = Messages.Text.Length;
+                Messages.ScrollToCaret();
+            }));
+        }
 
         private async void Grid_MouseClick(object sender, MouseEventArgs e)
         {
+            Task MatchScroll = new Task(new Action(Matchscroll));
+            Task MessageScroll = new Task(new Action(Messagescroll));
             int X = e.X ;
             int Y = e.Y;
             int Col = Board.MouseConverter(X);
@@ -102,7 +134,16 @@ namespace CheckersGUI
                 {
                     Positions.Clear();
                 }
-                Messages.Text = "Invalid Move";
+                if (gamemode == 3)
+                {
+                    Messages.AppendText(Environment.NewLine + "Invalid Move" + Environment.NewLine);
+                    MessageScroll.Start();
+                }
+                else if (gamemode != 3)
+                {
+                    Messages.Text = "Invalid Move" + Environment.NewLine;
+                }
+
                 DrawBoard();
                 return;
             }
@@ -128,12 +169,22 @@ namespace CheckersGUI
                                 {
                                     return;
                                 }
+                                if (gamemode == 3)
+                                {
+                                    //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                                    WhoTurn.Text = lblNameP2.Text + "'s turn";
+                                }
                                 break;
                             case Modality.WhiteTurn:
                                 WhiteTurn();
                                 while (MultiJump)
                                 {
                                     return;
+                                }
+                                if (gamemode == 3)
+                                {
+                                    //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                                    WhoTurn.Text = lblNameP2.Text + "'s turn";
                                 }
                                 break;
                             default:
@@ -156,13 +207,32 @@ namespace CheckersGUI
 
             if (Positions.Count == 1)
             {
+                if (gamemode == 3)
+                {
+                    if (!MyTurn)
+                    {
+                        Messages.AppendText (Environment.NewLine + "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine);
+                        MessageScroll.Start();
+                        WhoTurn.Text = lblNameP2.Text + "'s turn";
+                        Positions.Clear();
+                        return;
+                    }
+                }
                 var OldPosition = Positions.First();
                 var OldColumn = OldPosition.Key;
                 var OldRow = OldPosition.Value;
                 var realtype = Board.ReadSquare(OldColumn, OldRow);
                 if (Board.IsEmptySquare(OldColumn,OldRow))
                 {
-                    Messages.Text = "There is no piece in this square";
+                    if (gamemode == 3)
+                    {
+                        Messages.AppendText(Environment.NewLine + "There is no piece in this square" + Environment.NewLine);
+                        MessageScroll.Start();
+                    }
+                    else
+                    {
+                        Messages.Text = "There is no piece in this square" + Environment.NewLine;
+                    }                   
                     Positions.Clear();
                 }
 
@@ -174,7 +244,15 @@ namespace CheckersGUI
                         case Modality.BlackTurn:
                             if (Board.NotYourPiece(SquareValues.Black, OldColumn, OldRow))
                             {
-                                Messages.Text = "This is not your piece";
+                                if (gamemode==3)
+                                {
+                                    Messages.AppendText(Environment.NewLine +"This is not your piece" + Environment.NewLine);
+                                    MessageScroll.Start();
+                                }
+                                else
+                                {
+                                    Messages.Text = "This is not your piece" + Environment.NewLine;
+                                }                                
                                 Positions.Clear();
                             }
                             else
@@ -185,7 +263,16 @@ namespace CheckersGUI
                         case Modality.WhiteTurn:
                             if (Board.NotYourPiece(SquareValues.White, OldColumn, OldRow))
                             {
-                                Messages.Text = "This is not your piece";
+                                if (gamemode == 3)
+                                {
+                                    Messages.AppendText(Environment.NewLine + "This is not your piece" + Environment.NewLine);
+                                    MessageScroll.Start();
+                                }
+                                else
+                                {
+                                    Messages.Text = "This is not your piece" + Environment.NewLine;
+                                }
+                                
                                 Positions.Clear();
                             }
                             else
@@ -218,20 +305,26 @@ namespace CheckersGUI
                                 BlackHighlightConditions(newcol,newrow,SquareValues.Black);
                                 return;
                             }
-
                             BlackTurn();
+
+                            
 
                         }
                         if (turn == 2)
                         {
+                            Messages.Text = "Selecting a Piece to Move";
                             await Task.Delay(1000);
                             WhiteBotMove();
                             Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
-                            var sb = new StringBuilder();
-                            sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
-                            sb.AppendLine();
-                            sb.AppendLine(Log.ToString());
-                            Messages.Text = sb.ToString();
+                            MatchLog.Text = Log.ToString();
+                            MatchScroll.Start();
+                            Messages.Text = lblNameP1.Text + ", Select a Piece to Move";
+                            WhoTurn.Text = "Your Turn";
+                            //var sb = new StringBuilder();
+                            //sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                            //sb.AppendLine();
+                            //sb.AppendLine(Log.ToString());
+                            //Messages.Text = sb.ToString();
                             if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(2);
@@ -255,6 +348,7 @@ namespace CheckersGUI
                             WhiteTurn();
 
 
+
                             if (Board.GameIsWon())
                             {
                                 turn = -1;
@@ -262,15 +356,20 @@ namespace CheckersGUI
                         }
                         if (turn == 1)
                         {
-                            Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
+                            Messages.Text = "Selecting a Piece to Move";
+                            WhoTurn.Text = lblNameP2.Text + "'s Turn";
                             await Task.Delay(1000);
                             BlackBotMove();
                             Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
-                            var sb = new StringBuilder();
-                            sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
-                            sb.AppendLine();
-                            sb.AppendLine(Log.ToString());
-                            Messages.Text = sb.ToString();
+                             MatchLog.Text = Log.ToString();
+                            MatchScroll.Start();
+                            Messages.Text = lblNameP1.Text + ", Select a Piece to Move";
+                            WhoTurn.Text = "Your Turn";
+                            //var sb = new StringBuilder();
+                            //sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                            //sb.AppendLine();
+                            //sb.AppendLine(Log.ToString());
+                            //Messages.Text = sb.ToString();
                             if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
                             {
                                 GameWonProcedure(4);
@@ -286,13 +385,15 @@ namespace CheckersGUI
 
                     if(turn == -1)
                     {
-                        Messages.Text = lblNameP1.Text + " Wins!!!";
+                        Messages.Text = lblNameP1.Text + " Wins!!!" + Environment.NewLine;
+                        WhoTurn.Text = "";
                         return;
                     }
 
                     if (turn == -2)
                     {
-                        Messages.Text = lblNameP2.Text +  " Wins!!";
+                        Messages.Text = lblNameP2.Text +  " Wins!!" + Environment.NewLine;
+                        WhoTurn.Text = "";
                         return;
                     }
                 }
@@ -335,16 +436,82 @@ namespace CheckersGUI
 
                     if(turn == -1)
                     {
-                        Messages.Text = lblNameP1.Text + " Wins!!";
+                        Messages.Text = lblNameP1.Text + " Wins!!" + Environment.NewLine;
+                        WhoTurn.Text = "";
                         return;
                     }
 
                     if (turn == -2)
                     {
-                        Messages.Text = lblNameP2.Text + " Wins!!";
+                        Messages.Text = lblNameP2.Text + " Wins!!" + Environment.NewLine;
+                        WhoTurn.Text = "";
                         return;
                     }
 
+                }
+
+                if (gamemode == 3)
+                {
+                    if (GameWon)
+                    {
+                        return;
+                    }
+
+                    if (MyTurn)
+                    {
+                        if (PType == SquareValues.Black)
+                        {                       
+                            if (Board.Squares[newcol, newrow] == SquareValues.Black)
+                            {
+                                Positions.Clear();
+                                Positions.Add(newcol, newrow);
+                                BlackHighlightConditions(newcol, newrow, SquareValues.Black);
+                                return;
+                            }
+                            BlackTurn();
+                            //MyTurn = false;
+                            if (!MultiJump)
+                            {
+                                //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                               // WhoTurn.Text = lblNameP2.Text + "'s turn" ;
+                            }
+                            if (!Board.CanMove(SquareValues.White) && !Board.GameIsWon())
+                            {
+                                GameWonProcedure(5);
+                                return;
+                            }
+                            return;
+                        }
+
+                        if (PType == SquareValues.White)
+                        {
+                            if (Board.Squares[newcol, newrow] == SquareValues.White)
+                            {
+                                Positions.Clear();
+                                Positions.Add(newcol, newrow);
+                                WhiteHighlightConditions(newcol, newrow, SquareValues.White);
+                                return;
+                            }
+                            WhiteTurn();
+                            //MyTurn = false;
+                            if (!MultiJump)
+                            {
+                                //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                                //WhoTurn.Text = lblNameP2.Text + "'s turn";
+                            }
+                            if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
+                            {
+                                GameWonProcedure(6);
+                                return;
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                        WhoTurn.Text = lblNameP2.Text + "'s turn" ;
+                    }
                 }
             }
            
@@ -370,7 +537,10 @@ namespace CheckersGUI
             {
                 WhiteHighlight(OldColumn, OldRow, realtype, false);
             }
-            Messages.Text = "Now select where you would like to move to";
+            if (gamemode != 3)
+            {
+                Messages.Text = "Now select where you would like to move to" + Environment.NewLine;
+            }           
         }
 
         /// <summary>
@@ -393,7 +563,10 @@ namespace CheckersGUI
             {
                 BlackHighlight(OldColumn, OldRow, realtype, false);
             }
-            Messages.Text = "Now select where you would like to move to";
+            if (gamemode != 3)
+            {
+                Messages.Text = "Now select where you would like to move to" + Environment.NewLine;
+            }
         }
 
         /// <summary>
@@ -401,6 +574,7 @@ namespace CheckersGUI
         /// </summary>
         private async void BotMatch()
         {
+            Task MatchScroll = new Task(new Action(Matchscroll));
             PlayPause.Visible = true;
             running = true;
             //BotSpeed = menu.playspeed;
@@ -411,11 +585,10 @@ namespace CheckersGUI
 
             DrawBoard();
             cont = true;
-            Messages.Text = "Simulating Game...";
+            Messages.Text = "Simulating Game..." + Environment.NewLine;
 
             while (!Board.GameIsWon() && cont == true)
-            {
-
+            {               
                 await Task.Delay(BotSpeed);
                 //check for paused
                 while (!running)
@@ -424,8 +597,12 @@ namespace CheckersGUI
                 }
                 if (turn == 1)
                 {
-                        BlackBotMove();
+                    BlackBotMove();
+                    if (cont)
+                    {                    
                         Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                        MatchLog.Text = Log.ToString();
+                        ScrollDown();
                         if (Board.GameIsWon())
                         {
                             cont = false;
@@ -444,6 +621,7 @@ namespace CheckersGUI
                             return;
                         }
                         turn = 2;
+                    }
                 }
 
                 await Task.Delay(BotSpeed);
@@ -454,21 +632,32 @@ namespace CheckersGUI
                 if (turn == 2)
                 {
                     WhiteBotMove();
-                    Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
-                    if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
-                    {
-                        GameWonProcedure(2);
-                        cont = false;
+                    if (cont)
+                    {                    
+                        Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                        MatchLog.Text = Log.ToString();
+                        ScrollDown();
+                        if (!Board.CanMove(SquareValues.Black) && !Board.GameIsWon())
+                        {
+                            GameWonProcedure(2);
+                            cont = false;
+                            turn = 1;
+                            return;
+                        }
                         turn = 1;
-                        return;
                     }
-                    turn = 1;
                     
                 }
 
             }
             turn = 1;
             return;
+        }
+
+        private void ScrollDown()
+        {
+            Task MatchScroll = new Task(new Action(Matchscroll));
+            MatchScroll.Start();
         }
 
         /// <summary>
@@ -884,7 +1073,8 @@ namespace CheckersGUI
                 PlayerBlack = true;
                 BlackPiecePic.Location = Player1Pic;
                 WhitePiecePic.Location = Player2Pic;
-                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move" + Environment.NewLine;
+                WhoTurn.Text = "Your Turn";
                 //turn = 1;
                 if (turn == 1)
                 {
@@ -904,7 +1094,8 @@ namespace CheckersGUI
                 PlayerBlack = false;
                 BlackPiecePic.Location = Player2Pic;
                 WhitePiecePic.Location = Player1Pic;
-                Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
+                Messages.Text = "Selecting a Piece to Move" + Environment.NewLine;
+                WhoTurn.Text = lblNameP2.Text + "'s Turn" ;
                 //turn = 1;
                 if (turn == 1)
                 {
@@ -919,17 +1110,20 @@ namespace CheckersGUI
                 DrawBoard();
                 BlackBotMove();
                 Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
-                var sb = new StringBuilder();
-                sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
-                sb.AppendLine();
-                sb.AppendLine(Log.ToString());
-                Messages.Text = sb.ToString();
+                MatchLog.Text = Log.ToString();
+                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+                WhoTurn.Text = "Your Turn";
+                //var sb = new StringBuilder();
+                //sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                //sb.AppendLine();
+                //sb.AppendLine(Log.ToString());
+                //Messages.Text = sb.ToString();
                 turn = 2;
             }
 
             if (PType == SquareValues.Empty)
             {
-                Messages.Text = "It's empty";
+                Messages.Text = "It's empty" + Environment.NewLine;
             }
 
         }
@@ -943,7 +1137,8 @@ namespace CheckersGUI
             Board.InitializePieces();
             gamemode = 1;
             DrawBoard();
-            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+            Messages.Text = lblNameP1.Text + ", Select Piece to Move" + Environment.NewLine;
+            WhoTurn.Text = lblNameP1.Text + "'s Turn";
             //turn = 1;
             if (turn == 1)
             {
@@ -960,7 +1155,13 @@ namespace CheckersGUI
         /// </summary>
         private void BlackTurn()
         {
-            Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
+            Task MatchScroll = new Task(new Action(Matchscroll));
+            Task MesssageScroll = new Task(new Action(Messagescroll));
+            //if (gamemode != 3)
+            //{
+            //    Messages.Text = lblNameP2.Text + " Select Piece to Move" + Environment.NewLine;
+            //}
+            //WhoTurn.Text = lblNameP2.Text + "'s Turn";
             var type = SquareValues.Black;
             var OldPosition = Positions.First();
             var NewPosition = Positions.Last();
@@ -981,14 +1182,32 @@ namespace CheckersGUI
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
-                Messages.Text = "This is not your piece";
+                if (gamemode == 3)
+                {
+                    Messages.AppendText(Environment.NewLine + "This is not your piece" + Environment.NewLine);
+                    MesssageScroll.Start();
+                }
+                else
+                {
+                    Messages.Text = "This is not your piece" + Environment.NewLine;
+                }
+                
                 DrawBoard();
                 return;
             }
 
             if (!Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
-                Messages.Text = "Not a Valid Move";
+                if (gamemode == 3)
+                {
+                    Messages.AppendText(Environment.NewLine + "Not a Valid Move" + Environment.NewLine);
+                    MesssageScroll.Start();
+                }
+                if (gamemode != 3)
+                {
+                    Messages.Text = "Not a Valid Move" + Environment.NewLine;
+                }
+
                 DrawBoard();
                 if (MultiJump)
                 {
@@ -1000,6 +1219,24 @@ namespace CheckersGUI
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
                 Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                MatchLog.Text = Log.ToString();
+                MatchScroll.Start();
+                if (gamemode != 3)
+                {
+                    Messages.Text = lblNameP2.Text + " Select Piece to Move" + Environment.NewLine;
+                }
+                WhoTurn.Text = lblNameP2.Text + "'s Turn";
+                if (gamemode == 3)
+                {
+                    if (menu.joingame)
+                    {
+                        client.SendData(ConvertStringToBytes(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow).ToString()));
+                    }
+                    else
+                    {
+                        Server.Brodcast(ConvertStringToBytes(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow).ToString()));
+                    }
+                }
                 if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
                 {
                     if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow - 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow - 2))
@@ -1011,10 +1248,30 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
-                            Messages.Text = "Jump Again";
+                            if (gamemode == 3)
+                            {
+                                Messages.AppendText(Environment.NewLine +"Jump Again" + Environment.NewLine);
+                                MesssageScroll.Start();
+                            }
+                            if (gamemode != 3)
+                            {
+                                Messages.Text = "Jump Again" + Environment.NewLine;
+                            }
+                            
                             Positions.Add(NewColumn, NewRow);
                             BlackHighlight(NewColumn,NewRow, Board.ReadSquare(NewColumn,NewRow),true);
                             MultiJump = true;
+                            if (gamemode == 3)
+                            {
+                                if (menu.joingame)
+                                {
+                                    client.SendData(ConvertStringToBytes("^"));
+                                }
+                                else
+                                {
+                                    Server.Brodcast(ConvertStringToBytes("^"));
+                                }
+                            }
                             return;
                         }
                     }
@@ -1028,10 +1285,29 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
-                            Messages.Text = "Jump Again";
+                            if (gamemode == 3)
+                            {
+                                Messages.AppendText(Environment.NewLine + "Jump Again" + Environment.NewLine);
+                                MesssageScroll.Start();
+                            }
+                            if (gamemode != 3)
+                            {
+                                Messages.Text = "Jump Again" + Environment.NewLine;
+                            }
                             Positions.Add(NewColumn, NewRow);
                             BlackHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn, NewRow),true);
                             MultiJump = true;
+                            if (gamemode == 3)
+                            {
+                                if (menu.joingame)
+                                {
+                                    client.SendData(ConvertStringToBytes("^"));
+                                }
+                                else
+                                {
+                                    Server.Brodcast(ConvertStringToBytes("^"));
+                                }
+                            }
                             return;
                         }
                     }
@@ -1039,17 +1315,24 @@ namespace CheckersGUI
                 
             }
 
-            if (Board.GameIsWon())
+            if (gamemode != 3 && Board.GameIsWon())
             {
+
                 GameWonProcedure(1);
                 return;
             }
-            if (MultiJump)
+            if (gamemode == 3 && Board.GameIsWon())
             {
-                Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move";
-                //Positions.Clear();
+                GameWonProcedure(5);
+                return;
             }
+            //if (MultiJump)
+            //{
+            //    Messages.Text = "Your Turn " + lblNameP2.Text + "\nSelect Piece to Move" + Environment.NewLine;
+            //    //Positions.Clear();
+            //}
             MultiJump = false;
+            MyTurn = false;
             DrawBoard();
             turn = 2;
             Mode = Modality.WhiteTurn;
@@ -1061,7 +1344,17 @@ namespace CheckersGUI
         /// </summary>
         private void WhiteTurn()
         {
-            Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
+            Task MatchScroll = new Task(new Action(Matchscroll));
+            Task MesssageScroll = new Task(new Action(Messagescroll));
+            //if (gamemode != 3)
+            //{
+            //    Messages.Text = lblNameP1.Text + "Select Piece to Move" + Environment.NewLine;
+            //    WhoTurn.Text = lblNameP1.Text + "'s Turn";
+            //}
+            //if (gamemode == 3)
+            //{
+            //    WhoTurn.Text = lblNameP2.Text + "'s Turn"; ;
+            //}
             var type = SquareValues.White;
             var OldPosition = Positions.First();
             var NewPosition = Positions.Last();
@@ -1082,14 +1375,30 @@ namespace CheckersGUI
 
             if (Board.NotYourPiece(type, OldColumn, OldRow))
             {
-                Messages.Text = "This is not your piece";
+                if (gamemode == 3)
+                {
+                    Messages.AppendText(Environment.NewLine + "This is not your piece" + Environment.NewLine);
+                    MesssageScroll.Start();
+                }
+                else
+                {
+                    Messages.Text = "This is not your piece" + Environment.NewLine;
+                }
                 DrawBoard();
                 return;
             }
 
             if (!Board.IsValidMove(realtype, OldColumn, OldRow, NewColumn, NewRow))
             {
-                Messages.Text = "Not a Valid Move";
+                if (gamemode == 3)
+                {
+                    Messages.AppendText(Environment.NewLine + "Not a Valid Move" + Environment.NewLine);
+                    MesssageScroll.Start();
+                }
+                if (gamemode != 3)
+                {
+                    Messages.Text = "Not a Valid Move" + Environment.NewLine;
+                }
                 DrawBoard();
                 if (!MultiJump)
                 {
@@ -1101,6 +1410,30 @@ namespace CheckersGUI
             {
                 Board.MovePiece(realtype, OldColumn, OldRow, NewColumn, NewRow);
                 Log.Add(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow));
+                MatchLog.Text = Log.ToString();
+                MatchScroll.Start();
+                if (gamemode == 1)
+                {
+                    Messages.Text = lblNameP1.Text + "Select Piece to Move" + Environment.NewLine;
+                    WhoTurn.Text = lblNameP1.Text + "'s Turn";
+                }
+                if (gamemode == 0)
+                {
+                    Messages.Text = lblNameP2.Text + "Select Piece to Move" + Environment.NewLine;
+                    WhoTurn.Text = lblNameP2.Text + "'s Turn";
+                }
+                if (gamemode == 3)
+                {
+                    WhoTurn.Text = lblNameP2.Text + "'s Turn";
+                    if (menu.joingame)
+                    {
+                        client.SendData(ConvertStringToBytes(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow).ToString()));
+                    }
+                    else
+                    {
+                        Server.Brodcast(ConvertStringToBytes(new Move(Mode, CurrentType, CurrCol, CurrRow, NxtCol, NxtRow).ToString()));
+                    }
+                }
                 if (Board.HasJumped(OldColumn, OldRow, NewColumn, NewRow))
                 {
                     if (Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn + 2, NewRow + 2) || Board.IsValidMove(realtype, NewColumn, NewRow, NewColumn - 2, NewRow + 2))
@@ -1112,10 +1445,29 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
-                            Messages.Text = "Jump Again";
+                            if (gamemode == 3)
+                            {
+                                Messages.AppendText(Environment.NewLine + "Jump Again" + Environment.NewLine);
+                                MesssageScroll.Start();
+                            }
+                            if (gamemode != 3)
+                            {
+                                Messages.Text = "Jump Again" + Environment.NewLine;
+                            }
                             Positions.Add(NewColumn, NewRow);
                             WhiteHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn, NewRow),true);
                             MultiJump = true;
+                            if (gamemode == 3)
+                            {
+                                if (menu.joingame)
+                                {
+                                    client.SendData(ConvertStringToBytes("^"));
+                                }
+                                else
+                                {
+                                    Server.Brodcast(ConvertStringToBytes("^"));
+                                }
+                            }
                             return;
                         }
                     }
@@ -1128,10 +1480,29 @@ namespace CheckersGUI
                             {
                                 Positions.Clear();
                             }
-                            Messages.Text = "Jump Again";
+                            if (gamemode == 3)
+                            {
+                                Messages.AppendText(Environment.NewLine + "Jump Again" + Environment.NewLine);
+                                MesssageScroll.Start();
+                            }
+                            if (gamemode != 3)
+                            {
+                                Messages.Text = "Jump Again" + Environment.NewLine;
+                            }
                             Positions.Add(NewColumn, NewRow);
                             WhiteHighlight(NewColumn, NewRow, Board.ReadSquare(NewColumn,NewRow),true);
                             MultiJump = true;
+                            if (gamemode == 3)
+                            {
+                                if (menu.joingame)
+                                {
+                                    client.SendData(ConvertStringToBytes("^"));
+                                }
+                                else
+                                {
+                                    Server.Brodcast(ConvertStringToBytes("^"));
+                                }
+                            }
                             return;
                         }
                     }
@@ -1148,16 +1519,21 @@ namespace CheckersGUI
                 if (gamemode == 0)
                 {
                     GameWonProcedure(3);
-                    Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    Messages.Text = lblNameP1.Text + " Wins!!!!" + Environment.NewLine;
+                }
+                if (gamemode == 3)
+                {
+                    GameWonProcedure(6);
                 }
                 return;
             }
-            if (MultiJump)
-            {
-                Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move";
-               // Positions.Clear();
-            }
+            //if (MultiJump)
+            //{
+            //    Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move" + Environment.NewLine;
+            //   // Positions.Clear();
+            //}
             MultiJump = false;
+            MyTurn = false;
             DrawBoard();
             turn = 1;
             Mode = Modality.BlackTurn;
@@ -1170,6 +1546,7 @@ namespace CheckersGUI
         /// <param name="i"></param>
         private void GameWonProcedure(int i)
         {
+            Task MatchScroll = new Task(new Action(Matchscroll));
             switch (i)
             {
                 case 1:
@@ -1178,9 +1555,12 @@ namespace CheckersGUI
                     popUp.ShowDialog();
                     MultiJump = false;
                     //Messages.Text = lblNameP1.Text + " Wins!!!!";
-                    Messages.Text = Log.ToString();
+                    WhoTurn.Text = lblNameP1.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
                     Log.Clear();
                     DrawBoard();
+                    GameWon = true;
                     turn = -1;
                     return;
                 case 2:
@@ -1189,9 +1569,12 @@ namespace CheckersGUI
                     popUp.ShowDialog();
                     MultiJump = false;
                     //Messages.Text = lblNameP2.Text + " Wins!!!!";
-                    Messages.Text = Log.ToString();
+                    WhoTurn.Text = lblNameP2.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
                     Log.Clear();
                     DrawBoard();
+                    GameWon = true;
                     turn = -2;
                     break;
                 case 3:
@@ -1200,7 +1583,9 @@ namespace CheckersGUI
                     popUp.ShowDialog();
                     MultiJump = false;
                     //Messages.Text = lblNameP1.Text + " Wins!!!!";
-                    Messages.Text = Log.ToString();
+                    WhoTurn.Text = lblNameP1.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
                     Log.Clear();
                     DrawBoard();
                     turn = -1;
@@ -1211,10 +1596,80 @@ namespace CheckersGUI
                     popUp.ShowDialog();
                     MultiJump = false;
                     //Messages.Text = lblNameP2.Text + " Wins!!!!";
-                    Messages.Text = Log.ToString();
+                    WhoTurn.Text = lblNameP2.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
                     Log.Clear();
                     DrawBoard();
                     turn = -2;
+                    break;
+                case 5:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP1.Text + " Wins!!!!", BlackWins);
+                    popUp.ShowDialog();
+                    MultiJump = false;
+                    //Messages.Text = lblNameP1.Text + " Wins!!!!";
+                    WhoTurn.Text = lblNameP1.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
+                    Log.Clear();
+                    DrawBoard();
+                    GameWon = true;
+                    if (menu.joingame)
+                    {
+                        client.SendData(ConvertStringToBytes("$"));
+                    }
+                    else
+                    {
+                        Server.Brodcast(ConvertStringToBytes("$"));
+                    }
+                    return;
+                case 6:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP1.Text + " Wins!!!!", WhiteWins);
+                    popUp.ShowDialog();
+                    MultiJump = false;
+                    //Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    WhoTurn.Text = lblNameP1.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
+                    Log.Clear();
+                    DrawBoard();
+                    GameWon = true;
+                    if (menu.joingame)
+                    {
+                        client.SendData(ConvertStringToBytes("$"));
+                    }
+                    else
+                    {
+                        Server.Brodcast(ConvertStringToBytes("$"));
+                    }
+                    break;
+                case 7:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP2.Text + " Wins!!!!", BlackWins);
+                    popUp.ShowDialog();
+                    MultiJump = false;
+                    //Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    WhoTurn.Text = lblNameP2.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
+                    Log.Clear();
+                    DrawBoard();
+                    GameWon = true;
+                    break;
+                case 8:
+                    DrawBoard();
+                    popUp = new PopUp(lblNameP2.Text + " Wins!!!!", WhiteWins);
+                    popUp.ShowDialog();
+                    MultiJump = false;
+                    //Messages.Text = lblNameP2.Text + " Wins!!!!";
+                    WhoTurn.Text = lblNameP2.Text + " Won";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
+                    Log.Clear();
+                    DrawBoard();
+                    GameWon = true;
                     break;
                 default:
                     Messages.Text = "I have no idea who won, U put in a wrong number idiot, FIX ME!!!!!";
@@ -1389,16 +1844,12 @@ namespace CheckersGUI
         /// <param name="e"></param>
         private void MenuNewGame_Click(object sender, EventArgs e)
         {
-            cont = false;
-            Board = board;
             menu.ShowDialog();
             if (!menu.cancel)
-            {
-                StartNewGame();
-            }
-            if (menu.cancel)
-            {
-                menu.cancel = false;
+            {            
+            StartNewGame();
+            cont = false;
+            Board = board;
             }
         }
 
@@ -1407,6 +1858,22 @@ namespace CheckersGUI
         /// </summary>
         private void StartNewGame()
         {
+            WhoTurn.Text = "";
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
             try
             {
                 //var blackpieces = Pieces.BlackPlacements();
@@ -1419,15 +1886,21 @@ namespace CheckersGUI
             {
 
             }
-            PlayPause.Visible = false;
-            //menu.ShowDialog();
+            Messages.Clear();
+            MatchLog.Clear();
+            GameWon = false;
+            PlayPause.Visible = false;            
             StartSound.Load();
             StartSound.Play();
             PType = menu.PType;
             gamemode = menu.gamemode;
+            OnlineID = menu.onlineid;
             turn = 1;
             if (gamemode == 2)
             {
+                ChatMessage.Visible = false;
+                SendButton.Visible = false;
+                cont = true;
                 BotSpeed = menu.playspeed;
                 Bot = menu.Bot1;
                 Bot2 = menu.Bot2;
@@ -1441,12 +1914,47 @@ namespace CheckersGUI
             {
                 case 0:
                     lblNameP1.Text = menu.name1P;
+                    ChatMessage.Visible = false;
+                    SendButton.Visible = false;
                     StartGame1P();
                     break;
                 case 1:
                     lblNameP1.Text = menu.name2P1;
                     lblNameP2.Text = menu.name2P2;
+                    ChatMessage.Visible = false;
+                    SendButton.Visible = false;
                     StartGame2P();
+                    break;
+                case 3:
+                    Messages.Clear();
+                    ChatMessage.Visible = true;
+                    SendButton.Visible = true;
+                    if (menu.joingame)
+                    {
+                        Clientside(menu.hostid, menu.port);
+                        lblNameP1.Text = OnlineID;
+
+                    }
+                    else
+                    {
+                        Hostside(PType,menu.port);
+                        lblNameP1.Text = OnlineID;
+
+                        if (PType == SquareValues.Black)
+                        {
+                            PlayerBlack = true;
+                            BlackPiecePic.Location = Player1Pic;
+                            WhitePiecePic.Location = Player2Pic;
+                            MyTurn = true;
+                        }
+                        if (PType == SquareValues.White)
+                        {
+                            PlayerBlack = false;
+                            BlackPiecePic.Location = Player2Pic;
+                            WhitePiecePic.Location = Player1Pic;
+                            MyTurn = false;
+                        }
+                    }
                     break;
                 default:
                     lblNameP1.Text = menu.name1P;
@@ -1456,9 +1964,32 @@ namespace CheckersGUI
 
         }
 
+        /// <summary>
+        /// Adjusts the Piecetype pictures depending on the type the client plays as
+        /// </summary>
+        private void ClientPlay()
+        {
+            if (PType == SquareValues.Black)
+            {
+                PlayerBlack = true;
+                BlackPiecePic.Location = Player1Pic;
+                WhitePiecePic.Location = Player2Pic;
+            }
+            if (PType == SquareValues.White)
+            {
+                PlayerBlack = false;
+                BlackPiecePic.Location = Player2Pic;
+                WhitePiecePic.Location = Player1Pic;
+
+            }
+        }
+
+        /// <summary>
+        /// Starts a loaded game
+        /// </summary>
         private void StartLoadGame()
         {
-
+            WhoTurn.Text = "";
             PlayPause.Visible = false;
             StartSound.Load();
             StartSound.Play();
@@ -1489,16 +2020,54 @@ namespace CheckersGUI
         }
 
         /// <summary>
+        /// Starts Online game
+        /// </summary>
+        private void StartGameOnline()
+        {
+
+            Board.InitialiseEmptyBoard();
+            Board.InitializePieces();
+            DrawBoard();
+            IniBoardPlacements = Board.RecordPieces();
+            //if (MyTurn)
+            //{
+            //    Messages.Text = "Your Turn " + lblNameP1.Text + "\nSelect Piece to Move" + Environment.NewLine;
+            //}
+            //else
+            //{
+            //    Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+            //}
+        }
+
+        /// <summary>
         /// Instructions for when the End Game button is clicked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void endGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            WhoTurn.Text = "";
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
+            ChatMessage.Visible = false;
+            SendButton.Visible = false;
             cont = false;
             Board.InitialiseEmptyBoard();
             DrawBoard();
-            Messages.Text = "Click on New Game to Start Again";
+            Messages.Text = "Click on New Game to Start Again" + Environment.NewLine;
         }
 
         /// <summary>
@@ -1530,6 +2099,22 @@ namespace CheckersGUI
             Messages.Visible = true;
             OffTextBox.Checked = false;
             OnTextBox.Checked = true;
+            if (gamemode == 3 && menu.joingame)
+            {
+                if (client.isConnected)
+                {
+                    ChatMessage.Visible = true;
+                    SendButton.Visible = true;
+                }
+            }
+            else if (gamemode == 3 && menu.hostgame)
+            {
+                if (Server.Listening)
+                {
+                    ChatMessage.Visible = true;
+                    SendButton.Visible = true;
+                }
+            }
         }
 
         private void OffTextBox_Click(object sender, EventArgs e)
@@ -1537,10 +2122,28 @@ namespace CheckersGUI
             Messages.Visible = false;
             OffTextBox.Checked = true;
             OnTextBox.Checked = false;
+            ChatMessage.Visible = false;
+            SendButton.Visible = false;
         }
 
         private void CLIversion_Click(object sender, EventArgs e)
         {
+            WhoTurn.Text = "";
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
             cont = false;
             var retry = true;
             while (retry)
@@ -1574,7 +2177,7 @@ namespace CheckersGUI
                 if (running)
                 {
                     running = false;
-                    Messages.Text = "Game is Paused";
+                    Messages.Text = "Game is Paused" + Environment.NewLine;
                     return;
                 }
 
@@ -1588,102 +2191,124 @@ namespace CheckersGUI
 
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string filename = "";
-            string filepath = "";
-            SaveFileDialog sfd = new SaveFileDialog();
-            DialogResult dr = sfd.ShowDialog();
-            if (dr == DialogResult.OK)
+            if (gamemode == 3)
             {
-                filename = sfd.FileName;
-                filepath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+                MessageBox.Show("An Online Game Can't be saved", "CAUTION", MessageBoxButtons.OK);
             }
-            try
-            {
-                using (TextWriter Writer = new StreamWriter(new FileStream(filename + ".chk", FileMode.Create)))
+            else
+            {           
+                string filename = "";
+                string filepath = "";
+                SaveFileDialog sfd = new SaveFileDialog();
+                DialogResult dr = sfd.ShowDialog();
+                if (dr == DialogResult.OK)
                 {
-
-                    for (int row = 0; row < 8; row++)
+                    filename = sfd.FileName;
+                    filepath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+                }
+                try
+                {
+                    using (TextWriter Writer = new StreamWriter(new FileStream(filename + ".chk", FileMode.Create)))
                     {
-                        for (int col = 0; col < 8; col++)
+
+                        for (int row = 0; row < 8; row++)
                         {
-                            var square = Board.ReadSquare(col, row);
-
-                            switch (square)
+                            for (int col = 0; col < 8; col++)
                             {
-                                case SquareValues.Empty:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.Black:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.BlackKing:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.White:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
-                                case SquareValues.WhiteKing:
-                                    Writer.Write(col);
-                                    Writer.Write(row);
-                                    Writer.Write(square);
-                                    Writer.Write(Environment.NewLine);
-                                    break;
+                                var square = Board.ReadSquare(col, row);
 
+                                switch (square)
+                                {
+                                    case SquareValues.Empty:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.Black:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.BlackKing:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.White:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+                                    case SquareValues.WhiteKing:
+                                        Writer.Write(col);
+                                        Writer.Write(row);
+                                        Writer.Write(square);
+                                        Writer.Write(Environment.NewLine);
+                                        break;
+
+                                }
                             }
                         }
+                        Writer.Write(lblNameP1.Text);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(lblNameP2.Text);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(gamemode);
+                        Writer.Write(Environment.NewLine);
+                        Writer.Write(turn);
+                        if (gamemode == 0)
+                        {
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(PType);
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(Bot);
+                        }
+                        if (gamemode == 2)
+                        {
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(Bot);
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(Bot2);
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(BotSpeed);
+                        }
+                        //To-Do
+                        foreach (var item in Log.Plays)
+                        {
+                            Writer.Write(Environment.NewLine);
+                            Writer.Write(item.ToString());
+                        }
+                        Writer.Close();
                     }
-                    Writer.Write(lblNameP1.Text);
-                    Writer.Write(Environment.NewLine);
-                    Writer.Write(lblNameP2.Text);
-                    Writer.Write(Environment.NewLine);
-                    Writer.Write(gamemode);
-                    Writer.Write(Environment.NewLine);
-                    Writer.Write(turn);
-                    if (gamemode == 0)
-                    {
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(PType);
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(Bot);
-                    }
-                    if (gamemode == 2)
-                    {
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(Bot);
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(Bot2);
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(BotSpeed);
-                    }
-                    //To-Do
-                    foreach (var item in Log.Plays)
-                    {
-                        Writer.Write(Environment.NewLine);
-                        Writer.Write(item.ToString());
-                    }
-                    Writer.Close();
                 }
-            }
-            catch (Exception z)
-            {
-                Messages.Text = z.Message;
+                catch (Exception z)
+                {
+                    Messages.Text = z.Message;
+                }
             }
         }
 
         private void loadGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
             try
             {
                 Log.Clear();
@@ -1840,7 +2465,340 @@ namespace CheckersGUI
             }
         }
 
+        #region HOST
+        private void Hostside(SquareValues pType, int port)
+        {
 
+            Server = new NetComm.Host(menu.port); //Initialize the Server object, connection will use the 2020 port number
+            Server.StartConnection(); //Starts listening for incoming clients
+
+            //Adding event handling methods, to handle the server messages
+            Server.onConnection += new NetComm.Host.onConnectionEventHandler(Server_onConnection);
+            Server.lostConnection += new NetComm.Host.lostConnectionEventHandler(Server_lostConnection);
+            Server.DataReceived += new NetComm.Host.DataReceivedEventHandler(Server_DataReceived);
+        }
+
+        void Server_DataReceived(string ID, byte[] Data)
+        {
+            Task MessageScroll = new Task(new Action(Messagescroll));
+            Task MatchScroll = new Task(new Action(Matchscroll));
+            string data = ConvertBytesToString(Data);
+            switch (data[0])
+            {
+                case '*':
+                    Messages.AppendText(ID + ": " + data.Substring(1) + Environment.NewLine);
+                    MessageScroll.Start();
+                    break;
+                case '$':
+                    if (PType == SquareValues.Black)
+                    {
+                        GameWonProcedure(8);
+                    }
+                    if (PType == SquareValues.White)
+                    {
+                        GameWonProcedure(7);
+                    }
+
+                    break;
+                case '^':
+                    MyTurn = false;
+                    //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                    WhoTurn.Text = lblNameP2.Text + "'s turn";
+                    break;
+                default:
+                    var Movement = ConvertStringToMove(data);
+                    if (Movement.Mode == Modality.BlackTurn)
+                    {
+                        Mode = Modality.WhiteTurn;
+                    }
+                    if (Movement.Mode == Modality.WhiteTurn)
+                    {
+                        Mode = Modality.BlackTurn;
+                    }
+                    Board.MovePiece(Movement);
+                    FinBoardPlacements = Board.RecordPieces();
+                    HighlightMoves(IniBoardPlacements, FinBoardPlacements);
+                    IniBoardPlacements = FinBoardPlacements;
+                    DrawBoard();
+                    Log.Add(Movement);
+                    MyTurn = true;
+                    WhoTurn.Text = "Your Turn";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
+                    //var sb = new StringBuilder();
+                    //sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                    //sb.AppendLine();
+                    //sb.AppendLine(Log.ToString());
+                    //Messages.Text = sb.ToString();
+                    break;
+            }
+           
+        }
+
+        void Server_lostConnection(string id)
+        {
+            if (Messages.IsDisposed) return; //Fixes the invoke error
+            Messages.AppendText(id + " disconnected" + Environment.NewLine); //Updates the log textbox when user leaves the room
+        }
+
+        void Server_onConnection(string id)
+        {
+            Task MessageScroll = new Task(new Action(Messagescroll));
+            lblNameP2.Text = id;
+            Messages.AppendText(Environment.NewLine + id + " connected!" + Environment.NewLine); //Updates the log textbox when new user joined
+            MessageScroll.Start();
+            Server.SendData(id, ConvertStringToBytes( "`" + OnlineID));
+            Server.SendData(id, ConvertStringToBytes("!" + Convert.ToString(PType)));
+            Mode = Modality.BlackTurn;
+            if (MyTurn)
+            {
+                Messages.AppendText(Environment.NewLine + "Your Turn " + OnlineID + "\nSelect Piece to Move" + Environment.NewLine);
+                ScrollDown();
+                WhoTurn.Text = "Your Turn " ;
+            }
+            if (!MyTurn)
+            {
+                Messages.AppendText(Environment.NewLine + "It's " + id + "'s turn" + Environment.NewLine);
+                ScrollDown();
+                WhoTurn.Text = id + "'s turn";
+            }
+            StartGameOnline();
+        }
+        #endregion
+
+        #region CLIENT
+        private void Clientside(string hostid, int port)
+        {
+            client = new NetComm.Client(); //Initialize the client object
+
+            //Adding event handling methods for the client
+            client.Connected += new NetComm.Client.ConnectedEventHandler(client_Connected);
+            client.Disconnected += new NetComm.Client.DisconnectedEventHandler(client_Disconnected);
+            client.DataReceived += new NetComm.Client.DataReceivedEventHandler(client_DataReceived);
+
+            //Connecting to the host
+            client.Connect(menu.hostid, menu.port, menu.onlineid); //Connecting to the host (on the same machine) with port 2020 and ID "Jack"
+        }
+
+        void client_DataReceived(byte[] Data, string ID)
+        {
+            Task MessageScroll = new Task(new Action(Messagescroll));
+            Task MatchScroll = new Task(new Action(Matchscroll));
+            string data = ConvertBytesToString(Data);
+            switch (data[0])
+            {
+                case '*':
+                    Messages.AppendText(ID + HostName + ": " + data.Substring(1) + Environment.NewLine);
+                    MessageScroll.Start();
+                    break;
+                case '`':
+                    HostName = data.Substring(1);
+                    lblNameP2.Text = HostName;
+                    break;
+                case '!':
+                    PType = Board.OpponentType(ConvertStringToSquareValues(data.Substring(1)));
+                    ClientPlay();
+                    if (PType == SquareValues.Black)
+                    {
+                        MyTurn = true;
+                    }
+                    if (PType == SquareValues.White)
+                    {
+                        MyTurn = false;
+                    }
+                    if (MyTurn)
+                    {
+                        Messages.AppendText(Environment.NewLine + "Your Turn " + OnlineID + "\nSelect Piece to Move" + Environment.NewLine);
+                        MessageScroll.Start();
+                        WhoTurn.Text = "Your Turn ";
+                    }
+                    if (!MyTurn)
+                    {
+                        Messages.AppendText(Environment.NewLine + "It's " + HostName + "'s turn" + Environment.NewLine);
+                        MessageScroll.Start();
+                        WhoTurn.Text = HostName + "'s turn";
+                    }
+                    break;
+                case '$':
+                    if (PType == SquareValues.Black)
+                    {
+                        GameWonProcedure(8);
+                    }
+                    if (PType == SquareValues.White)
+                    {
+                        GameWonProcedure(7);
+                    }
+
+                    break;
+                case '^':
+                    MyTurn = false;
+                    //Messages.Text = "It's " + lblNameP2.Text + "'s turn" + Environment.NewLine;
+                    WhoTurn.Text = lblNameP2.Text + "'s turn";
+                    break;
+                default:
+                    var Movement = ConvertStringToMove(data);
+                    if (Movement.Mode == Modality.BlackTurn)
+                    {
+                        Mode = Modality.WhiteTurn;
+                    }
+                    if (Movement.Mode == Modality.WhiteTurn)
+                    {
+                        Mode = Modality.BlackTurn;
+                    }
+                    Board.MovePiece(Movement);
+                    FinBoardPlacements = Board.RecordPieces();
+                    HighlightMoves(IniBoardPlacements,FinBoardPlacements);
+                    IniBoardPlacements = FinBoardPlacements;
+                    Log.Add(Movement);
+                    DrawBoard();
+                    MyTurn = true;
+                    WhoTurn.Text = "Your Turn";
+                    MatchLog.Text = Log.ToString();
+                    MatchScroll.Start();
+                    //var sb = new StringBuilder();
+                    //sb.AppendLine("Your Turn " + lblNameP1.Text + "\nSelect Piece to Move");
+                    //sb.AppendLine();
+                    //sb.AppendLine(Log.ToString());
+                    //Messages.Text = sb.ToString();
+                    break;
+            }
+
+        }
+
+        void client_Disconnected()
+        {
+            Messages.AppendText("Disconnected from host!" + Environment.NewLine); //Updates the log with the current connection state
+        }
+
+        void client_Connected()
+        {
+            Messages.AppendText(Environment.NewLine + "Connected succesfully!" + Environment.NewLine); //Updates the log with the current connection state
+            Mode = Modality.BlackTurn;
+            StartGameOnline();
+        }
+        #endregion
+
+        private void SendButton_Click_1(object sender, EventArgs e)
+        {
+            if (menu.joingame)
+            {
+                client.SendData(ConvertStringToBytes("*" +ChatMessage.Text)); //Sends the message to the host
+            }
+
+            else
+            {                  
+              Server.Brodcast(ConvertStringToBytes("*" + ChatMessage.Text)); //Sends the message to the client
+                            
+            }
+            Messages.AppendText(OnlineID + ": " + ChatMessage.Text + Environment.NewLine);
+            ChatMessage.Clear(); //Clears the chatmessage textbox text
+        }
+
+        private void ChatMessage_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SendButton.PerformClick();
+            }
+        }
+
+        #region String to Byte Conversions
+        string ConvertBytesToString(byte[] bytes)
+        {
+            return ASCIIEncoding.ASCII.GetString(bytes);
+        }
+
+        byte[] ConvertStringToBytes(string str)
+        {
+            return ASCIIEncoding.ASCII.GetBytes(str);
+        }
+
+
+
+
+        #endregion
+
+        SquareValues ConvertStringToSquareValues(string text)
+        {
+            switch (text)
+            {
+                case "Black":
+                    return SquareValues.Black;
+                case "White":
+                    return SquareValues.White;
+                case "BlackKing":
+                    return SquareValues.BlackKing;
+                case "WhiteKing":
+                    return SquareValues.WhiteKing;
+                default:
+                    return SquareValues.Empty;
+            }
+        }
+
+        Move ConvertStringToMove(string txt)
+        {
+            char[] ColAlphabet = new char[8] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+            char[] RowNumbers = new char[8] { '1', '2', '3', '4', '5', '6', '7', '8' };
+            int BracketPosition = -1;
+            foreach (var item in txt)
+            {
+                if (item == '(')
+                {
+                    BracketPosition = BracketPosition + 1;
+                    break;
+                }
+                else
+                {
+                    BracketPosition = BracketPosition + 1;
+                }
+            }
+            int inicol = Array.IndexOf(ColAlphabet, txt[BracketPosition + 1], 0);
+            int inirow = Array.IndexOf(RowNumbers, txt[BracketPosition + 3], 0);
+            int fincol = Array.IndexOf(ColAlphabet, txt[BracketPosition + 9], 0);
+            int finrow = Array.IndexOf(RowNumbers, txt[BracketPosition + 11], 0);
+            if (Mode == Modality.BlackTurn)
+            {
+                return new Move(Modality.BlackTurn, SquareValues.Black, inicol, inirow, fincol, finrow);
+            }
+            else
+            {
+                return new Move(Modality.WhiteTurn,SquareValues.White, inicol, inirow, fincol, finrow);
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                Server.CloseConnection(); //Closes all of the opened connections and stops listening
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                client.Disconnect();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void offToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MatchLog.Visible = false;
+            OffMatchLog.Checked = true;
+            OnMatchLog.Checked = false;
+        }
+
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MatchLog.Visible = true;
+            OffMatchLog.Checked = false;
+            OnMatchLog.Checked = true;
+
+        }
     }
 
 }
